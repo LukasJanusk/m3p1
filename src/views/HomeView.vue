@@ -4,12 +4,15 @@ import WeekDayButtons from '@/components/WeekDayButtons.vue'
 // import { getCurrentWeek } from '@/utils/dateUtils'
 
 // const currentWeek = ref(getCurrentWeek())
+const handleDateSelected = date => {
+  console.log('Selected Date:', date)
+}
 </script>
 
 <template>
   <main>
     <div>
-      <WeekDayButtons></WeekDayButtons>
+      <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
     </div>
   </main>
 </template>

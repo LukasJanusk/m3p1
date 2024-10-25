@@ -20,7 +20,8 @@ export function getCurrentDay() {
 }
 export function getCurrentWeekDay() {
   const date = new Date()
-  return date.toISOString().split('T')[0]
+  const shortNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  return shortNames[date.getDay()]
 }
 export function getWeekDay(dateObject) {
   const shortNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -28,4 +29,10 @@ export function getWeekDay(dateObject) {
 }
 export function getDate(dateObject) {
   return dateObject.toISOString().split('T')[0]
+}
+export function getCurrentDayIndex() {
+  const currentDate = new Date()
+  const dayIndex = currentDate.getDay()
+  const adjustedIndex = (dayIndex + 6) % 7
+  return adjustedIndex
 }

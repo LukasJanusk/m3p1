@@ -1,20 +1,21 @@
 <template>
   <div>
     <button
-      v-for="day in currentWeek"
+      v-for="(day, index) in week"
       class="week-day"
-      :class="{ active: activeIndex === index }"
+      :class="{ active: activeIndex.index === index }"
       :key="day.date"
-      @click="handleClick(index)"
+      @click="handleClick(day, index)"
     >
-      {{ getWeekDay(day.date) }}
+      {{ getWeekDay(day) }}
     </button>
   </div>
 </template>
 
 <script>
-import { defineComponent, computed, ref } from 'vue'
-import { getWeekDay, getCurrentWeek } from '@/utils/dateUtils'
+import { defineComponent } from 'vue'
+import { getWeekDay } from '@/utils/dateUtils'
+import { useCurrentWeek } from '@/stores/week'
 
 export default defineComponent({
   name: 'WeekdayButtons',
@@ -28,15 +29,15 @@ export default defineComponent({
   },
 
   // Using the setup function for state and methods
-  setup() {
-    const currentWeek = ref(getCurrentWeek())
-    const activeIndex = ref(null)
-    const weekDay = ref(getWeekDay(date))
-    function handleClick(index) {
-      activeIndex.value = index
+  setup(props, { emit }) {
+    const { week, activeIndex } = useCurrentWeek()
+    console.log(activeIndex)
+    function handleClick(day, index) {
+      activeIndex.index = index
+      emit('dateSelected', day) // Emit the clicked date object
     }
 
-    return { activeIndex, currentWeek }
+    return { activeIndex, week, getWeekDay, handleClick }
   },
 })
 </script>
