@@ -1,5 +1,15 @@
-<script setup></script>
+<script setup>
+import WeekDayButtons from '@/components/WeekDayButtons.vue'
+// import { ref } from 'vue'
+// import { getCurrentWeek } from '@/utils/dateUtils'
+
+// const currentWeek = ref(getCurrentWeek())
+</script>
 
 <template>
-  <main>This is main page</main>
+  <main>
+    <div>
+      <WeekDayButtons></WeekDayButtons>
+    </div>
+  </main>
 </template>
