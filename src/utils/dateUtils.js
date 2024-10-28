@@ -36,3 +36,22 @@ export function getCurrentDayIndex() {
   const adjustedIndex = (dayIndex + 6) % 7
   return adjustedIndex
 }
+export function getCurrentDayString(dateObject) {
+  const longNames = [
+    'Sunday',
+    'Monday',
+    'Tueday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ]
+  const month = dateObject.toLocaleString('default', { month: 'long' })
+  const date = dateObject.getDate()
+  const day = dateObject.getDay()
+  return `${longNames[day]}, ${month} ${date}`
+}
+export function adjustDayIndex(date) {
+  const dayIndex = date.getDay()
+  return dayIndex === 0 ? 6 : dayIndex - 1
+}

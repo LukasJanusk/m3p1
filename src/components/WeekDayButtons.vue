@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="week-container">
     <button
       v-for="(day, index) in week"
       class="week-day"
@@ -30,19 +30,23 @@ export default defineComponent({
 
   // Using the setup function for state and methods
   setup(props, { emit }) {
-    const { week, activeIndex } = useCurrentWeek()
-    console.log(activeIndex)
+    const { week, activeIndex, selectedDay, setSelectedDay } = useCurrentWeek()
     function handleClick(day, index) {
       activeIndex.index = index
+      setSelectedDay(day)
       emit('dateSelected', day) // Emit the clicked date object
     }
 
-    return { activeIndex, week, getWeekDay, handleClick }
+    return { activeIndex, week, selectedDay, getWeekDay, handleClick }
   },
 })
 </script>
 
 <style scoped>
+.week-contaienr {
+  display: flex;
+  justify-content: space-around;
+}
 .week-day {
   padding: 10px 15px;
   font-size: 15px;
