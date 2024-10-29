@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import Habit from '@/utils/habits'
+import Habit from '../utils/habits'
 
 export const useHabits = defineStore('habits', () => {
   const habit1 = new Habit(1, 'Run', 1, 1, 'I love running')
@@ -12,6 +12,10 @@ export const useHabits = defineStore('habits', () => {
     'I love sleeping',
     [0, 1, 2, 3, 4, 5, 6],
   )
+  // const habitsJson = localStorage.getItem(habits)
+  // const habits = ref(JSON.parse(habitsJson) || [])
+  // habits.value.push(habit1)
+  // console.log('wtf')
   const habits = ref([habit1, habit2])
   return { habits }
 })

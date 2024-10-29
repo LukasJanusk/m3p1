@@ -1,5 +1,7 @@
 <template>
-  <div>{{ dateToDisplay }}</div>
+  <div>
+    {{ dateToDisplay }}
+  </div>
 </template>
 
 <script>
@@ -12,6 +14,7 @@ export default defineComponent({
 
   setup() {
     const currentWeek = useCurrentWeek()
+
     const dateToDisplay = computed(() => {
       return getCurrentDayString(currentWeek.selectedDay)
     })

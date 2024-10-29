@@ -43,27 +43,62 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.week-contaienr {
+.week-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .week-day {
-  padding: 10px 15px;
-  font-size: 15px;
-  min-width: 50px;
-  color: white;
-  background-color: #42b983;
+  font-weight: bold;
+  padding: 12px 20px;
+  font-size: 16px;
+  min-width: 60px;
+  color: #ffffff;
+  background-color: #42b983; /* Default color */
   border: none;
-  border-radius: 3rem;
+  border-radius: 25px; /* Rounded corners */
   cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  margin: 5px;
 }
+
 .week-day:hover {
-  background-color: #6c9fdd;
+  background-color: #5a9fd7;
+  transform: scale(1.05);
+}
+.week-day:active {
+  border-color: #226144;
+  transform: scale(0.95);
+  background-color: #4dd698;
 }
 .active {
-  background-color: #1e513b;
+  background-color: #226144;
+  color: #ffffff;
+  box-shadow: 0px 4px 10px rgba(34, 97, 68, 0.5); /* Shadow for active state */
+  border-radius: 25px 25px 25px 25px; /* Rounded top corners */
 }
+
 .active:hover {
   background-color: #466e9e;
+}
+@media (max-width: 600px) {
+  .week-container {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .week-day {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: 30px;
+    margin: 2px;
+  }
+}
+@media (min-width: 500px) {
+  .week-container {
+    display: flex;
+    justify-content: flex-start;
+  }
 }
 </style>

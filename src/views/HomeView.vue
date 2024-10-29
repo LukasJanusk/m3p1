@@ -17,35 +17,42 @@ const handleDateSelected = dateObj => {
 <template>
   <main>
     <h1>Hello, {user.name}!</h1>
-    <SelectedDay></SelectedDay>
+    <SelectedDay id="selected-day"></SelectedDay>
     <div id="weekday-buttons">
       <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
     </div>
     <HabitList id="habit-list"></HabitList>
-    <!-- <div class="habit-container">
-      <label class="switch">
-        <span>This is habit example 1</span>
-        <input type="checkbox" id="toggle-checkbox" />
-        <span class="slider"></span> </label
-      ><br />
-      <label class="switch">
-        <span>This is habit example 2</span>
-        <input type="checkbox" id="toggle-checkbox" />
-        <span class="slider"></span>
-      </label>
-    </div> -->
   </main>
 </template>
 <style scoped>
+.main {
+  position: absolute;
+  top: 0;
+}
+#selected-day {
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
 #habit-list {
   padding: 10px;
   height: 500px;
-  background-color: rgb(233, 206, 174);
+  background: linear-gradient(
+    135deg,
+    rgba(142, 141, 141, 0.7),
+    rgba(164, 191, 82, 0.5)
+  );
+  width: auto;
   border-radius: 0px 0px 20px 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 #weekday-buttons {
-  background-color: bisque;
+  background: linear-gradient(
+    135deg,
+    rgba(81, 80, 80, 0.7),
+    rgba(112, 118, 95, 0.5)
+  );
   border-radius: 20px 20px 0px 0px;
   padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 </style>

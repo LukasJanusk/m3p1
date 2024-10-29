@@ -8,4 +8,14 @@ export default class Habit {
     this.active = true
     this.weekdays = weekdays // Array of week days that is active e.g [0, 1, 2, 6]
   }
+  save() {
+    const habits = JSON.parse(localStorage.getItem('Habits')) || []
+    const existingIndex = habits.findIndex(habit => habit.id === this.id)
+    if (existingIndex !== -1) {
+      habits[existingIndex] = this
+    } else {
+      habits.push(this)
+    }
+    localStorage.setItem('Habits', JSON.stringify(habits))
+  }
 }
