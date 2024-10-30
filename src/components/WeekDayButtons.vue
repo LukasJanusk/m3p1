@@ -1,13 +1,13 @@
 <template>
   <div class="week-container">
     <button
-      v-for="(day, index) in week"
+      v-for="(day, index) in dayWeek"
       class="week-day"
       :class="{ active: activeIndex.index === index }"
-      :key="day.date"
+      :key="day.date.date"
       @click="handleClick(day, index)"
     >
-      {{ getWeekDay(day) }}
+      {{ getWeekDay(day.date) }}
     </button>
   </div>
 </template>
@@ -30,14 +30,15 @@ export default defineComponent({
 
   // Using the setup function for state and methods
   setup(props, { emit }) {
-    const { week, activeIndex, selectedDay, setSelectedDay } = useCurrentWeek()
+    const { week, activeIndex, selectedDay, setSelectedDay, dayWeek } =
+      useCurrentWeek()
     function handleClick(day, index) {
       activeIndex.index = index
-      setSelectedDay(day)
+      setSelectedDay(day.date)
       emit('dateSelected', day) // Emit the clicked date object
     }
 
-    return { activeIndex, week, selectedDay, getWeekDay, handleClick }
+    return { activeIndex, week, selectedDay, getWeekDay, handleClick, dayWeek }
   },
 })
 </script>
@@ -53,7 +54,7 @@ export default defineComponent({
   font-size: 16px;
   min-width: 60px;
   color: #ffffff;
-  background-color: #42b983; /* Default color */
+  background-color: #42b983;
   border: none;
   border-radius: 25px; /* Rounded corners */
   cursor: pointer;

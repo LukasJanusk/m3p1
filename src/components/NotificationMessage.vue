@@ -1,0 +1,70 @@
+<template>
+  <Transition name="fade">
+    <div id="notification" v-if="isVisible">
+      {{ message }}
+    </div>
+  </Transition>
+</template>
+<script>
+import { defineComponent, ref, onMounted } from 'vue'
+
+export default defineComponent({
+  name: 'NotificationMessage',
+  props: {
+    message: {
+      type: String,
+      required: true,
+    },
+  },
+  setup() {
+    const isVisible = ref(false)
+
+    onMounted(() => {
+      isVisible.value = true
+      setTimeout(() => {
+        isVisible.value = false
+      }, 3000)
+    })
+
+    return { isVisible }
+  },
+})
+</script>
+
+<style scoped>
+#notification {
+  font-size: 26px;
+  color: white;
+  border-radius: 30px;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100px;
+  width: 300px;
+  border: 3px solid;
+  transform: translate(-50%, -50%);
+  background: rgba(38, 155, 46, 0.708);
+  box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.4);
+  border-color: #14e587;
+  background-color: rgba(66, 185, 131, 0.911);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.683);
+}
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+.fade-leave-active {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

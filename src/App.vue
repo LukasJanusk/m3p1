@@ -27,12 +27,7 @@ header {
   max-height: 100vh;
 }
 nav {
-  display: flex;
-  justify-items: center;
-  align-items: center;
-  width: auto;
-  border-radius: 50px;
-  /* border: 2px solid black; */
+  width: 100vw;
   font-size: 12px;
   text-align: center;
   margin-top: 2rem;
@@ -69,12 +64,7 @@ nav img:active {
 }
 .active-link img {
   border-color: #42b983;
-  background-color: rgba(
-    66,
-    185,
-    131,
-    0.3
-  ); /* Add a background for active state */
+  background-color: rgba(66, 185, 131, 0.3);
 }
 /* @media (min-width: 1024px) {
 } */

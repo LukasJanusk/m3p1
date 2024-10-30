@@ -1,31 +1,29 @@
 <template>
   <div id="habits-container">
-    <transition-group name="fade" tag="div">
-      <div
-        v-for="habit in habits"
-        :key="habit.id"
-        :title="habit.description"
-        class="habit-item"
-        :class="{ active: habit.active }"
-        @click="toggleCheckbox(habit.id)"
-      >
-        <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
-        <input
-          class="checkbox"
-          type="checkbox"
-          :id="`checkbox-${habit.id}`"
-          :checked="habit.active"
-          @click.stop="toggleCheckbox(habit.id)"
-        />
-      </div>
-    </transition-group>
+    <div
+      v-for="habit in dayWeek.habits"
+      :key="habit.id"
+      :title="habit.description"
+      class="habit-item"
+      :class="{ active: habit.active }"
+      @click="toggleCheckbox(habit.id)"
+    >
+      <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
+      <input
+        class="checkbox"
+        type="checkbox"
+        :id="`checkbox-${habit.id}`"
+        :checked="habit.active"
+        @click.stop="toggleCheckbox(habit.id)"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 import Habit from '@/utils/habits'
-import { useHabits } from '@/stores/habitsStore'
+import { useCurrentWeek } from '@/stores/week'
 
 export default defineComponent({
   name: 'HabitList',
@@ -36,30 +34,28 @@ export default defineComponent({
     },
   },
   setup() {
-    const { habits } = useHabits()
+    const { dayWeek } = useCurrentWeek()
+    // const { habits } = useHabits()
     function toggleCheckbox(id) {
-      for (const habit of habits) {
+      for (const habit of dayWeek.habits) {
         if (habit.id === id) {
           habit.active = !habit.active
         }
       }
     }
-    return { habits, toggleCheckbox }
+    return { dayWeek, toggleCheckbox }
   },
 })
 </script>
 
 <style scoped>
-#habits-container {
-  position: absolute;
-  top: 0;
-  padding: 0;
-  margin: 0;
-}
-
 .habit-item {
   display: flex;
-  background-color: rgba(255, 255, 255, 0.418);
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0.1)
+  );
   border-radius: 50px;
   justify-content: space-between;
   align-items: center;
@@ -88,7 +84,7 @@ export default defineComponent({
 }
 .active {
   text-decoration: line-through;
-  color: gray;
+  color: white;
   background-color: rgb(96, 199, 165);
 }
 /* Fade Transition Styles */

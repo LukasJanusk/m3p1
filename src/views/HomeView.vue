@@ -16,7 +16,6 @@ const handleDateSelected = dateObj => {
 
 <template>
   <main>
-    <h1>Hello, {user.name}!</h1>
     <SelectedDay id="selected-day"></SelectedDay>
     <div id="weekday-buttons">
       <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
@@ -25,10 +24,6 @@ const handleDateSelected = dateObj => {
   </main>
 </template>
 <style scoped>
-.main {
-  position: absolute;
-  top: 0;
-}
 #selected-day {
   margin-left: 10px;
   margin-bottom: 5px;

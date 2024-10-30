@@ -1,27 +1,47 @@
 <script setup>
 import HabitForm from '@/components/HabitForm.vue'
+import HabitList from '@/components/HabitList.vue'
+import { ref, computed } from 'vue'
+
+const show = ref(false)
+const title = computed(() => (show.value ? 'Add Habit' : 'My Habits'))
+const showForm = () => {
+  show.value = !show.value
+}
 </script>
 <template>
   <div id="title">
-    <h1>My habits</h1>
-    <div id="add-habit">
-      <img title="Add new habit" src="../assets/add.svg" />
+    <h1>{{ title }}</h1>
+    <div id="add-habit" @click="showForm">
+      <img v-if="!show" title="Add new habit" src="../assets/add2.svg" />
+      <img v-if="show" title="Back to habits" src="../assets/back2.svg" />
     </div>
   </div>
-  <HabitForm></HabitForm>
-  <div class="habit-container"></div>
+  <HabitForm class="bottom-container" v-if="show"></HabitForm>
+  <HabitList class="habit-container bottom-container" v-if="!show"></HabitList>
 </template>
 
 <style scoped>
 #title {
   display: flex;
   justify-content: space-between;
+  background: linear-gradient(
+    135deg,
+    rgba(81, 80, 80, 0.7),
+    rgba(112, 118, 95, 0.5)
+  );
+  border-radius: 20px 20px 0px 0px;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+h1 {
+  margin-left: 10px;
 }
 #add-habit img {
   width: 100%;
 }
 #add-habit {
-  margin-top: 10px;
+  margin-top: 16px;
   height: 50px;
   border-radius: 30px;
   max-width: 50px;
@@ -32,7 +52,18 @@ import HabitForm from '@/components/HabitForm.vue'
     transform 0.2s ease,
     border-color 0.3s ease;
 }
-
+.bottom-container {
+  padding: 10px;
+  height: 500px;
+  background: linear-gradient(
+    135deg,
+    rgba(142, 141, 141, 0.7),
+    rgba(164, 191, 82, 0.5)
+  );
+  width: auto;
+  border-radius: 0px 0px 20px 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
 #add-habit:hover {
   transform: scale(1.1);
   background-color: #466e9e8b;
@@ -44,10 +75,6 @@ import HabitForm from '@/components/HabitForm.vue'
   transform: scale(0.95);
   border-color: #42b983;
   background-color: #42b983;
-}
-.habit-container {
-  border: 1px solid red;
-  height: 500px;
 }
 @media (min-width: 1024px) {
   .habit-container {

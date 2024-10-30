@@ -7,13 +7,13 @@ export default class Day {
     this.active = false
   }
   // Creates new object Array of days of current week
-  getWeekdays(week, habits) {
+  static getWeekdays(week, habits) {
     const weekDays = []
     const today = new Date()
     const todayIndex = adjustDayIndex(today)
     for (const d of week) {
       const day = new Day(d)
-      const dayIndex = adjustDayIndex(day)
+      const dayIndex = adjustDayIndex(day.date)
       if (dayIndex > todayIndex) {
         day.active = false
       }
