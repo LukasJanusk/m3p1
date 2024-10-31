@@ -4,21 +4,23 @@ export default class Day {
   constructor(date) {
     this.date = date //Date object
     this.habits = [] // Array of Habit objects
-    this.active = false
+    this.active = true
   }
   // Creates new object Array of days of current week
   static getWeekdays(week, habits) {
     const weekDays = []
     const today = new Date()
     const todayIndex = adjustDayIndex(today)
-    for (const d of week) {
-      const day = new Day(d)
-      const dayIndex = adjustDayIndex(day.date)
+    for (const day of week) {
+      const dayIndex = adjustDayIndex(day)
+      const dayObject = new Day(day)
       if (dayIndex > todayIndex) {
-        day.active = false
+        dayObject.active = false
       }
-      day.habits = habits.filter(habit => habit.weekdays.includes(dayIndex))
-      weekDays.push(day)
+      dayObject.habits = habits.filter(habit =>
+        habit.weekdays.includes(dayIndex),
+      )
+      weekDays.push(dayObject)
     }
     return weekDays
   }

@@ -4,7 +4,7 @@
       v-for="(day, index) in dayWeek"
       class="week-day"
       :class="{ active: activeIndex.index === index }"
-      :key="day.date.date"
+      :key="day.date"
       @click="handleClick(day, index)"
     >
       {{ getWeekDay(day.date) }}

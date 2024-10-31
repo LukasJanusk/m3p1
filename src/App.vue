@@ -31,7 +31,7 @@ nav {
   font-size: 12px;
   text-align: center;
   margin-top: 2rem;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);

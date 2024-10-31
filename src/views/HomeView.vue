@@ -1,14 +1,10 @@
 <script setup>
 import WeekDayButtons from '@/components/WeekDayButtons.vue'
 import SelectedDay from '@/components/SelectedDay.vue'
-import HabitList from '@/components/HabitList.vue'
-// import { ref } from 'vue'
-// import { getCurrentDayString } from '@/utils/dateUtils'
+import DayHabitList from '@/components/DayHabitList.vue'
+import { useCurrentWeek } from '@/stores/week'
 
-// import { getCurrentWeek } from '@/utils/dateUtils'
-
-// const currentWeek = ref(getCurrentWeek())
-
+const { dayWeek, activeIndex } = useCurrentWeek()
 const handleDateSelected = dateObj => {
   console.log(dateObj)
 }
@@ -16,13 +12,17 @@ const handleDateSelected = dateObj => {
 
 <template>
   <main>
-    <SelectedDay id="selected-day"></SelectedDay>
     <div id="weekday-buttons">
+      <SelectedDay id="selected-day"></SelectedDay>
       <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
     </div>
-    <HabitList id="habit-list"></HabitList>
+    <DayHabitList
+      id="habit-list"
+      :habits="dayWeek[activeIndex.index].habits"
+    ></DayHabitList>
   </main>
 </template>
+
 <style scoped>
 #selected-day {
   margin-left: 10px;
@@ -31,6 +31,7 @@ const handleDateSelected = dateObj => {
 #habit-list {
   padding: 10px;
   height: 500px;
+  min-width: 320px;
   background: linear-gradient(
     135deg,
     rgba(142, 141, 141, 0.7),
@@ -41,6 +42,8 @@ const handleDateSelected = dateObj => {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 #weekday-buttons {
+  min-width: 320px;
+  height: 100px;
   background: linear-gradient(
     135deg,
     rgba(81, 80, 80, 0.7),

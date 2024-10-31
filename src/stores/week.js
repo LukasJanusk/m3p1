@@ -12,6 +12,35 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     selectedDay.value = newDate
   }
   const habits = ref(Habit.getHabits())
-  const dayWeek = Day.getWeekdays(week.value, habits.value)
-  return { week, activeIndex, selectedDay, setSelectedDay, dayWeek }
+  const dayWeek = ref(Day.getWeekdays(week.value, habits.value))
+  const updateHabits = (
+    habitsId,
+    habitName,
+    userId,
+    habitCategory,
+    habitDescription,
+    selectedDays,
+  ) => {
+    dayWeek.value.forEach((day, index) => {
+      if (selectedDays.includes(index)) {
+        const habit = new Habit(
+          habitsId,
+          habitName,
+          userId,
+          habitCategory,
+          habitDescription,
+          selectedDay,
+        )
+        day.habits.push(habit)
+      }
+    })
+  }
+  return {
+    week,
+    activeIndex,
+    selectedDay,
+    setSelectedDay,
+    updateHabits,
+    dayWeek,
+  }
 })

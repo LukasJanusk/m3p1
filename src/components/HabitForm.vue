@@ -31,8 +31,9 @@
 <script>
 import { useHabits } from '@/stores/habitsStore.js'
 import { defineComponent, ref } from 'vue'
-import NotificationMessage from './NotificationMessage.vue'
+import NotificationMessage from './NotificationSuccessMessage.vue'
 import Habit from '@/utils/habits'
+import { useCurrentWeek } from '@/stores/week'
 
 export default defineComponent({
   name: 'HabitForm',
@@ -41,7 +42,6 @@ export default defineComponent({
   },
   setup() {
     const { habits, saveHabits } = useHabits()
-    console.log(habits[0].name)
     const weekdays = [
       'Monday',
       'Tuesday',
@@ -51,6 +51,7 @@ export default defineComponent({
       'Saturday',
       'Sunday',
     ]
+    const { updateHabits } = useCurrentWeek()
     const message = ref('Habit added succesfully')
     const success = ref(false)
     const userId = 1
@@ -68,13 +69,25 @@ export default defineComponent({
         habitDescription.value,
         selectedDays.value,
       )
+      // update for runtime
+      updateHabits(
+        habits.length + 1,
+        habitName.value,
+        userId,
+        habitCategory.value,
+        habitDescription.value,
+        selectedDays.value,
+      )
       habits.push(habit)
+      // update for the future
       saveHabits()
+      // reset form values
       success.value = true
       habitName.value = ''
       habitDescription.value = ''
       selectedDays.value = []
       habitCategory.value = ''
+      // reset popup
       setTimeout(() => {
         success.value = false
       }, 4000)

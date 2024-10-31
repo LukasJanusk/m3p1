@@ -11,18 +11,35 @@ const showForm = () => {
 </script>
 <template>
   <div id="title">
-    <h1>{{ title }}</h1>
+    <Transition name="fade" mode="out-in">
+      <h1 v-if="show">{{ title }}</h1>
+      <h1 v-else>{{ title }}</h1>
+    </Transition>
     <div id="add-habit" @click="showForm">
       <img v-if="!show" title="Add new habit" src="../assets/add2.svg" />
       <img v-if="show" title="Back to habits" src="../assets/back2.svg" />
     </div>
   </div>
-  <HabitForm class="bottom-container" v-if="show"></HabitForm>
-  <HabitList class="habit-container bottom-container" v-if="!show"></HabitList>
+  <div class="bottom-container">
+    <Transition name="fade" mode="out-in">
+      <HabitList v-if="!show"></HabitList>
+      <HabitForm v-else></HabitForm>
+    </Transition>
+  </div>
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 #title {
+  height: 100px;
   display: flex;
   justify-content: space-between;
   background: linear-gradient(
@@ -33,6 +50,7 @@ const showForm = () => {
   border-radius: 20px 20px 0px 0px;
   padding: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  min-width: 320px;
 }
 h1 {
   margin-left: 10px;
@@ -53,6 +71,7 @@ h1 {
     border-color 0.3s ease;
 }
 .bottom-container {
+  min-width: 320px;
   padding: 10px;
   height: 500px;
   background: linear-gradient(
