@@ -7,7 +7,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { getCurrentDayString } from '@/utils/dateUtils'
-import { useCurrentWeek } from '@/stores/week'
+import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'SelectedDate',

@@ -15,7 +15,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { getWeekDay } from '@/utils/dateUtils'
-import { useCurrentWeek } from '@/stores/week'
+import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'WeekdayButtons',

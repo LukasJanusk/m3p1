@@ -139,11 +139,11 @@ img:active {
   padding: 0.5rem;
   margin-top: 5px;
   box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
-  transition: transform 0.2s ease;
+  transition: background-color 0.5s ease;
 }
 #edit-tools-container {
   display: flex;
-  margin-left: auto; /* Pushes it to the right */
+  margin-left: auto;
   justify-content: flex-end;
   justify-self: flex-end;
 }
@@ -193,11 +193,18 @@ img:active {
   }
 }
 @media (max-width: 510px) {
+  #habit-name-container {
+    font-size: 20px;
+  }
   .day-toggle {
-    font-size: 12px;
+    font-size: 10px;
   }
   img {
     height: 20px;
+  }
+  #edit-button,
+  #delete-button {
+    height: 30px;
   }
 }
 </style>

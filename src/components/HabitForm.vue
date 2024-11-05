@@ -2,24 +2,53 @@
   <div>
     <form id="add-habit-form" @submit.prevent="addHabit">
       <label for="name" required>Habit name</label><br />
-      <input id="name" type="text" v-model="habitName" /><br />
+      <input id="name" type="text" maxlength="30" v-model="habitName" /><br />
       <label for="description">Description</label><br />
-      <textarea id="description" v-model="habitDescription"></textarea><br />
-      <label for="category">Category</label><br />
-      <select id="category" v-model="habitCategory">
+      <textarea
+        @click="(isHidden = !isHidden), (isFocused = !isFocused)"
+        value="description"
+        :class="{ focused: isFocused }"
+        v-model="habitDescription"
+      ></textarea
+      ><br />
+      <label :class="{ hidden: isHidden }" for="category">Category</label><br />
+      <select
+        :class="{ hidden: isHidden }"
+        id="category"
+        v-model="habitCategory"
+      >
         <option value="sport">Sport</option>
         <option value="food">Eating</option>
         <option value="sleep">Sleep</option>
         <option value="learning">Learning</option></select
       ><br />
-      <label for="weekday-select">Select habit activity days</label>
-      <div id="weekday-select" v-for="(day, index) in weekdays" :key="index">
+      <label :class="{ hidden: isHidden }" for="weekday-select"
+        >Select habit activity days</label
+      >
+      <div
+        :class="{ hidden: isHidden }"
+        id="weekday-select"
+        v-for="(day, index) in weekdays"
+        :key="index"
+      >
         <label>
-          <input type="checkbox" :value="index" v-model="selectedDays" />
+          <input
+            :class="{ hidden: isHidden }"
+            type="checkbox"
+            :value="index"
+            v-model="selectedDays"
+          />
           {{ day }}
         </label>
       </div>
-      <button @click.stop type="submit" id="submit">Add Habit</button>
+      <button
+        :class="{ hidden: isHidden }"
+        @click.stop
+        type="submit"
+        id="submit"
+      >
+        Add Habit
+      </button>
     </form>
     <NotificationMessage
       :message="message"
@@ -33,7 +62,8 @@ import { useHabits } from '@/stores/habitsStore.js'
 import { defineComponent, ref } from 'vue'
 import NotificationMessage from './NotificationSuccessMessage.vue'
 import Habit from '@/utils/habits'
-import { useCurrentWeek } from '@/stores/week'
+import { useCurrentWeek } from '@/stores/dayStore'
+import Day from '@/utils/day'
 
 export default defineComponent({
   name: 'HabitForm',
@@ -42,6 +72,7 @@ export default defineComponent({
   },
   setup() {
     const { habits, saveHabits } = useHabits()
+    const { dayWeek } = useCurrentWeek()
     const weekdays = [
       'Monday',
       'Tuesday',
@@ -54,13 +85,14 @@ export default defineComponent({
     const { updateHabits } = useCurrentWeek()
     const message = ref('Habit added succesfully')
     const success = ref(false)
-    const userId = 1
+    const userId = 1 // Placeholder
     const habitName = ref('')
     const habitDescription = ref('')
     const selectedDays = ref([])
     const habitCategory = ref('')
+    const isHidden = ref(false)
+    const isFocused = ref(false)
     const addHabit = () => {
-      console.log(habits.length)
       const habit = new Habit(
         habits.length + 1,
         habitName.value,
@@ -81,6 +113,7 @@ export default defineComponent({
       habits.push(habit)
       // update for the future
       saveHabits()
+      Day.saveWeekdays(dayWeek)
       // reset form values
       success.value = true
       habitName.value = ''
@@ -101,6 +134,8 @@ export default defineComponent({
       habitName,
       habitDescription,
       habitCategory,
+      isHidden,
+      isFocused,
       addHabit,
       NotificationMessage,
     }
@@ -123,12 +158,16 @@ select:hover {
     width 0.3s ease,
     height 0.3s ease;
 }
-#description:focus {
-  width: 90%;
+.focused {
+  width: 80%;
   height: 300px;
+  padding-left: 50px;
   scale: 1;
   justify-self: center;
   align-self: center;
+}
+.hidden {
+  display: none;
 }
 .fade-enter-active {
   transition: opacity 0.5s ease-in;

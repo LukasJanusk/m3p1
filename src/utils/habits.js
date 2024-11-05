@@ -8,7 +8,8 @@ export default class Habit {
     this.active = false
     this.weekdays = weekdays // Array of week days that is active e.g [0, 1, 2, 6]
   }
-  save() {
+  // Save habits to local storage
+  static save() {
     const habits = JSON.parse(localStorage.getItem('habits')) || []
     const existingIndex = habits.findIndex(habit => habit.id === this.id)
     if (existingIndex !== -1) {
@@ -21,5 +22,16 @@ export default class Habit {
   static getHabits() {
     const habits = JSON.parse(localStorage.getItem('habits')) || []
     return habits
+  }
+  // Create a new Habit instance with the same properties
+  clone() {
+    return new Habit(
+      this.id,
+      this.name,
+      this.userId,
+      this.category,
+      this.description,
+      [...this.weekdays],
+    )
   }
 }

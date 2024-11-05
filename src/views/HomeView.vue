@@ -2,12 +2,20 @@
 import WeekDayButtons from '@/components/WeekDayButtons.vue'
 import SelectedDay from '@/components/SelectedDay.vue'
 import DayHabitList from '@/components/DayHabitList.vue'
-import { useCurrentWeek } from '@/stores/week'
+// import { useCurrentWeek } from '@/stores/week'
 
-const { dayWeek, activeIndex } = useCurrentWeek()
+// const { dayWeek, activeIndex } = useCurrentWeek()
 const handleDateSelected = dateObj => {
   console.log(dateObj)
 }
+// const handleHabitActivity = habit => {
+//   const habitToToggle = dayWeek[activeIndex.index].habits.find(h => {
+//     h.id === habit.id
+//   })
+//   if (habitToToggle) {
+//     habitToToggle.active = !habitToToggle.active
+//   }
+// }
 </script>
 
 <template>
@@ -16,10 +24,7 @@ const handleDateSelected = dateObj => {
       <SelectedDay id="selected-day"></SelectedDay>
       <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
     </div>
-    <DayHabitList
-      id="habit-list"
-      :habits="dayWeek[activeIndex.index].habits"
-    ></DayHabitList>
+    <DayHabitList id="habit-list"></DayHabitList>
   </main>
 </template>
 

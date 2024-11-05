@@ -1,6 +1,11 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { getCurrentWeek, getCurrentDayIndex } from '@/utils/dateUtils'
+import {
+  getCurrentWeek,
+  getCurrentDayIndex,
+  getCurrentMonthDates,
+  adjustDayIndex,
+} from '@/utils/dateUtils'
 import Habit from '@/utils/habits'
 import Day from '@/utils/day'
 
@@ -13,6 +18,8 @@ export const useCurrentWeek = defineStore('weekStore', () => {
   }
   const habits = ref(Habit.getHabits())
   const dayWeek = ref(Day.getWeekdays(week.value, habits.value))
+  const monthDates = ref(getCurrentMonthDates())
+  const startIndex = ref(adjustDayIndex(monthDates.value[0]))
   const updateHabits = (
     habitsId,
     habitName,
@@ -42,5 +49,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     setSelectedDay,
     updateHabits,
     dayWeek,
+    monthDates,
+    startIndex,
   }
 })

@@ -1,7 +1,7 @@
 <template>
-  <div id="habits-container">
+  <div v-if="dayWeek[activeIndex.index].active === true" id="habits-container">
     <div
-      v-for="habit in habits"
+      v-for="habit in dayWeek[activeIndex.index].habits"
       :key="habit.id"
       :title="habit.description"
       class="habit-item"
@@ -20,30 +20,42 @@
       />
     </div>
   </div>
+  <div v-else id="habits-container-inactive">
+    <div
+      v-for="habit in dayWeek[activeIndex.index].habits"
+      :key="habit.id"
+      class="habit-item-inactive"
+    >
+      <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
+      <input
+        hidden
+        class="checkbox"
+        type="checkbox"
+        :id="`checkbox-${habit.id}`"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import { useCurrentWeek } from '@/stores/week'
+import { useCurrentWeek } from '@/stores/dayStore'
+import Day from '@/utils/day'
 
 export default defineComponent({
   name: 'DayHabitList',
-  props: {
-    habits: {
-      type: Array,
-      Required: true,
-    },
-  },
-  setup(props) {
-    const { dayWeek } = useCurrentWeek()
+  props: {},
+  setup() {
+    const { dayWeek, activeIndex } = useCurrentWeek()
     function toggleCheckbox(id) {
-      for (const habit of props.habits) {
+      for (const habit of dayWeek[activeIndex.index].habits) {
         if (habit.id === id) {
           habit.active = !habit.active
+          Day.saveWeekdays(dayWeek)
         }
       }
     }
-    return { dayWeek, toggleCheckbox }
+    return { dayWeek, toggleCheckbox, activeIndex }
   },
 })
 </script>
@@ -71,6 +83,21 @@ export default defineComponent({
 .habit-item:active {
   transform: scale(0.99);
   background-color: rgb(94, 192, 159);
+}
+.habit-item-inactive {
+  display: flex;
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.495),
+    rgba(0, 0, 0, 0.262)
+  );
+  border-radius: 50px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  margin-top: 5px;
+  box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
+  transition: transform 0.2s ease;
 }
 .checkbox {
   margin-left: auto;

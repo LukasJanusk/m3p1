@@ -55,3 +55,21 @@ export function adjustDayIndex(date) {
   const dayIndex = date.getDay()
   return dayIndex === 0 ? 6 : dayIndex - 1
 }
+export function isSameDay(date1, date2) {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  )
+}
+export function getCurrentMonthDates() {
+  const dates = []
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  for (let day = 1; day <= daysInMonth; day++) {
+    dates.push(new Date(year, month, day))
+  }
+  return dates
+}
