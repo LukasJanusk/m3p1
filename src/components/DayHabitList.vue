@@ -25,6 +25,7 @@
       v-for="habit in dayWeek[activeIndex.index].habits"
       :key="habit.id"
       class="habit-item-inactive"
+      title="Cannot toggle habits for the future days"
     >
       <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
       <input

@@ -42,6 +42,25 @@ a,
   position: absolute;
   top: 0;
 }
+.nav-button {
+  border-radius: 1rem;
+  max-width: 50px;
+  max-height: 50px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
+}
+.nav-button:hover {
+  transform: scale(1.1);
+  background-color: #466e9e8b;
+}
+.nav-button:active {
+  transform: scale(0.95);
+  border-color: #42b983;
+  background-color: #42b983;
+}
 
 @media (min-width: 1024px) {
   #app {

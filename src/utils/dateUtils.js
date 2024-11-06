@@ -73,3 +73,12 @@ export function getCurrentMonthDates() {
   }
   return dates
 }
+export function getMonthDates(year, month) {
+  const dates = []
+  const adjustedMonth = month - 1
+  const daysInMonth = new Date(year, adjustedMonth + 1, 0).getDate()
+  for (let day = 1; day <= daysInMonth; day++) {
+    dates.push(new Date(year, adjustedMonth, day))
+  }
+  return dates
+}

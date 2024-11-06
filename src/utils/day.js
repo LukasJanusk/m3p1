@@ -1,4 +1,4 @@
-import { adjustDayIndex, isSameDay } from './dateUtils'
+import { adjustDayIndex, isSameDay, getMonthDates } from './dateUtils'
 
 export default class Day {
   constructor(date) {
@@ -17,7 +17,7 @@ export default class Day {
         const habitsToAdd = habits.filter(habit =>
           habit.weekdays.includes(dayIndex),
         )
-        if (habitsToAdd > 0) {
+        if (habitsToAdd.length > 0) {
           habitsToAdd.forEach(habit => {
             newDay.habits.push(habit.clone())
           })
@@ -35,6 +35,41 @@ export default class Day {
       }
     }
     return weekDays
+  }
+  // Generates day objects for a month from local storage filling empty days with new objects
+  static getMonthDays(year, month, habits) {
+    const days = this.loadWeekdays()
+    const currentMonthDays = []
+    if (days.length > 0) {
+      currentMonthDays.push(
+        ...days.filter(
+          day =>
+            day.date.getMonth() + 1 === month &&
+            day.date.getFullYear() === year,
+        ),
+      )
+    }
+    const currentMonthDates = getMonthDates(year, month)
+    const occupiedDays = currentMonthDays.map(day => {
+      return day.date.getDate()
+    })
+    const datesToAdd = currentMonthDates.filter(date => {
+      return !occupiedDays.includes(date.getDate())
+    })
+    for (const date of datesToAdd) {
+      const newDay = new Day(date)
+      const dayIndex = adjustDayIndex(newDay.date)
+      const habitsToAdd = habits.filter(habit =>
+        habit.weekdays.includes(dayIndex),
+      )
+      if (habitsToAdd.length > 0) {
+        habitsToAdd.forEach(habit => {
+          newDay.habits.push(habit.clone())
+        })
+      }
+      currentMonthDays.push(newDay)
+    }
+    return currentMonthDays.sort((a, b) => a.date - b.date)
   }
   static saveWeekdays(weekDays) {
     const toSave = JSON.stringify(weekDays)

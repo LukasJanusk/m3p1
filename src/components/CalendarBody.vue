@@ -1,38 +1,41 @@
 <template>
   <div id="weekday-container">
     <div class="tag-item" v-for="(tag, index) in weekdayTags" :key="index">
-      <p>{{ tag }}</p>
+      <p class="day-text">{{ tag }}</p>
     </div>
   </div>
   <div id="calendar-container">
+    <div class="empty-day" v-for="index in skip" :key="'empty-' + index"></div>
     <div
-      class="empty-day"
-      v-for="index in getEmptyDaysStart()"
-      :key="'empty-' + index"
-    ></div>
-    <div class="day-item" v-for="date in monthDates" :key="date.toISOString()">
-      <p>{{ date.getDate() }}</p>
+      class="day-item"
+      v-for="day in monthDays"
+      :key="day.date.toISOString()"
+    >
+      <p>{{ day.date.getDate() }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'CalendarBody',
   props: {},
   setup() {
-    const { monthDates, startIndex } = useCurrentWeek()
-    console.log(monthDates)
+    const { startIndex, monthDays } = useCurrentWeek()
     const weekdayTags = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
-    function getEmptyDaysStart() {
+    const skip = computed(() => {
       return Array.from({ length: startIndex })
-    }
+    })
 
-    return { monthDates, weekdayTags, startIndex, getEmptyDaysStart }
+    return {
+      monthDays,
+      weekdayTags,
+      startIndex,
+      skip,
+    }
   },
 })
 </script>
@@ -41,7 +44,8 @@ export default defineComponent({
 #calendar-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
+  grid-template-rows: repeat(6, 1fr);
+  gap: 10px;
 }
 #weekday-container {
   display: flex;
@@ -49,19 +53,49 @@ export default defineComponent({
 }
 .tag-item {
   display: flex;
-  margin: 10px;
+  font-size: 20px;
   font-weight: 800;
   justify-content: flex-end;
+  text-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
 }
 .day-item {
-  border: 1px solid black;
-  transition: transform 0.5s ease;
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+  border: 2px solid black;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
   border-radius: 20px;
+  padding: 5px;
+  background: linear-gradient(30deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
 }
 .day-item:hover {
-  scale: 1.05;
+  transform: scale(1.05);
+  background-color: #466e9e8b;
+}
+.day-item:active {
+  transform: scale(0.99);
+  border-color: #42b983;
+  background-color: #42b983;
 }
 .empty-day {
   margin: 1px;
+}
+@media (max-width: 550px) {
+  .tag-item {
+    font-size: 15px;
+  }
+  #calendar-container {
+    gap: 4px;
+  }
+}
+@media (max-width: 1000px) {
+  .day-item {
+    border-radius: 15px;
+  }
 }
 </style>

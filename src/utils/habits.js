@@ -19,8 +19,19 @@ export default class Habit {
     }
     localStorage.setItem('habits', JSON.stringify(habits))
   }
+  // Loads habits from local storage and creates instances of it
   static getHabits() {
-    const habits = JSON.parse(localStorage.getItem('habits')) || []
+    const habitsParsed = JSON.parse(localStorage.getItem('habits')) || []
+    const habits = habitsParsed.map(habitData => {
+      return new Habit(
+        habitData.id,
+        habitData.name,
+        habitData.userId,
+        habitData.category,
+        habitData.description,
+        habitData.weekdays,
+      )
+    })
     return habits
   }
   // Create a new Habit instance with the same properties
