@@ -61,7 +61,6 @@ a,
   border-color: #42b983;
   background-color: #42b983;
 }
-
 @media (min-width: 1024px) {
   #app {
     display: grid;

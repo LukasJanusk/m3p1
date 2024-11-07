@@ -5,6 +5,7 @@ import {
   getCurrentDayIndex,
   adjustDayIndex,
 } from '@/utils/dateUtils'
+import Category from '@/utils/category'
 import Habit from '@/utils/habits'
 import Day from '@/utils/day'
 
@@ -33,6 +34,12 @@ export const useCurrentWeek = defineStore('weekStore', () => {
       }
     })
   }
+  const saveHabits = () => {
+    const habitsJson = JSON.stringify(habits.value)
+    localStorage.setItem('habits', habitsJson)
+  }
+  // categories
+  const categories = ref(Category.load())
   //week
   const week = ref(getCurrentWeek())
   const activeIndex = ref({ index: getCurrentDayIndex() })
@@ -57,10 +64,8 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     const year = nextMonthDate.getFullYear()
     const month = nextMonthDate.getMonth()
     selectedMonth.value = month + 1
-    monthDays.value = Day.getMonthDays(year, month + 1, habits.value)
+    monthDays.value = [...Day.getMonthDays(year, month + 1, habits.value)]
     startIndex.value = adjustDayIndex(monthDays.value[0].date)
-    console.log(monthDays.value)
-    console.log(selectedMonth.value)
   }
   const previousMonth = () => {
     const previousMonthDate = new Date(monthDays.value[0].date)
@@ -68,18 +73,19 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     const year = previousMonthDate.getFullYear()
     const month = previousMonthDate.getMonth()
     selectedMonth.value = month + 1
-    monthDays.value = Day.getMonthDays(year, month + 1, habits.value)
+    monthDays.value = [...Day.getMonthDays(year, month + 1, habits.value)]
     startIndex.value = adjustDayIndex(monthDays.value[0].date)
-    console.log(monthDays.value)
-    console.log(selectedMonth.value)
   }
 
   return {
     week,
+    habits,
+    categories,
     activeIndex,
     selectedDay,
     setSelectedDay,
     updateHabits,
+    saveHabits,
     nextMonth,
     previousMonth,
     dayWeek,

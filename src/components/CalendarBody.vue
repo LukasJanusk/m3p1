@@ -1,39 +1,51 @@
 <template>
-  <div id="weekday-container">
-    <div class="tag-item" v-for="(tag, index) in weekdayTags" :key="index">
-      <p class="day-text">{{ tag }}</p>
+  <div id="calendar-body">
+    <div id="weekday-container">
+      <div class="tag-item" v-for="(tag, index) in weekdayTags" :key="index">
+        <p class="day-text">{{ tag }}</p>
+      </div>
     </div>
-  </div>
-  <div id="calendar-container">
-    <div class="empty-day" v-for="index in skip" :key="'empty-' + index"></div>
-    <div
-      class="day-item"
-      v-for="day in monthDays"
-      :key="day.date.toISOString()"
-    >
-      <p>{{ day.date.getDate() }}</p>
+    <div id="calendar-container">
+      <div
+        class="empty-day"
+        v-for="index in skip"
+        :key="'empty-' + index"
+      ></div>
+      <DayOfMonth
+        v-for="day in monthDays"
+        :key="day.date.toISOString()"
+        :dayObject="day"
+      >
+      </DayOfMonth>
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, computed } from 'vue'
-import { useCurrentWeek } from '@/stores/dayStore'
+import DayOfMonth from './DayOfMonth.vue'
 
 export default defineComponent({
   name: 'CalendarBody',
-  props: {},
-  setup() {
-    const { startIndex, monthDays } = useCurrentWeek()
+  components: { DayOfMonth },
+  props: {
+    startIndex: {
+      type: Number,
+      required: true,
+    },
+    monthDays: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props) {
     const weekdayTags = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     const skip = computed(() => {
-      return Array.from({ length: startIndex })
+      return Array.from({ length: props.startIndex })
     })
 
     return {
-      monthDays,
       weekdayTags,
-      startIndex,
       skip,
     }
   },
@@ -41,11 +53,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#calendar-body {
+  height: inherit;
+}
 #calendar-container {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: repeat(7, calc((100% - (6 * 10px)) / 7));
+  grid-template-rows: repeat(6, calc((100% - (5 * 10px)) / 6));
   gap: 10px;
+  height: 85%;
 }
 #weekday-container {
   display: flex;
@@ -58,7 +74,8 @@ export default defineComponent({
   justify-content: flex-end;
   text-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
 }
-.day-item {
+/* .day-item {
+  cursor: pointer;
   display: flex;
   justify-content: flex-end;
   align-items: end;
@@ -81,7 +98,7 @@ export default defineComponent({
   transform: scale(0.99);
   border-color: #42b983;
   background-color: #42b983;
-}
+} */
 .empty-day {
   margin: 1px;
 }
@@ -91,6 +108,9 @@ export default defineComponent({
   }
   #calendar-container {
     gap: 4px;
+    grid-template-columns: repeat(7, calc((100% - (6 * 4px)) / 7));
+    grid-template-rows: repeat(6, calc((100% - (5 * 4px)) / 6));
+    gap: 4;
   }
 }
 @media (max-width: 1000px) {

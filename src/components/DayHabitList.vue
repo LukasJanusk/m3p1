@@ -76,6 +76,7 @@ export default defineComponent({
   margin-top: 5px;
   box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
   transition: transform 0.2s ease;
+  cursor: pointer;
 }
 .habit-item:hover {
   background-color: rgb(80, 168, 139);

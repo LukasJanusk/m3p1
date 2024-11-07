@@ -4,35 +4,37 @@ import SelectedDay from '@/components/SelectedDay.vue'
 import DayHabitList from '@/components/DayHabitList.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import TopContainer from '@/components/TopContainer.vue'
-// import { useCurrentWeek } from '@/stores/week'
 
-// const { dayWeek, activeIndex } = useCurrentWeek()
 const handleDateSelected = dateObj => {
   console.log(dateObj)
 }
-// const handleHabitActivity = habit => {
-//   const habitToToggle = dayWeek[activeIndex.index].habits.find(h => {
-//     h.id === habit.id
-//   })
-//   if (habitToToggle) {
-//     habitToToggle.active = !habitToToggle.active
-//   }
-// }
 </script>
 
 <template>
   <main>
     <TopContainer>
-      <SelectedDay id="selected-day"></SelectedDay>
+      <Transition name="fade" mode="out-in">
+        <SelectedDay id="selected-day"></SelectedDay>
+      </Transition>
       <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
     </TopContainer>
     <MainContainer>
-      <DayHabitList id="habit-list"></DayHabitList
+      <Transition name="fade" mode="out-in">
+        <DayHabitList id="habit-list"></DayHabitList> </Transition
     ></MainContainer>
   </main>
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 #selected-day {
   margin-left: 10px;
   margin-bottom: 5px;

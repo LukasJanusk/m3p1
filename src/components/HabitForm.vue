@@ -4,51 +4,37 @@
       <label for="name" required>Habit name</label><br />
       <input id="name" type="text" maxlength="30" v-model="habitName" /><br />
       <label for="description">Description</label><br />
-      <textarea
-        @click="(isHidden = !isHidden), (isFocused = !isFocused)"
-        value="description"
-        :class="{ focused: isFocused }"
-        v-model="habitDescription"
-      ></textarea
-      ><br />
-      <label :class="{ hidden: isHidden }" for="category">Category</label><br />
-      <select
-        :class="{ hidden: isHidden }"
-        id="category"
-        v-model="habitCategory"
-      >
-        <option value="sport">Sport</option>
-        <option value="food">Eating</option>
-        <option value="sleep">Sleep</option>
-        <option value="learning">Learning</option></select
-      ><br />
-      <label :class="{ hidden: isHidden }" for="weekday-select"
-        >Select habit activity days</label
-      >
-      <div
-        :class="{ hidden: isHidden }"
-        id="weekday-select"
-        v-for="(day, index) in weekdays"
-        :key="index"
-      >
+      <textarea value="description" v-model="habitDescription"></textarea><br />
+      <label for="category">Category</label><br />
+      <div id="category-select-container">
+        <CategorySelect
+          id="category"
+          v-model="habitCategory"
+          :categories="store.categories"
+        ></CategorySelect>
+        <img
+          id="add-category-button"
+          class="nav-button"
+          src="../assets/add2.svg"
+          title="Add category"
+          alt="Plus symbol inside rounded square"
+          @click="addingCategory = !addingCategory"
+        />
+        <Transition name="fade" mode="out-in">
+          <AddCategoryForm
+            v-if="addingCategory"
+            @close-form="addingCategory = false"
+          ></AddCategoryForm
+        ></Transition>
+      </div>
+      <label for="weekday-select">Select habit activity days</label>
+      <div id="weekday-select" v-for="(day, index) in weekdays" :key="index">
         <label>
-          <input
-            :class="{ hidden: isHidden }"
-            type="checkbox"
-            :value="index"
-            v-model="selectedDays"
-          />
+          <input type="checkbox" :value="index" v-model="selectedDays" />
           {{ day }}
         </label>
       </div>
-      <button
-        :class="{ hidden: isHidden }"
-        @click.stop
-        type="submit"
-        id="submit"
-      >
-        Add Habit
-      </button>
+      <button @click.stop type="submit" id="submit">Add Habit</button>
     </form>
     <NotificationMessage
       :message="message"
@@ -58,21 +44,23 @@
 </template>
 
 <script>
-import { useHabits } from '@/stores/habitsStore.js'
 import { defineComponent, ref } from 'vue'
 import NotificationMessage from './NotificationSuccessMessage.vue'
 import Habit from '@/utils/habits'
 import { useCurrentWeek } from '@/stores/dayStore'
 import Day from '@/utils/day'
+import CategorySelect from './CategorySelect.vue'
+import AddCategoryForm from './AddCategoryForm.vue'
 
 export default defineComponent({
   name: 'HabitForm',
   components: {
     NotificationMessage,
+    CategorySelect,
+    AddCategoryForm,
   },
   setup() {
-    const { habits, saveHabits } = useHabits()
-    const { dayWeek } = useCurrentWeek()
+    const store = useCurrentWeek()
     const weekdays = [
       'Monday',
       'Tuesday',
@@ -82,7 +70,6 @@ export default defineComponent({
       'Saturday',
       'Sunday',
     ]
-    const { updateHabits } = useCurrentWeek()
     const message = ref('Habit added succesfully')
     const success = ref(false)
     const userId = 1 // Placeholder
@@ -92,9 +79,10 @@ export default defineComponent({
     const habitCategory = ref('')
     const isHidden = ref(false)
     const isFocused = ref(false)
+    const addingCategory = ref(false)
     const addHabit = () => {
       const habit = new Habit(
-        habits.length + 1,
+        store.habits.length + 1,
         habitName.value,
         userId,
         habitCategory.value,
@@ -102,18 +90,18 @@ export default defineComponent({
         selectedDays.value,
       )
       // update for runtime
-      updateHabits(
-        habits.length + 1,
+      store.updateHabits(
+        store.habits.length + 1,
         habitName.value,
         userId,
         habitCategory.value,
         habitDescription.value,
         selectedDays.value,
       )
-      habits.push(habit)
+      store.habits.push(habit)
       // update for the future
-      saveHabits()
-      Day.saveWeekdays(dayWeek)
+      store.saveHabits()
+      Day.saveWeekdays(store.dayWeek)
       // reset form values
       success.value = true
       habitName.value = ''
@@ -126,7 +114,7 @@ export default defineComponent({
       }, 4000)
     }
     return {
-      habits,
+      store,
       success,
       message,
       weekdays,
@@ -136,6 +124,7 @@ export default defineComponent({
       habitCategory,
       isHidden,
       isFocused,
+      addingCategory,
       addHabit,
       NotificationMessage,
     }
@@ -144,6 +133,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 textarea:hover {
   scale: 1.05;
 }
@@ -157,6 +154,16 @@ select:hover {
   transition:
     width 0.3s ease,
     height 0.3s ease;
+}
+#category-select-container {
+  display: flex;
+}
+#add-category-button {
+  height: 22px;
+  margin-left: 10px;
+  border-radius: 0.5rem;
+  /* box-shadow: 0px 2px 4px; */
+  /* background: linear-gradient(30deg, rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0)); */
 }
 .focused {
   width: 80%;

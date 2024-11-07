@@ -10,12 +10,14 @@ export default defineComponent({
   name: 'SelectedMonth',
 
   setup() {
-    const { monthDays } = useCurrentWeek()
+    const store = useCurrentWeek()
     const month = computed(() => {
-      return monthDays[0].date.toLocaleString('default', { month: 'long' })
+      return store.monthDays[0].date.toLocaleString('default', {
+        month: 'long',
+      })
     })
     const year = computed(() => {
-      return ' ' + monthDays[0].date.getFullYear()
+      return ' ' + store.monthDays[0].date.getFullYear()
     })
     return { month, year }
   },

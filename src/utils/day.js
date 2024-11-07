@@ -32,6 +32,8 @@ export default class Day {
       const dayIndex = adjustDayIndex(day.date)
       if (dayIndex > todayIndex) {
         day.active = false
+      } else {
+        day.active = true
       }
     }
     return weekDays

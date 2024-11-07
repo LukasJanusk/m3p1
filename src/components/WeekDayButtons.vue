@@ -19,16 +19,6 @@ import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'WeekdayButtons',
-
-  // Define props for dynamic data
-  props: {
-    date: {
-      type: Date,
-      default: () => new Date(),
-    },
-  },
-
-  // Using the setup function for state and methods
   setup(props, { emit }) {
     const { week, activeIndex, selectedDay, setSelectedDay, dayWeek } =
       useCurrentWeek()
@@ -56,7 +46,7 @@ export default defineComponent({
   color: #ffffff;
   background-color: #42b983;
   border: none;
-  border-radius: 25px; /* Rounded corners */
+  border-radius: 15px;
   cursor: pointer;
   transition:
     background-color 0.3s ease,
@@ -77,8 +67,8 @@ export default defineComponent({
 .active {
   background-color: #226144;
   color: #ffffff;
-  box-shadow: 0px 4px 10px rgba(34, 97, 68, 0.5); /* Shadow for active state */
-  border-radius: 25px 25px 25px 25px; /* Rounded top corners */
+  transform: scale(0.98);
+  box-shadow: 0px 4px 10px rgba(34, 97, 68, 0.5);
 }
 
 .active:hover {

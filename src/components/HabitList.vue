@@ -1,7 +1,7 @@
 <template>
   <div id="habits-container">
     <div
-      v-for="habit in habits"
+      v-for="habit in store.habits"
       :key="habit.id"
       :title="habit.description"
       class="habit-item"
@@ -49,23 +49,20 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { useHabits } from '@/stores/habitsStore'
+import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'HabitList',
   setup() {
-    const { habits } = useHabits()
+    const store = useCurrentWeek()
     const deleteHover = ref({})
     const editHover = ref({})
-
     const setDeleteHover = (id, state) => {
       deleteHover.value = { ...deleteHover.value, [id]: state }
     }
-
     const setEditHover = (id, state) => {
       editHover.value = { ...editHover.value, [id]: state }
     }
-
     const isActive = (habit, index) => {
       return habit.weekdays.includes(index)
     }
@@ -80,7 +77,7 @@ export default defineComponent({
     ])
 
     return {
-      habits,
+      store,
       deleteHover,
       editHover,
       setDeleteHover,
@@ -93,7 +90,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-img {
+#edit-button,
+#delete-button {
+  cursor: pointer;
+  height: 30px;
+  cursor: pointer;
   height: 30px;
   border: 1px solid transparent;
   border-radius: 10px;
@@ -139,7 +140,7 @@ img:active {
   padding: 0.5rem;
   margin-top: 5px;
   box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
-  transition: background-color 0.5s ease;
+  transition: background-color 0.3s ease;
 }
 #edit-tools-container {
   display: flex;
@@ -205,6 +206,7 @@ img:active {
   #edit-button,
   #delete-button {
     height: 30px;
+    cursor: pointer;
   }
 }
 </style>
