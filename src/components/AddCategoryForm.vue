@@ -82,6 +82,19 @@ export default defineComponent({
 textarea {
   max-width: 99%;
   width: 90%;
+  width: 200px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.37);
+  border: 1px solid #ccc;
+  border-radius: 18px;
+  padding: 5px;
+  color: #333;
+}
+input {
+  background-color: rgba(255, 255, 255, 0.37);
+  border: 1px solid #ccc;
+  border-radius: 18px;
+  padding: 5px;
 }
 #add-habit-form {
   position: fixed;

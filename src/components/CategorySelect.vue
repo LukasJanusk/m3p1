@@ -1,5 +1,6 @@
 <template>
   <select :value="modelValue" @input="handleInput">
+    <option disabled selected value="">Select a category</option>
     <option
       v-for="category in categories"
       :key="category.id"
@@ -37,4 +38,24 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+select {
+  background-color: transparent;
+  align-self: center;
+  border: 1px solid #ccc;
+  border-radius: 18px;
+  padding: 5px;
+  color: #333;
+}
+option {
+  background-color: rgba(255, 255, 255, 0.409);
+  color: #333;
+  padding: 10px;
+  border-radius: 18px;
+}
+@media (max-width: 500px) {
+  select {
+    width: 100%;
+  }
+}
+</style>

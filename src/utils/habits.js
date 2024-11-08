@@ -7,6 +7,7 @@ export default class Habit {
     this.userId = userId
     this.active = false
     this.weekdays = weekdays // Array of week days that is active e.g [0, 1, 2, 6]
+    this.stopped = false
   }
   // Save habits to local storage
   static save() {
@@ -44,5 +45,17 @@ export default class Habit {
       this.description,
       [...this.weekdays],
     )
+  }
+  // If matching ID is found it updates habit values with pased Habit object values
+  updateInPlace(habit) {
+    if (this.id === habit.id) {
+      this.name = habit.name
+      this.description = habit.description
+      this.category = habit.category
+      this.userId = habit.userId
+      this.active = habit.active
+      this.weekdays = habit.weekdays
+      this.stopped = habit.stopped
+    }
   }
 }

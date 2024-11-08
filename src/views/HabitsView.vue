@@ -3,13 +3,17 @@ import HabitForm from '@/components/HabitForm.vue'
 import HabitList from '@/components/HabitList.vue'
 import TopContainer from '@/components/TopContainer.vue'
 import MainContainer from '@/components/MainContainer.vue'
+import CategorySelect from '@/components/CategorySelect.vue'
 import { ref, computed } from 'vue'
+import { useCurrentWeek } from '@/stores/dayStore'
 
 const show = ref(false)
 const title = computed(() => (show.value ? 'Add Habit' : 'My Habits'))
 const showForm = () => {
   show.value = !show.value
 }
+const habitCategory = ref('')
+const store = useCurrentWeek()
 </script>
 <template>
   <TopContainer id="title">
@@ -21,15 +25,22 @@ const showForm = () => {
       <img v-if="!show" title="Add new habit" src="../assets/add2.svg" />
       <img v-if="show" title="Back to habits" src="../assets/back2.svg" /></div
   ></TopContainer>
-  <MainContainer>
-    <Transition name="fade" mode="out-in">
-      <HabitList v-if="!show"></HabitList>
+  <MainContainer
+    ><Transition name="fade" mode="out-in"
+      ><div v-if="!show">
+        <CategorySelect
+          id="category"
+          v-model="habitCategory"
+          :categories="store.categories"
+        ></CategorySelect>
+        <HabitList v-if="!show"></HabitList>
+      </div>
       <HabitForm v-else></HabitForm>
     </Transition>
   </MainContainer>
 </template>
 
-<style scoped>
+<style>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;

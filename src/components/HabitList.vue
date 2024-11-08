@@ -31,18 +31,33 @@
             src="../assets/edit5.svg"
             alt="edit pencil"
             title="Edit Habit"
+            @click="editHabitId = habit.id"
           /><img
             id="delete-button"
             @mouseenter="setDeleteHover(habit.id, true)"
             @mouseleave="setDeleteHover(habit.id, false)"
             @touchstart="setDeleteHover(habit.id, true)"
             @touchend="setDeleteHover(habit.id, false)"
+            @click="store.deleteHabit(habit.id)"
             src="../assets/trash1.svg"
             alt="trashcan"
             title="Remove Habit"
           />
         </div>
       </div>
+      <EditHabitForm
+        id="edit-habit-form"
+        v-if="editHabitId === habit.id"
+        :habit="habit"
+        :categories="store.categories"
+        @close-form="editHabitId = null"
+        @update="
+          newHabit => {
+            editHabitId = null
+            store.editHabit(newHabit)
+          }
+        "
+      ></EditHabitForm>
     </div>
   </div>
 </template>
@@ -50,13 +65,17 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
+import EditHabitForm from './EditHabitForm.vue'
 
 export default defineComponent({
   name: 'HabitList',
+  components: { EditHabitForm },
   setup() {
     const store = useCurrentWeek()
     const deleteHover = ref({})
     const editHover = ref({})
+    const editHabitId = ref(null) // Store the id of the habit being edited
+    // const editActive = ref(false)
     const setDeleteHover = (id, state) => {
       deleteHover.value = { ...deleteHover.value, [id]: state }
     }
@@ -84,6 +103,8 @@ export default defineComponent({
       setEditHover,
       weekDayToggles,
       isActive,
+      // editActive,
+      editHabitId,
     }
   },
 })
@@ -182,6 +203,13 @@ img:active {
 .fade-leave-to {
   opacity: 0;
 }
+/* #edit-habit-form {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  justify-self: center;
+  align-self: center;
+} */
 @media (max-width: 600px) {
   .day-toggle {
     font-size: 16px;
