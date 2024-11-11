@@ -1,9 +1,9 @@
 <template>
   <div class="week-container">
     <button
-      v-for="(day, index) in dayWeek"
+      v-for="(day, index) in store.dayWeek"
       class="week-day"
-      :class="{ active: activeIndex.index === index }"
+      :class="{ active: store.activeIndex.index === index }"
       :key="day.date"
       @click="handleClick(day, index)"
     >
@@ -14,21 +14,20 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { getWeekDay } from '@/utils/dateUtils'
+import { formatDate, getWeekDay } from '@/utils/dateUtils'
 import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'WeekdayButtons',
   setup(props, { emit }) {
-    const { week, activeIndex, selectedDay, setSelectedDay, dayWeek } =
-      useCurrentWeek()
+    const store = useCurrentWeek()
     function handleClick(day, index) {
-      activeIndex.index = index
-      setSelectedDay(day.date)
-      emit('dateSelected', day) // Emit the clicked date object
+      store.activeIndex.index = index
+      store.setSelectedDay(day.date)
+      const dateString = formatDate(day.date)
+      emit('dateSelected', dateString)
     }
-
-    return { activeIndex, week, selectedDay, getWeekDay, handleClick, dayWeek }
+    return { store, getWeekDay, handleClick }
   },
 })
 </script>
@@ -44,8 +43,12 @@ export default defineComponent({
   font-size: 16px;
   min-width: 60px;
   color: #ffffff;
-  background-color: #42b983;
-  border: none;
+  background: linear-gradient(
+    135deg,
+    rgba(48, 162, 111, 1),
+    rgba(27, 122, 78, 1)
+  );
+  border: 2px solid rgba(0, 0, 0, 0.4);
   border-radius: 15px;
   cursor: pointer;
   transition:
@@ -56,37 +59,41 @@ export default defineComponent({
 }
 
 .week-day:hover {
-  background-color: #5a9fd7;
+  background: linear-gradient(
+    135deg,
+    rgba(70, 110, 158, 1),
+    rgba(36, 82, 128, 1)
+  );
   transform: scale(1.05);
 }
 .week-day:active {
-  border-color: #226144;
+  background: rgba(56, 183, 126, 1);
+  border-color: transparent;
   transform: scale(0.95);
-  background-color: #4dd698;
 }
 .active {
-  background-color: #226144;
+  background: linear-gradient(135deg, rgba(34, 97, 68, 1), rgba(20, 75, 50, 1));
   color: #ffffff;
+  border: 2px solid rgba(0, 0, 0, 0.6);
   transform: scale(0.98);
   box-shadow: 0px 4px 10px rgba(34, 97, 68, 0.5);
 }
 
-.active:hover {
-  background-color: #466e9e;
-}
 @media (max-width: 600px) {
   .week-container {
-    flex-wrap: wrap;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 1fr;
   }
   .week-day {
-    padding: 8px 12px;
+    padding: 20px 6px;
     font-size: 12px;
-    min-width: 30px;
+    min-width: 40px;
     margin: 2px;
+    width: 1/7;
   }
 }
-@media (min-width: 500px) {
+@media (min-width: 600px) {
   .week-container {
     display: flex;
     justify-content: flex-start;

@@ -15,6 +15,7 @@
         v-for="day in monthDays"
         :key="day.date.toISOString()"
         :dayObject="day"
+        @click="daySelected(day)"
       >
       </DayOfMonth>
     </div>
@@ -38,15 +39,19 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const weekdayTags = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     const skip = computed(() => {
       return Array.from({ length: props.startIndex })
     })
-
+    const daySelected = day => {
+      emit('daySelected', day)
+      console.log(`Day selected: ${day}`)
+    }
     return {
       weekdayTags,
       skip,
+      daySelected,
     }
   },
 })

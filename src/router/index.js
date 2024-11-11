@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import CalendarView from '../views/CalendarView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,21 +9,37 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      props: route => {
+        const dateParam =
+          route.query.date || new Date().toISOString().split('T')[0]
+        return { date: dateParam }
+      },
+    },
+    {
+      path: '/day/:date',
+      name: 'HomeView',
+      component: HomeView,
+      props: true,
     },
     {
       path: '/calendar',
       name: 'calendar',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/CalendarView.vue'),
+      // props: route => {
+      //   const dateParam =
+      //     route.params.date || new Date().toISOString().split('T')[0]
+      //   return { date: dateParam }
+      // },
+    },
+    {
+      path: '/calendar/day/:date',
+      name: 'CalendarView',
+      component: CalendarView,
+      props: true,
     },
     {
       path: '/habits',
       name: 'habits',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/HabitsView.vue'),
     },
   ],

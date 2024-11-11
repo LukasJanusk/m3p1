@@ -7,13 +7,13 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="wrapper">
       <nav>
         <RouterLink title="habits" to="/habits" active-class="active-link">
-          <img src="./assets/list.svg" />
+          <img src="./assets/list.svg" alt="Habits" />
         </RouterLink>
         <RouterLink title="home" to="/" active-class="active-link">
-          <img src="./assets/home.svg" />
+          <img src="./assets/home.svg" alt="Home" />
         </RouterLink>
         <RouterLink title="calendar" to="/calendar" active-class="active-link">
-          <img src="./assets/calendar.svg" />
+          <img src="./assets/calendar.svg" alt="Calendar" />
         </RouterLink>
       </nav>
     </div>

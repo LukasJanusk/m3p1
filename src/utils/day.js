@@ -7,7 +7,8 @@ export default class Day {
     this.active = true
   }
   // Creates new object Array of days of current week
-  static getWeekdays(week, habits) {
+  static getWeekdays(week, allHabits) {
+    const habits = allHabits.filter(habit => habit.stopped === false)
     const weekDays = this.getCurrentWeekSavedDays(week)
     const dayIndexes = weekDays.map(day => day.date.getDay())
     for (const day of week) {
@@ -39,7 +40,8 @@ export default class Day {
     return weekDays
   }
   // Generates day objects for a month from local storage filling empty days with new objects
-  static getMonthDays(year, month, habits) {
+  static getMonthDays(year, month, allHabits) {
+    const habits = allHabits.filter(habit => habit.stopped === false)
     const days = this.loadWeekdays()
     const currentMonthDays = []
     if (days.length > 0) {
@@ -71,12 +73,29 @@ export default class Day {
       }
       currentMonthDays.push(newDay)
     }
+    currentMonthDays.forEach(day => {
+      if (day.date > new Date()) {
+        day.active = false
+      }
+    })
     return currentMonthDays.sort((a, b) => a.date - b.date)
   }
   static saveWeekdays(weekDays) {
-    const toSave = JSON.stringify(weekDays)
-    localStorage.setItem('days', toSave)
+    const savedDays = this.loadWeekdays() || []
+    for (const d of weekDays) {
+      const existingDay = savedDays.find(
+        day => day.date.toISOString() === d.date.toISOString(),
+      )
+      if (existingDay) {
+        existingDay.habits = d.habits
+        existingDay.active = d.active
+      } else {
+        savedDays.push(d)
+      }
+    }
+    localStorage.setItem('days', JSON.stringify(savedDays))
   }
+  // Returns Day objects from local storage
   static loadWeekdays() {
     const savedData = localStorage.getItem('days')
     if (!savedData) return []

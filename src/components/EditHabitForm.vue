@@ -72,6 +72,7 @@ export default defineComponent({
     const habitWeekdays = ref(props.habit.weekdays)
     const habitCategory = ref(props.habit.category)
     const updateHabit = () => {
+      console.log(habitCategory.value)
       emit(
         'update',
         new Habit(

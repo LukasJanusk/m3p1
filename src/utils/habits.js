@@ -31,6 +31,7 @@ export default class Habit {
         habitData.category,
         habitData.description,
         habitData.weekdays,
+        habitData.stopped,
       )
     })
     return habits
