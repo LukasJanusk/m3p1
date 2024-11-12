@@ -99,7 +99,60 @@ export const useCurrentWeek = defineStore('weekStore', () => {
       })
       saveHabits()
       Day.saveWeekdays(dayWeek.value)
+      Day.saveWeekdays(monthDays.value)
+      console.log(`Habits saved to localStorage`)
     }
+    return true
+  }
+  const stopHabit = habitId => {
+    const habitToStop = habits.value.find(h => habitId === h.id)
+    if (habitToStop) {
+      habitToStop.stopped = true
+      saveHabits()
+    }
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    dayWeek.value.forEach(day => {
+      if (day.date >= today) {
+        day.habits = day.habits.filter(habit => habit.id !== habitId)
+      }
+    })
+    monthDays.value.forEach(day => {
+      if (day.date >= today) {
+        day.habits = day.habits.filter(habit => habit.id !== habitId)
+      }
+    })
+    Day.saveWeekdays(dayWeek.value)
+    Day.saveWeekdays(monthDays.value)
+    return true
+  }
+  const activateStoppedHabit = habitId => {
+    const habitToActivate = habits.value.find(h => habitId === h.id)
+    if (habitToActivate) {
+      habitToActivate.stopped = false
+      saveHabits()
+    }
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    dayWeek.value.forEach(day => {
+      if (
+        day.date >= today &&
+        !day.habits.some(habit => habit.id === habitId)
+      ) {
+        day.habits.push(habitToActivate.clone())
+      }
+    })
+    monthDays.value.forEach(day => {
+      if (
+        day.date >= today &&
+        !day.habits.some(habit => habit.id === habitId)
+      ) {
+        day.habits.push(habitToActivate.clone())
+      }
+    })
+    Day.saveWeekdays(dayWeek.value)
+    Day.saveWeekdays(monthDays.value)
+    return true
   }
   const deleteHabit = habitId => {
     const days = Day.loadWeekdays()
@@ -115,6 +168,8 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     })
     saveHabits()
     Day.saveWeekdays(days)
+    console.log(`Habit deleted returning true`)
+    return true
   }
   // categories
   const categories = ref(Category.load())
@@ -122,6 +177,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
   const week = ref(getCurrentWeek())
   const activeIndex = ref({ index: getCurrentDayIndex() })
   const selectedDay = ref(new Date())
+  selectedDay.value.setHours(0, 0, 0, 0)
   const setSelectedDay = newDate => {
     selectedDay.value = newDate
   }
@@ -154,13 +210,14 @@ export const useCurrentWeek = defineStore('weekStore', () => {
       match.active = day.active
     }
   }
+  console.log(dayWeek.value)
   const nextMonth = () => {
     const nextMonthDate = new Date(monthDays.value[0].date)
     nextMonthDate.setMonth(monthDays.value[0].date.getMonth() + 1)
     const year = nextMonthDate.getFullYear()
     const month = nextMonthDate.getMonth()
     selectedMonth.value = month + 1
-    monthDays.value = [...Day.getMonthDays(year, month + 1, habits.value)]
+    monthDays.value = [...Day.getMonthDays(year, month, habits.value)]
     startIndex.value = adjustDayIndex(monthDays.value[0].date)
   }
   const previousMonth = () => {
@@ -168,8 +225,8 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     previousMonthDate.setMonth(monthDays.value[0].date.getMonth() - 1)
     const year = previousMonthDate.getFullYear()
     const month = previousMonthDate.getMonth()
-    selectedMonth.value = month + 1
-    monthDays.value = [...Day.getMonthDays(year, month + 1, habits.value)]
+    selectedMonth.value = month - 1
+    monthDays.value = [...Day.getMonthDays(year, month, habits.value)]
     startIndex.value = adjustDayIndex(monthDays.value[0].date)
   }
 
@@ -184,6 +241,8 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     editHabit,
     deleteHabit,
     saveHabits,
+    activateStoppedHabit,
+    stopHabit,
     updateWeek,
     updateMonth,
     nextMonth,

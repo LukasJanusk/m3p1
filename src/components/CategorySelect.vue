@@ -1,11 +1,12 @@
 <template>
   <select :value="modelValue" @input="handleInput">
-    <option disabled selected value="">Select a category</option>
+    <option v-if="showSelectCategory" value="Select a category" disabled>
+      Select a category
+    </option>
     <option
-      v-for="category in categories"
+      v-for="category in categoriesFiltered"
       :key="category.id"
       :value="category.name"
-      @input="$emit(category.name)"
     >
       {{ category.name }}
     </option></select
@@ -13,7 +14,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   name: 'CategorySelect',
@@ -21,6 +22,16 @@ export default defineComponent({
     categories: {
       type: Array,
       required: true,
+    },
+    showAll: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    showSelectCategory: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     modelValue: {
       // This is for v-model binding
@@ -34,7 +45,15 @@ export default defineComponent({
       this.$emit('update:modelValue', event.target.value)
     },
   },
-  setup() {},
+  setup(props) {
+    const categoriesFiltered = computed(() => {
+      if (props.showAll === false) {
+        return props.categories.filter(category => category.id !== 0)
+      }
+      return props.categories
+    })
+    return { categoriesFiltered }
+  },
 })
 </script>
 

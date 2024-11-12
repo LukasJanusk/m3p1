@@ -1,66 +1,91 @@
 <template>
-  <form id="add-habit-form" @submit.prevent="updateCategories">
-    <h2>Add Category</h2>
-    <label for="category-name">Name</label>
-    <img
-      id="close-button"
-      src="../assets/close.svg"
-      alt="x symbol in a square"
-      title="close"
-      @click="closeForm"
-    /><br />
-    <input
-      type="text"
-      maxlength="30"
-      id="category-name"
-      v-model="categoryName"
-    /><br />
-    <label for="description">Description</label><br />
-    <textarea
-      value="desciption"
-      id="description"
-      v-model="categoryDescription"
-    ></textarea
-    ><br />
-    <button id="submit-button" type="submit" @click.stop>Add Category</button>
-  </form>
+  <div>
+    <form id="add-category-form" @submit.prevent="updateCategories">
+      <h2>Add Category</h2>
+      <label for="category-name">Name*</label>
+      <img
+        id="close-button"
+        src="../assets/close.svg"
+        alt="x symbol in a square"
+        title="close"
+        @click="closeForm"
+      /><br />
+      <input
+        type="text"
+        maxlength="30"
+        id="category-name"
+        v-model="categoryName"
+      /><br />
+      <label for="description">Description</label><br />
+      <textarea id="description" v-model="categoryDescription"></textarea><br />
+      <button
+        class="submit-button"
+        id="submit-button"
+        type="submit"
+        @click.stop
+      >
+        Add Category
+      </button>
+    </form>
+    <ErrorMessage v-if="error" :message="message"></ErrorMessage>
+  </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import Category from '@/utils/category'
+import ErrorMessage from './ErrorMessage.vue'
 
 export default defineComponent({
   name: 'AddCategoryForm',
-  props: {
-    categories: {
-      type: Array,
-      required: true,
-    },
-  },
+  components: { ErrorMessage },
+  emits: ['category-added', 'close-form'],
   setup(props, { emit }) {
     const store = useCurrentWeek()
     const categoryName = ref('')
     const categoryDescription = ref('')
+    const error = ref(false)
+    const message = ref('')
     const updateCategories = () => {
-      const category = new Category(
-        store.categories.length + 1,
-        categoryName.value,
-        categoryDescription.value,
-      )
-      store.categories.push(category)
-      Category.save(store.categories)
+      if (!categoryName.value) {
+        error.value = true
+        message.value = 'Invalid category name!'
+        setTimeout(() => {
+          error.value = false
+        }, 3000)
+      } else {
+        const category = new Category(
+          store.categories.length + 1,
+          categoryName.value,
+          categoryDescription.value,
+        )
+        store.categories.push(category)
+        Category.save(store.categories)
+        categoryAdded(category)
+      }
+    }
+    const categoryAdded = category => {
+      emit('category-added', category)
     }
     const closeForm = () => {
       emit('close-form')
     }
-    return { categoryName, categoryDescription, updateCategories, closeForm }
+    return {
+      error,
+      message,
+      categoryName,
+      categoryDescription,
+      updateCategories,
+      closeForm,
+    }
   },
 })
 </script>
 <style scoped>
 #submit-button {
+  margin-top: 15px;
+  margin-bottom: 10px;
   border-radius: 0.5rem;
 }
 #close-button {
@@ -89,35 +114,40 @@ textarea {
   border-radius: 18px;
   padding: 5px;
   color: #333;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 input {
   background-color: rgba(255, 255, 255, 0.37);
   border: 1px solid #ccc;
   border-radius: 18px;
   padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
-#add-habit-form {
+#add-category-form {
   position: fixed;
   padding: 10px;
-  /* left: 200px; */
-  /* width: 350px; */
   min-width: 200px;
   max-width: 90vw;
   border: 2px solid black;
   background: linear-gradient(
     135deg,
-    rgba(142, 141, 141, 0.9),
-    rgba(122, 143, 60, 0.9)
+    rgba(142, 141, 141, 0.95),
+    rgba(104, 149, 65, 0.95)
   );
   width: auto;
   border-radius: 10px 10px 10px 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
+#submit-button {
+  width: 100%;
+}
 @media (max-width: 500px) {
-  #add-habit-form {
-    left: auto;
-    width: 85vw;
-    top: 310px;
+  #add-category-form {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   input {
     width: 80vw;
@@ -125,23 +155,12 @@ input {
   textarea {
     width: 80vw;
   }
-  #submit-button {
-    width: 100%;
-    height: 30px;
-    padding: 5px;
-    margin-top: 20px;
-    margin-right: 20px;
-  }
 }
-@media (max-width: 1279px) {
-  #add-habit-form {
-    left: auto;
-    top: 310px;
-  }
-}
-@media (min-width: 1280px) {
-  #add-habit-form {
-    left: calc(50% - 640px + 190px);
+@media (max-height: 750px) {
+  #add-category-form {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 </style>

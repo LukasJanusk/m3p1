@@ -1,13 +1,22 @@
 export default class Habit {
-  constructor(id, name, userId, category, description, weekdays) {
+  constructor(
+    id,
+    name,
+    userId,
+    category,
+    description,
+    weekdays,
+    active = false,
+    stopped = false,
+  ) {
     this.id = id
     this.name = name
     this.description = description || ''
     this.category = category
     this.userId = userId
-    this.active = false
     this.weekdays = weekdays // Array of week days that is active e.g [0, 1, 2, 6]
-    this.stopped = false
+    this.active = active
+    this.stopped = stopped
   }
   // Save habits to local storage
   static save() {
@@ -31,9 +40,11 @@ export default class Habit {
         habitData.category,
         habitData.description,
         habitData.weekdays,
+        habitData.active,
         habitData.stopped,
       )
     })
+    console.log(habits)
     return habits
   }
   // Create a new Habit instance with the same properties

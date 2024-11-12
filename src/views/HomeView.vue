@@ -26,8 +26,6 @@ export default {
   },
   methods: {
     handleDateSelected(date) {
-      const store = useCurrentWeek()
-      store
       this.$router.push({ name: 'HomeView', params: { date } })
     },
   },
@@ -39,7 +37,7 @@ export default {
 </script>
 
 <template>
-  <main>
+  <div>
     <TopContainer>
       <Transition name="fade" mode="out-in">
         <SelectedDay id="selected-day"></SelectedDay>
@@ -47,13 +45,11 @@ export default {
       <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
     </TopContainer>
     <MainContainer>
-      <Transition name="fade" mode="out-in">
-        <SelectedDayHabitList
-          id="habit-list"
-          :day="store.dayWeek[store.activeIndex.index]"
-        ></SelectedDayHabitList> </Transition
-    ></MainContainer>
-  </main>
+      <SelectedDayHabitList
+        :day="store.dayWeek[store.activeIndex.index]"
+      ></SelectedDayHabitList>
+    </MainContainer>
+  </div>
 </template>
 
 <style scoped>
@@ -69,5 +65,8 @@ export default {
 #selected-day {
   margin-left: 10px;
   margin-bottom: 5px;
+}
+#habit-list::-webkit-scrollbar {
+  display: none;
 }
 </style>

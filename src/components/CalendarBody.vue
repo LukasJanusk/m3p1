@@ -46,7 +46,6 @@ export default defineComponent({
     })
     const daySelected = day => {
       emit('daySelected', day)
-      console.log(`Day selected: ${day}`)
     }
     return {
       weekdayTags,
@@ -79,31 +78,6 @@ export default defineComponent({
   justify-content: flex-end;
   text-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
 }
-/* .day-item {
-  cursor: pointer;
-  display: flex;
-  justify-content: flex-end;
-  align-items: end;
-  border: 2px solid black;
-  transition:
-    transform 0.3s ease,
-    color 0.3s ease,
-    background-color 0.3s ease,
-    border-color 0.3s ease;
-  border-radius: 20px;
-  padding: 5px;
-  background: linear-gradient(30deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
-  box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
-}
-.day-item:hover {
-  transform: scale(1.05);
-  background-color: #466e9e8b;
-}
-.day-item:active {
-  transform: scale(0.99);
-  border-color: #42b983;
-  background-color: #42b983;
-} */
 .empty-day {
   margin: 1px;
 }

@@ -17,6 +17,7 @@ export default class Category {
     // If no categories are found, create default ones
     if (categories.length === 0) {
       const defaultCategories = [
+        new Category(0, 'All habits', 'Show habits of all categories'),
         new Category(1, 'Fitness', 'Health and fitness related activities'),
         new Category(2, 'Productivity', 'Habits that improve productivity'),
         new Category(3, 'Social', 'Social interaction and relationships'),

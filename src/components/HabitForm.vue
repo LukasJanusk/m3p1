@@ -1,7 +1,39 @@
 <template>
   <div>
     <form id="add-habit-form" @submit.prevent="createHabit">
-      <label for="name" required>Habit name</label><br />
+      <label for="category">Category*</label><br />
+      <div id="category-select-container">
+        <CategorySelect
+          v-model="habitCategory"
+          :categories="store.categories"
+          :showAll="false"
+          :showSelectCategory="true"
+        ></CategorySelect>
+        <img
+          id="add-category-button"
+          class="nav-button"
+          src="../assets/add2.svg"
+          title="Add category"
+          alt="Plus symbol inside rounded square"
+          @click="addingCategory = !addingCategory"
+        />
+        <img
+          id="remove-category-button"
+          class="nav-button"
+          src="../assets/trash1.svg"
+          title="Remove category"
+          alt="Trashcan symbol"
+          @click="handleCategoryRemove"
+        />
+        <Transition name="fade" mode="out-in">
+          <AddCategoryForm
+            v-if="addingCategory"
+            @close-form="addingCategory = false"
+            @category-added="handleCategoryAdded"
+          ></AddCategoryForm
+        ></Transition>
+      </div>
+      <label for="name" required>Habit name*</label><br />
       <input
         placeholder="e.g. Running"
         id="name"
@@ -16,43 +48,8 @@
         v-model="habitDescription"
       ></textarea
       ><br />
-      <label for="category">Category</label><br />
-      <div id="category-select-container">
-        <CategorySelect
-          id="category"
-          v-model="habitCategory"
-          :categories="store.categories"
-        ></CategorySelect>
-        <img
-          id="add-category-button"
-          class="nav-button"
-          src="../assets/add2.svg"
-          title="Add category"
-          alt="Plus symbol inside rounded square"
-          @click="addingCategory = !addingCategory"
-        />
-        <img
-          id="edit-category-button"
-          class="nav-button"
-          src="../assets/edit5.svg"
-          title="Edit category"
-          alt="Pencil"
-        />
-        <img
-          id="remove-category-button"
-          class="nav-button"
-          src="../assets/trash1.svg"
-          title="Remove category"
-          alt="Trashcan symbol"
-        />
-        <Transition name="fade" mode="out-in">
-          <AddCategoryForm
-            v-if="addingCategory"
-            @close-form="addingCategory = false"
-          ></AddCategoryForm
-        ></Transition>
-      </div>
-      <label for="weekday-select">Select habit activity days</label>
+
+      <label for="weekday-select">Select habit activity days*</label>
       <div id="weekday-select" v-for="(day, index) in weekdays" :key="index">
         <label>
           <input
@@ -64,12 +61,15 @@
           {{ day }}
         </label>
       </div>
-      <button @click.stop type="submit" id="submit">Add Habit</button>
+      <button class="submit-button" @click.stop type="submit" id="submit">
+        Add Habit
+      </button>
     </form>
     <NotificationMessage
       :message="message"
       v-if="success"
     ></NotificationMessage>
+    <ErrorMessage v-if="error" :message="message"></ErrorMessage>
   </div>
 </template>
 
@@ -78,9 +78,9 @@ import { defineComponent, ref } from 'vue'
 import NotificationMessage from './NotificationSuccessMessage.vue'
 import Habit from '@/utils/habits'
 import { useCurrentWeek } from '@/stores/dayStore'
-import Day from '@/utils/day'
 import CategorySelect from './CategorySelect.vue'
 import AddCategoryForm from './AddCategoryForm.vue'
+import ErrorMessage from './ErrorMessage.vue'
 
 export default defineComponent({
   name: 'HabitForm',
@@ -88,6 +88,7 @@ export default defineComponent({
     NotificationMessage,
     CategorySelect,
     AddCategoryForm,
+    ErrorMessage,
   },
   setup() {
     const store = useCurrentWeek()
@@ -102,43 +103,85 @@ export default defineComponent({
     ]
     const message = ref('Habit added succesfully')
     const success = ref(false)
+    const error = ref(false)
     const userId = 1 // Placeholder
     const habitName = ref('')
     const habitDescription = ref('')
     const selectedDays = ref([])
-    const habitCategory = ref('')
+    const habitCategory = ref('Select a category')
     const isHidden = ref(false)
     const isFocused = ref(false)
     const addingCategory = ref(false)
+    const handleCategoryAdded = category => {
+      habitCategory.value = category.name
+      addingCategory.value = false
+      message.value = 'Category added succesfuly!'
+      success.value = true
+      setTimeout(() => {
+        success.value = false
+      }, 3000)
+    }
+    const handleCategoryRemove = () => {
+      const categoryToDelete = store.categories.find(
+        category => category.name === habitCategory.value,
+      )
+      if (categoryToDelete) {
+        store.categories = store.categories.filter(
+          category => category.id !== categoryToDelete.id,
+        )
+        success.value = true
+        message.value = 'Category Removed Succesfuly!'
+        setTimeout(() => {
+          success.value = false
+        }, 3000)
+      } else {
+        message.value = 'Select a category to remove!'
+        error.value = true
+        setTimeout(() => {
+          error.value = false
+        }, 3000)
+      }
+    }
     const createHabit = () => {
       let habitId = store.habits.length + 1
       while (store.habits.some(habit => habit.id === habitId)) {
         habitId++
       }
-      const habit = new Habit(
-        habitId,
-        habitName.value,
-        userId,
-        habitCategory.value,
-        habitDescription.value,
-        selectedDays.value,
-      )
-      // update for runtime and save to local storage
-      store.addHabit(habit, selectedDays.value)
-      // reset form values
-      success.value = true
-      habitName.value = ''
-      habitDescription.value = ''
-      selectedDays.value = []
-      habitCategory.value = ''
-      // reset popup
-      setTimeout(() => {
-        success.value = false
-      }, 4000)
+      if (!habitName.value || !habitCategory.value || !selectedDays.value) {
+        message.value = 'Please fill all required fields!'
+        error.value = true
+        setTimeout(() => {
+          error.value = false
+        }, 3000)
+      } else {
+        const habit = new Habit(
+          habitId,
+          habitName.value,
+          userId,
+          habitCategory.value,
+          habitDescription.value,
+          selectedDays.value,
+        )
+        // update for runtime and save to local storage
+        store.addHabit(habit, selectedDays.value)
+        // reset form values
+        message.value = 'Habit added successfuly!'
+        success.value = true
+        habitName.value = ''
+        habitDescription.value = ''
+        selectedDays.value = []
+        habitCategory.value = ''
+        // reset popup
+        setTimeout(() => {
+          success.value = false
+        }, 3000)
+      }
     }
+
     return {
       store,
       success,
+      error,
       message,
       weekdays,
       selectedDays,
@@ -149,7 +192,8 @@ export default defineComponent({
       isFocused,
       addingCategory,
       createHabit,
-      NotificationMessage,
+      handleCategoryAdded,
+      handleCategoryRemove,
     }
   },
 })

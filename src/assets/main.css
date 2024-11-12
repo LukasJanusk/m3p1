@@ -1,12 +1,7 @@
 /* @import './base.css'; */
 body {
-  min-height: 100vh;
-  color: var(--color-text);
-  background: rgba(143, 143, 143, 0.612);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
+  min-height: 750px;
+  background: rgba(186, 186, 186, 0.664);
   font-family:
     Inter,
     -apple-system,
@@ -26,11 +21,15 @@ body {
 }
 #app {
   max-width: 1280px;
+  min-height: 600px;
   margin: 0 auto;
   font-weight: normal;
   font-family: 'Sans-serif', sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
 }
-
 a,
 .green {
   text-decoration: none;
@@ -38,9 +37,49 @@ a,
   transition: 0.4s;
   padding: 3px;
 }
-.view {
-  position: absolute;
-  top: 0;
+.wrapper {
+  flex: 1;
+}
+nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: auto;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 2rem;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  transform-origin: center;
+  margin-bottom: 10px;
+  padding: 0 1rem;
+}
+
+nav img {
+  max-width: 50px;
+  padding: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  border-radius: 1rem;
+  box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.2s ease,
+    border-color 0.3s ease;
+}
+nav img:hover {
+  transform: scale(1.1);
+  background-color: #466e9e8b;
+}
+
+nav img:active {
+  transform: scale(0.95);
+  border-color: #42b983;
+  background-color: #42b983;
+}
+.active-link img {
+  border-color: #42b983;
+  background-color: rgba(66, 185, 131, 0.3);
 }
 .nav-button {
   border-radius: 1rem;
@@ -61,10 +100,46 @@ a,
   border-color: #42b983;
   background-color: #42b983;
 }
+.submit-button {
+  display: inline-block;
+  font-size: 14px;
+  padding: 8px 20px;
+  border: 2px solid rgba(0, 0, 0, 0.073);
+  background-color: #1d5598d0;
+  color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 2px 4px 14px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+  outline: none;
+  text-align: center;
+}
+.submit-button:hover {
+  transform: scale(1.02);
+  background-color: #2761a8ec;
+}
+.submit-button:active {
+  transform: scale(0.99);
+  border-color: #42b983;
+  background-color: #42b983;
+}
+.submit-button:focus {
+  outline: 2px solid #42b983;
+}
 @media (min-width: 1024px) {
   #app {
     display: grid;
     grid-template-columns: 1fr;
     padding: 0 2rem;
+  }
+}
+@media (max-height: 760px) {
+  nav {
+    position: absolute;
+    top: 620px;
+    bottom: auto;
   }
 }

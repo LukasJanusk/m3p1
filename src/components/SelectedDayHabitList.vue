@@ -26,6 +26,7 @@
       :key="habit.id"
       class="habit-item-inactive"
       title="Cannot toggle habits for the future days"
+      @click="handleToggleInactive"
     >
       <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
       <input
@@ -36,15 +37,18 @@
       />
     </div>
   </div>
+  <ErrorMessage :message="message" v-if="error"></ErrorMessage>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import Day from '@/utils/day'
 import { useCurrentWeek } from '@/stores/dayStore'
+import ErrorMessage from './ErrorMessage.vue'
 
 export default defineComponent({
   name: 'SelectedDayHabitList',
+  components: { ErrorMessage },
   props: {
     day: {
       name: 'day',
@@ -53,6 +57,8 @@ export default defineComponent({
   },
   setup(props) {
     const store = useCurrentWeek()
+    const error = ref(false)
+    const message = ref('')
     function toggleCheckbox(id) {
       for (const habit of props.day.habits) {
         if (habit.id === id) {
@@ -63,12 +69,33 @@ export default defineComponent({
         }
       }
     }
-    return { toggleCheckbox }
+    const handleToggleInactive = () => {
+      message.value = 'Cannot toggle habits in the future!'
+      error.value = true
+      setTimeout(() => {
+        error.value = false
+      }, 3000)
+    }
+    return { toggleCheckbox, handleToggleInactive, error, message }
   },
 })
 </script>
 
 <style scoped>
+#habits-container {
+  height: 500px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  border: 2px solid rgba(0, 0, 0, 0.035);
+  border-radius: 20px;
+}
+#habits-container-inactive {
+  height: 500px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  border: 2px solid rgba(0, 0, 0, 0.035);
+  border-radius: 20px;
+}
 .habit-item {
   display: flex;
   background-image: linear-gradient(
@@ -77,23 +104,27 @@ export default defineComponent({
     rgba(0, 0, 0, 0.1)
   );
   border-radius: 50px;
+  min-height: 30px;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  margin-top: 5px;
+  margin: 5px;
   box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
   transition: transform 0.2s ease;
   cursor: pointer;
 }
 .habit-item:hover {
   background-color: rgb(80, 168, 139);
-  transform: scale(1.01);
+  border-color: transparent;
+  transform: scale(1.005);
 }
 .habit-item:active {
   transform: scale(0.99);
   background-color: rgb(94, 192, 159);
 }
 .habit-item-inactive {
+  width: 98%;
+  min-height: 30px;
   display: flex;
   background-image: linear-gradient(
     90deg,
@@ -104,7 +135,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  margin-top: 5px;
+  margin: 5px;
   box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
   transition: transform 0.2s ease;
 }
@@ -120,10 +151,10 @@ export default defineComponent({
 }
 .active {
   text-decoration: line-through;
-  color: white;
+  color: rgb(69, 69, 69);
   background-color: rgb(96, 199, 165);
 }
-/* Fade Transition Styles */
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;

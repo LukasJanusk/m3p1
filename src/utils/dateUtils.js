@@ -10,6 +10,7 @@ export function getCurrentWeek() {
     const date = new Date(startOfWeek)
     date.setHours(0, 0, 0, 0)
     date.setDate(startOfWeek.getDate() + i)
+    date.setHours(0, 0, 0, 0)
     week.push(date)
   }
   return week
@@ -78,8 +79,7 @@ export function getCurrentMonthDates() {
 }
 export function getMonthDates(year, month) {
   const dates = []
-  const adjustedMonth = month - 1
-  const daysInMonth = new Date(year, adjustedMonth + 1, 0).getDate()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month, day)
     date.setHours(0, 0, 0, 0)

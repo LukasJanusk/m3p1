@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 
 export default defineComponent({
   name: 'DayOfMonth',
@@ -17,26 +17,30 @@ export default defineComponent({
   },
   setup(props) {
     const day = props.dayObject
-    const totalHabits = day.habits.length
-    const activeCount = day.habits.filter(habit => habit.active).length
-    const activePercentage = Math.floor((activeCount / totalHabits) * 100)
+    const totalHabits = ref(day.habits ? day.habits.length : 0)
+    const activeCount = ref(
+      day.habits ? day.habits.filter(habit => habit.active).length : 0,
+    )
+    const activePercentage = computed(() => {
+      return Math.floor((activeCount.value / totalHabits.value) * 100)
+    })
     const getActiveClass = () => {
-      if (activePercentage >= 20 && activePercentage < 40) {
+      if (activePercentage.value >= 20 && activePercentage.value < 40) {
         return 'twenty'
-      } else if (activePercentage >= 40 && activePercentage < 60) {
+      } else if (activePercentage.value >= 40 && activePercentage.value < 60) {
         return 'fourty'
-      } else if (activePercentage >= 60 && activePercentage < 80) {
+      } else if (activePercentage.value >= 60 && activePercentage.value < 80) {
         return 'sixty'
-      } else if (activePercentage >= 80 && activePercentage < 100) {
+      } else if (activePercentage.value >= 80 && activePercentage.value < 100) {
         return 'eighty'
-      } else if (activePercentage === 100) {
+      } else if (activePercentage.value === 100) {
         return 'hundred'
       } else {
         return ''
       }
     }
     const getPercentage = () => {
-      return `Completed ${activePercentage}% of Habits`
+      return `Completed ${activePercentage.value}% of Habits`
     }
 
     return { getActiveClass, getPercentage }

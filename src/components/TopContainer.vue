@@ -15,8 +15,6 @@ export default defineComponent({
 <style scoped>
 .top-container {
   height: 100px;
-  /* display: flex;
-  justify-content: space-between; */
   background: linear-gradient(
     135deg,
     rgba(81, 80, 80, 0.7),

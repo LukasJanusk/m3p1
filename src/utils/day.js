@@ -48,18 +48,17 @@ export default class Day {
       currentMonthDays.push(
         ...days.filter(
           day =>
-            day.date.getMonth() + 1 === month &&
-            day.date.getFullYear() === year,
+            day.date.getMonth() === month && day.date.getFullYear() === year,
         ),
       )
     }
     const currentMonthDates = getMonthDates(year, month)
-    const occupiedDays = currentMonthDays.map(day => {
-      return day.date.getDate()
-    })
     const datesToAdd = currentMonthDates.filter(date => {
-      return !occupiedDays.includes(date.getDate())
+      return !currentMonthDays.some(
+        day => day.date.toISOString() === date.toISOString(),
+      )
     })
+    console.log('datesToAdd:', datesToAdd)
     for (const date of datesToAdd) {
       const newDay = new Day(date)
       const dayIndex = adjustDayIndex(newDay.date)
@@ -73,8 +72,12 @@ export default class Day {
       }
       currentMonthDays.push(newDay)
     }
+    console.log('currentMonthDates:', currentMonthDates)
+    console.log('currentMonthDays:', currentMonthDays)
+
+    const today = new Date()
     currentMonthDays.forEach(day => {
-      if (day.date > new Date()) {
+      if (day.date > today) {
         day.active = false
       }
     })

@@ -25,11 +25,11 @@ const router = createRouter({
       path: '/calendar',
       name: 'calendar',
       component: () => import('../views/CalendarView.vue'),
-      // props: route => {
-      //   const dateParam =
-      //     route.params.date || new Date().toISOString().split('T')[0]
-      //   return { date: dateParam }
-      // },
+      props: route => {
+        const dateParam =
+          route.query.date || new Date().toISOString().split('T')[0]
+        return { date: dateParam }
+      },
     },
     {
       path: '/calendar/day/:date',
