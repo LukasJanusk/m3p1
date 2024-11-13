@@ -58,7 +58,6 @@ export default class Day {
         day => day.date.toISOString() === date.toISOString(),
       )
     })
-    console.log('datesToAdd:', datesToAdd)
     for (const date of datesToAdd) {
       const newDay = new Day(date)
       const dayIndex = adjustDayIndex(newDay.date)
@@ -72,13 +71,12 @@ export default class Day {
       }
       currentMonthDays.push(newDay)
     }
-    console.log('currentMonthDates:', currentMonthDates)
-    console.log('currentMonthDays:', currentMonthDays)
-
     const today = new Date()
     currentMonthDays.forEach(day => {
       if (day.date > today) {
         day.active = false
+      } else {
+        day.active = true
       }
     })
     return currentMonthDays.sort((a, b) => a.date - b.date)

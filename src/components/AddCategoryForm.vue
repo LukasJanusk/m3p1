@@ -27,7 +27,11 @@
         Add Category
       </button>
     </form>
-    <ErrorMessage v-if="error" :message="message"></ErrorMessage>
+    <ErrorMessage
+      v-if="error"
+      :message="message"
+      @dismiss="resetError"
+    ></ErrorMessage>
   </div>
 </template>
 
@@ -51,9 +55,11 @@ export default defineComponent({
       if (!categoryName.value) {
         error.value = true
         message.value = 'Invalid category name!'
-        setTimeout(() => {
-          error.value = false
-        }, 3000)
+      } else if (
+        store.categories.some(category => category.name === categoryName.value)
+      ) {
+        message.value = 'Category already exist'
+        error.value = true
       } else {
         const category = new Category(
           store.categories.length + 1,
@@ -71,6 +77,10 @@ export default defineComponent({
     const closeForm = () => {
       emit('close-form')
     }
+    const resetError = () => {
+      message.value = ''
+      error.value = false
+    }
     return {
       error,
       message,
@@ -78,6 +88,7 @@ export default defineComponent({
       categoryDescription,
       updateCategories,
       closeForm,
+      resetError,
     }
   },
 })

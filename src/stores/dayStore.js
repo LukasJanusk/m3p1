@@ -31,6 +31,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     })
     saveHabits()
     Day.saveWeekdays(monthDays.value)
+    return true
   }
   const saveHabits = () => {
     const habitsJson = JSON.stringify(habits.value)
@@ -100,7 +101,6 @@ export const useCurrentWeek = defineStore('weekStore', () => {
       saveHabits()
       Day.saveWeekdays(dayWeek.value)
       Day.saveWeekdays(monthDays.value)
-      console.log(`Habits saved to localStorage`)
     }
     return true
   }
@@ -135,17 +135,21 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     dayWeek.value.forEach(day => {
+      const dayIndex = adjustDayIndex(day.date)
       if (
         day.date >= today &&
-        !day.habits.some(habit => habit.id === habitId)
+        !day.habits.some(habit => habit.id === habitId) &&
+        habitToActivate.weekdays.includes(dayIndex)
       ) {
         day.habits.push(habitToActivate.clone())
       }
     })
     monthDays.value.forEach(day => {
+      const dayIndex = adjustDayIndex(day.date)
       if (
         day.date >= today &&
-        !day.habits.some(habit => habit.id === habitId)
+        !day.habits.some(habit => habit.id === habitId) &&
+        habitToActivate.weekdays.includes(dayIndex)
       ) {
         day.habits.push(habitToActivate.clone())
       }
@@ -168,7 +172,6 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     })
     saveHabits()
     Day.saveWeekdays(days)
-    console.log(`Habit deleted returning true`)
     return true
   }
   // categories
@@ -210,7 +213,6 @@ export const useCurrentWeek = defineStore('weekStore', () => {
       match.active = day.active
     }
   }
-  console.log(dayWeek.value)
   const nextMonth = () => {
     const nextMonthDate = new Date(monthDays.value[0].date)
     nextMonthDate.setMonth(monthDays.value[0].date.getMonth() + 1)

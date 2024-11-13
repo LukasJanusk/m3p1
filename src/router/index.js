@@ -14,28 +14,32 @@ const router = createRouter({
           route.query.date || new Date().toISOString().split('T')[0]
         return { date: dateParam }
       },
-    },
-    {
-      path: '/day/:date',
-      name: 'HomeView',
-      component: HomeView,
-      props: true,
+      children: [
+        {
+          path: 'day/:date',
+          name: 'HomeView',
+          component: HomeView,
+          props: true,
+        },
+      ],
     },
     {
       path: '/calendar',
       name: 'calendar',
-      component: () => import('../views/CalendarView.vue'),
+      component: CalendarView,
       props: route => {
         const dateParam =
           route.query.date || new Date().toISOString().split('T')[0]
         return { date: dateParam }
       },
-    },
-    {
-      path: '/calendar/day/:date',
-      name: 'CalendarView',
-      component: CalendarView,
-      props: true,
+      children: [
+        {
+          path: 'day/:date',
+          name: 'CalendarView',
+          component: CalendarView,
+          props: true,
+        },
+      ],
     },
     {
       path: '/habits',

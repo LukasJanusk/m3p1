@@ -1,32 +1,41 @@
 <template>
-  <Transition name="fade">
-    <div id="notification" v-if="isVisible">
-      {{ message }}
-    </div>
-  </Transition>
+  <div>
+    <Transition name="fade" mode="out-in" appear>
+      <div id="notification" v-if="visible">
+        {{ message }}
+      </div>
+    </Transition>
+  </div>
 </template>
+
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onUnmounted } from 'vue'
 
 export default defineComponent({
-  name: 'NotificationMessage',
+  name: 'SuccessMessage',
   props: {
     message: {
       type: String,
       required: true,
     },
+    duration: {
+      type: Number,
+      default: 3000,
+    },
   },
-  setup() {
-    const isVisible = ref(false)
-
-    onMounted(() => {
-      isVisible.value = true
+  setup(props, { emit }) {
+    const visible = ref(true)
+    const timer = setTimeout(() => {
+      visible.value = false
       setTimeout(() => {
-        isVisible.value = false
-      }, 3000)
+        emit('dismiss')
+      }, 500)
+    }, props.duration)
+    onUnmounted(() => {
+      clearTimeout(timer)
+      visible.value = false
     })
-
-    return { isVisible }
+    return { visible }
   },
 })
 </script>
@@ -55,14 +64,27 @@ export default defineComponent({
 }
 .fade-enter-from {
   opacity: 0;
+  position: absolute;
+  left: 50%;
+  top: 0%;
 }
 .fade-enter-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-to {
+  position: absolute;
+  left: 50%;
+  top: 10%;
   opacity: 1;
-  transition: opacity 1s ease-in;
+}
+.fade-leave-from {
+  opacity: 1;
 }
 .fade-leave-active {
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transition: opacity 0.5s ease;
 }
 .fade-leave-to {
   opacity: 0;

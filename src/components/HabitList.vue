@@ -17,7 +17,6 @@
           >--stopped--</span
         >
       </div>
-
       <div id="edit-tools-container">
         <div id="weekday-toggles-container">
           <span
@@ -89,23 +88,28 @@
       ></Transition>
     </div>
   </div>
-  <NotificationSuccessMessage
+  <SuccessMessage
     v-if="success"
     :message="message"
-  ></NotificationSuccessMessage>
-  <ErrorMessage v-if="error" :message="message"></ErrorMessage>
+    @dismiss="resetSuccess"
+  ></SuccessMessage>
+  <ErrorMessage
+    v-if="error"
+    :message="message"
+    @dismiss="resetError"
+  ></ErrorMessage>
 </template>
 
 <script>
 import { defineComponent, ref, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import EditHabitForm from './EditHabitForm.vue'
-import NotificationSuccessMessage from './NotificationSuccessMessage.vue'
+import SuccessMessage from './SuccessMessage.vue'
 import ErrorMessage from './ErrorMessage.vue'
 
 export default defineComponent({
   name: 'HabitList',
-  components: { EditHabitForm, NotificationSuccessMessage, ErrorMessage },
+  components: { EditHabitForm, SuccessMessage, ErrorMessage },
   props: {
     category: {
       category: 'category',
@@ -137,16 +141,9 @@ export default defineComponent({
       if (updated) {
         message.value = 'Habit updated succesfuly!'
         success.value = true
-        setTimeout(() => {
-          success.value = false
-        }, 3000)
       } else {
-        console.log(updated)
         message.value = 'Failed to update habit!'
         error.value = true
-        setTimeout(() => {
-          error.value = false
-        }, 3000)
       }
     }
     const handleHabitStopToggle = habitId => {
@@ -157,29 +154,18 @@ export default defineComponent({
           if (stopped === true) {
             message.value = 'Habit stopped succesfully!'
             success.value = true
-            setTimeout(() => {
-              success.value = false
-            }, 3000)
           } else {
             message.value = 'Failed to stop habit!'
-            setTimeout(() => {
-              error.value = false
-            }, 3000)
+            error.value = true
           }
         } else if (matchHabit.stopped === true) {
           const activated = store.activateStoppedHabit(habitId)
           if (activated === true) {
             message.value = 'Habit activated succesfully!'
             success.value = true
-            setTimeout(() => {
-              success.value = false
-            }, 3000)
           } else {
             message.value = 'Failed to activate habit!'
             error.value = true
-            setTimeout(() => {
-              error.value = false
-            }, 3000)
           }
         }
       }
@@ -189,15 +175,9 @@ export default defineComponent({
       if (deleted === true) {
         message.value = 'Habit removed successfuly!'
         success.value = true
-        setTimeout(() => {
-          success.value = false
-        }, 3000)
       } else {
         message.value = 'Failed to remove Habit!'
         error.value = true
-        setTimeout(() => {
-          error.value = false
-        }, 3000)
       }
     }
     const setDeleteHover = (id, state) => {
@@ -211,6 +191,14 @@ export default defineComponent({
     }
     const isActive = (habit, index) => {
       return habit.weekdays.includes(index)
+    }
+    const resetError = () => {
+      message.value = ''
+      error.value = false
+    }
+    const resetSuccess = () => {
+      message.value = ''
+      success.value = false
     }
     const weekDayToggles = ref([
       'Mon',
@@ -240,6 +228,8 @@ export default defineComponent({
       weekDayToggles,
       isActive,
       editHabitId,
+      resetError,
+      resetSuccess,
     }
   },
 })
@@ -313,7 +303,7 @@ img:active {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  margin-top: 5px;
+  margin: 5px;
   box-shadow: 0px 2px 8px rgba(34, 97, 68, 0.3);
   transition: background-color 0.3s ease;
 }
@@ -342,6 +332,9 @@ img:active {
 .toggled {
   background-color: rgba(46, 199, 148, 0.619);
 }
+#weekday-toggles-container {
+  margin-top: 5px;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -359,7 +352,7 @@ img:active {
     margin-left: 10px;
   }
   #edit-tools-container div {
-    margin-left: 10px;
+    margin-left: 5px;
   }
 }
 @media (max-width: 510px) {
@@ -368,9 +361,12 @@ img:active {
   }
   .day-toggle {
     font-size: 10px;
+    font-weight: 500;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   img {
-    height: 20px;
+    height: 18px;
   }
   #edit-button,
   #delete-button {

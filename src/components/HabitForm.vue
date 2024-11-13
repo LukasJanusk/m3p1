@@ -38,7 +38,7 @@
         placeholder="e.g. Running"
         id="name"
         type="text"
-        maxlength="30"
+        maxlength="20"
         v-model="habitName"
       /><br />
       <label for="description">Description</label><br />
@@ -65,17 +65,22 @@
         Add Habit
       </button>
     </form>
-    <NotificationMessage
+    <SuccessMessage
       :message="message"
       v-if="success"
-    ></NotificationMessage>
-    <ErrorMessage v-if="error" :message="message"></ErrorMessage>
+      @dismiss="resetSuccess"
+    ></SuccessMessage>
+    <ErrorMessage
+      v-if="error"
+      :message="message"
+      @dismiss="resetError"
+    ></ErrorMessage>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
-import NotificationMessage from './NotificationSuccessMessage.vue'
+import SuccessMessage from './SuccessMessage.vue'
 import Habit from '@/utils/habits'
 import { useCurrentWeek } from '@/stores/dayStore'
 import CategorySelect from './CategorySelect.vue'
@@ -85,7 +90,7 @@ import ErrorMessage from './ErrorMessage.vue'
 export default defineComponent({
   name: 'HabitForm',
   components: {
-    NotificationMessage,
+    SuccessMessage,
     CategorySelect,
     AddCategoryForm,
     ErrorMessage,
@@ -117,9 +122,6 @@ export default defineComponent({
       addingCategory.value = false
       message.value = 'Category added succesfuly!'
       success.value = true
-      setTimeout(() => {
-        success.value = false
-      }, 3000)
     }
     const handleCategoryRemove = () => {
       const categoryToDelete = store.categories.find(
@@ -129,17 +131,11 @@ export default defineComponent({
         store.categories = store.categories.filter(
           category => category.id !== categoryToDelete.id,
         )
-        success.value = true
         message.value = 'Category Removed Succesfuly!'
-        setTimeout(() => {
-          success.value = false
-        }, 3000)
+        success.value = true
       } else {
         message.value = 'Select a category to remove!'
         error.value = true
-        setTimeout(() => {
-          error.value = false
-        }, 3000)
       }
     }
     const createHabit = () => {
@@ -150,9 +146,6 @@ export default defineComponent({
       if (!habitName.value || !habitCategory.value || !selectedDays.value) {
         message.value = 'Please fill all required fields!'
         error.value = true
-        setTimeout(() => {
-          error.value = false
-        }, 3000)
       } else {
         const habit = new Habit(
           habitId,
@@ -163,21 +156,29 @@ export default defineComponent({
           selectedDays.value,
         )
         // update for runtime and save to local storage
-        store.addHabit(habit, selectedDays.value)
-        // reset form values
-        message.value = 'Habit added successfuly!'
-        success.value = true
-        habitName.value = ''
-        habitDescription.value = ''
-        selectedDays.value = []
-        habitCategory.value = ''
-        // reset popup
-        setTimeout(() => {
-          success.value = false
-        }, 3000)
+        const added = store.addHabit(habit, selectedDays.value)
+        if (added === true) {
+          // reset form values
+          message.value = 'Habit added successfuly!'
+          success.value = true
+          habitName.value = ''
+          habitDescription.value = ''
+          selectedDays.value = []
+          habitCategory.value = ''
+        } else {
+          message.value = 'Failed to save Habit!'
+          error.value = true
+        }
       }
     }
-
+    const resetError = () => {
+      message.value = ''
+      error.value = false
+    }
+    const resetSuccess = () => {
+      message.value = ''
+      success.value = false
+    }
     return {
       store,
       success,
@@ -194,6 +195,8 @@ export default defineComponent({
       createHabit,
       handleCategoryAdded,
       handleCategoryRemove,
+      resetError,
+      resetSuccess,
     }
   },
 })

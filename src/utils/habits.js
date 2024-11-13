@@ -44,7 +44,6 @@ export default class Habit {
         habitData.stopped,
       )
     })
-    console.log(habits)
     return habits
   }
   // Create a new Habit instance with the same properties

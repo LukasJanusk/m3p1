@@ -1,12 +1,15 @@
 <template>
-  <Transition name="fade" mode="out-in"></Transition>
-  <div id="error">
-    {{ message }}
+  <div>
+    <Transition name="fade" mode="out-in" appear>
+      <div v-if="visible" id="error">
+        {{ message }}
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onUnmounted } from 'vue'
 
 export default defineComponent({
   name: 'ErrorMessage',
@@ -15,8 +18,28 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    duration: {
+      type: Number,
+      default: 3000,
+    },
   },
-  setup() {},
+  setup(props, { emit }) {
+    const visible = ref(true)
+    const timer = setTimeout(() => {
+      visible.value = false
+      setTimeout(() => {
+        emit('dismiss')
+      }, 500)
+    }, props.duration)
+    onUnmounted(() => {
+      clearTimeout(timer)
+      visible.value = false
+    })
+
+    return {
+      visible,
+    }
+  },
 })
 </script>
 <style scoped>
@@ -41,12 +64,31 @@ export default defineComponent({
   align-items: center;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.683);
 }
-.fade-enter-active,
-.fade-leave-active {
+
+.fade-enter-from {
+  opacity: 0;
+  position: absolute;
+  left: 50%;
+  top: 0%;
+}
+.fade-enter-active {
   transition: opacity 0.3s ease;
 }
-
-.fade-enter-from,
+.fade-enter-to {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-active {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transition: opacity 0.5s ease;
+}
 .fade-leave-to {
   opacity: 0;
 }

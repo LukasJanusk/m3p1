@@ -20,7 +20,7 @@
         alt="arrow left"
         class="nav-button"
         id="back-button"
-        @click="calendarView = true"
+        @click="toggleBacktoCalendar"
       />
     </TopContainer>
     <MainContainer
@@ -30,10 +30,7 @@
         :monthDays="store.monthDays"
         @daySelected="toggleDayView"
       ></CalendarBody>
-      <SelectedDayHabitList
-        v-if="!calendarView"
-        :day="selectedDay"
-      ></SelectedDayHabitList>
+      <DayHabitList v-if="!calendarView" :day="selectedDay"></DayHabitList>
     </MainContainer>
   </div>
 </template>
@@ -44,7 +41,7 @@ import TopContainer from '@/components/TopContainer.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import SelectedMonth from '@/components/SelectedMonth.vue'
 import MonthNavigation from '@/components/MonthNavigation.vue'
-import SelectedDayHabitList from '@/components/SelectedDayHabitList.vue'
+import DayHabitList from '@/components/DayHabitList.vue'
 import { useRouter, useRoute } from 'vue-router'
 import {
   adjustDayIndex,
@@ -62,7 +59,7 @@ export default {
     MainContainer,
     SelectedMonth,
     MonthNavigation,
-    SelectedDayHabitList,
+    DayHabitList,
   },
   props: ['date'],
   setup() {
@@ -76,7 +73,7 @@ export default {
       if (dateString) {
         return dateString
       } else {
-        return 'Canno get selected Date'
+        return 'Cannot get selected Date'
       }
     })
     store.monthDays.forEach(day => {
@@ -122,12 +119,17 @@ export default {
       const dateString = formatDate(day.date)
       router.push({ name: 'CalendarView', params: { date: dateString } })
     }
+    const toggleBacktoCalendar = () => {
+      router.push({ name: 'calendar' })
+      calendarView.value = true
+    }
     return {
       store,
       calendarView,
       selectedDay,
       dateToShow,
       toggleDayView,
+      toggleBacktoCalendar,
     }
   },
 }
