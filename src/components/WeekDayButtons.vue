@@ -42,7 +42,7 @@ export default defineComponent({
   padding: 12px 20px;
   font-size: 16px;
   min-width: 60px;
-  color: #ffffff;
+  color: rgba(230, 230, 230, 0.895);
   background: linear-gradient(
     135deg,
     rgba(48, 162, 111, 1),
@@ -73,7 +73,6 @@ export default defineComponent({
 }
 .active {
   background: linear-gradient(135deg, rgba(34, 97, 68, 1), rgba(20, 75, 50, 1));
-  color: #ffffff;
   border: 2px solid rgba(0, 0, 0, 0.6);
   transform: scale(0.98);
   box-shadow: 0px 4px 10px rgba(34, 97, 68, 0.5);

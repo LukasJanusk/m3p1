@@ -1,42 +1,47 @@
 <template>
   <div v-if="day.active === true" id="habits-container">
-    <div
-      v-for="habit in day.habits"
-      :key="habit.id"
-      :title="habit.description"
-      class="habit-item"
-      :class="{ active: habit.active }"
-      @click="toggleCheckbox(habit.id)"
-    >
-      <label @click="toggleCheckbox(habit.id)" :for="`checkbox-${habit.id}`">{{
-        habit.name
-      }}</label>
-      <input
-        class="checkbox"
-        type="checkbox"
-        :id="`checkbox-${habit.id}`"
-        :checked="habit.active"
-        @click.stop="toggleCheckbox(habit.id)"
-      />
-    </div>
+    <transition-group name="slide-fade" tag="div">
+      <div
+        v-for="habit in day.habits"
+        :key="habit.id"
+        :title="habit.description"
+        class="habit-item"
+        :class="{ active: habit.active }"
+        @click="toggleCheckbox(habit.id)"
+      >
+        <label
+          @click="toggleCheckbox(habit.id)"
+          :for="`checkbox-${habit.id}`"
+          >{{ habit.name }}</label
+        >
+        <input
+          class="checkbox"
+          type="checkbox"
+          :id="`checkbox-${habit.id}`"
+          :checked="habit.active"
+          @click.stop="toggleCheckbox(habit.id)"
+        /></div
+    ></transition-group>
   </div>
   <div v-else id="habits-container-inactive">
-    <div
-      v-for="habit in day.habits"
-      :key="habit.id"
-      class="habit-item-inactive"
-      title="Cannot toggle habits for the future days"
-      @click="handleToggleInactive"
-    >
-      <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
-      <input
-        hidden
-        class="checkbox"
-        type="checkbox"
-        :id="`checkbox-${habit.id}`"
-      />
-    </div>
+    <transition-group name="slide-fade" tag="div">
+      <div
+        v-for="habit in day.habits"
+        :key="habit.id"
+        class="habit-item-inactive"
+        title="Cannot toggle habits for the future days"
+        @click="handleToggleInactive"
+      >
+        <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
+        <input
+          hidden
+          class="checkbox"
+          type="checkbox"
+          :id="`checkbox-${habit.id}`"
+        /></div
+    ></transition-group>
   </div>
+
   <ErrorMessage
     :message="message"
     :duration="3000"
@@ -88,6 +93,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.slide-fade-enter-active {
+  transition: all 0.4s ease-out;
+}
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(1, 0.1, 0.1, 1);
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(50px);
+  opacity: 0;
+}
 #habits-container,
 #habits-container-inactive {
   height: 500px;

@@ -4,24 +4,30 @@
       ><h1 id="title">Calendar</h1>
       <Transition name="fade" mode="out-in">
         <SelectedMonth v-if="calendarView"></SelectedMonth>
-        <h2 v-else>
-          {{ dateToShow }}
-        </h2>
+        <div v-else>
+          <transition name="fade" mode="out-in">
+            <div :key="dateToShow">
+              <h2>{{ dateToShow }}</h2>
+            </div>
+          </transition>
+        </div>
       </Transition>
-      <MonthNavigation
-        v-if="calendarView"
-        @next="store.nextMonth"
-        @previous="store.previousMonth"
-      ></MonthNavigation>
-      <img
-        v-if="!calendarView"
-        src="../assets/back2.svg"
-        title="Back to calendar"
-        alt="arrow left"
-        class="nav-button"
-        id="back-button"
-        @click="toggleBacktoCalendar"
-      />
+      <div v-if="calendarView" class="navigation-container">
+        <MonthNavigation
+          @next="store.nextMonth"
+          @previous="store.previousMonth"
+        ></MonthNavigation>
+      </div>
+      <div v-if="!calendarView" class="navigation-container">
+        <img
+          src="../assets/back2.svg"
+          title="Back to calendar"
+          alt="Back arrow"
+          class="nav-button"
+          id="back-button"
+          @click="toggleBacktoCalendar"
+        />
+      </div>
     </TopContainer>
     <MainContainer
       ><CalendarBody
@@ -136,6 +142,30 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.navigation-container {
+  display: flex;
+  justify-content: end;
+  align-content: end;
+  min-width: 108px;
+}
 #top-container {
   display: flex;
   justify-content: space-between;

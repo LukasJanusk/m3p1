@@ -81,6 +81,7 @@ export default class Day {
     })
     return currentMonthDays.sort((a, b) => a.date - b.date)
   }
+  // Saves array of day objects to local storage
   static saveWeekdays(weekDays) {
     const savedDays = this.loadWeekdays() || []
     for (const d of weekDays) {
@@ -110,6 +111,7 @@ export default class Day {
       })
     })
   }
+  // Returns an array of day objects created from passed Date objects
   static getCurrentWeekSavedDays(week) {
     const loadedWeekdays = this.loadWeekdays()
     const currentWeek = []

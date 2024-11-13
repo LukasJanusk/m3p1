@@ -5,20 +5,21 @@
         <p class="day-text">{{ tag }}</p>
       </div>
     </div>
-    <div id="calendar-container">
-      <div
-        class="empty-day"
-        v-for="index in skip"
-        :key="'empty-' + index"
-      ></div>
-      <DayOfMonth
-        v-for="day in monthDays"
-        :key="day.date.toISOString()"
-        :dayObject="day"
-        @click="daySelected(day)"
-      >
-      </DayOfMonth>
-    </div>
+    <transition name="fade" mode="out-in">
+      <div :key="calendarKey" id="calendar-container">
+        <div
+          class="empty-day"
+          v-for="index in skip"
+          :key="'empty-' + index"
+        ></div>
+        <DayOfMonth
+          v-for="day in monthDays"
+          :key="day.date.toISOString()"
+          :dayObject="day"
+          @click="daySelected(day)"
+        >
+        </DayOfMonth></div
+    ></transition>
   </div>
 </template>
 
@@ -41,6 +42,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const weekdayTags = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    const calendarKey = computed(() => {
+      return props.monthDays.map(day => day.date.toISOString()).join('-')
+    })
     const skip = computed(() => {
       return Array.from({ length: props.startIndex })
     })
@@ -51,12 +55,31 @@ export default defineComponent({
       weekdayTags,
       skip,
       daySelected,
+      calendarKey,
     }
   },
 })
 </script>
 
 <style scoped>
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
 #calendar-body {
   height: inherit;
 }

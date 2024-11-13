@@ -1,6 +1,10 @@
 <template>
   <div>
-    {{ dateToDisplay }}
+    <transition name="fade" tag="div" mode="out-in">
+      <div v-if="dateToDisplay" :key="dateToDisplay" class="date-container">
+        {{ dateToDisplay }}
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -23,4 +27,24 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Fade in/out transition */
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

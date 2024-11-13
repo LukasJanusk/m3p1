@@ -6,7 +6,7 @@
       <img
         id="close-button"
         src="../assets/close.svg"
-        alt="x symbol in a square"
+        alt="X symbol"
         title="close"
         @click="closeForm"
       /><br />

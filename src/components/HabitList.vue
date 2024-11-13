@@ -1,92 +1,94 @@
 <template>
   <div id="habits-container">
-    <div
-      v-for="habit in habitList"
-      :key="habit.id"
-      :title="habit.description"
-      class="habit-item"
-      :class="{
-        delete: deleteHover[habit.id],
-        edit: editHover[habit.id],
-        stop: stopHover[habit.id],
-      }"
-    >
-      <div id="habit-name-container">
-        <span class="habit-name">{{ habit.name }}</span
-        ><span v-if="habit.stopped === true" class="stopped-text"
-          >--stopped--</span
-        >
-      </div>
-      <div id="edit-tools-container">
-        <div id="weekday-toggles-container">
-          <span
-            v-for="(day, index) in weekDayToggles"
-            class="day-toggle"
-            :class="{ toggled: isActive(habit, index) }"
-            :key="index"
-            >{{ day }}</span
+    <transition-group name="slide-fade" appear>
+      <div
+        v-for="habit in habitList"
+        :key="habit.id"
+        :title="habit.description"
+        class="habit-item"
+        :class="{
+          delete: deleteHover[habit.id],
+          edit: editHover[habit.id],
+          stop: stopHover[habit.id],
+        }"
+      >
+        <div id="habit-name-container">
+          <span class="habit-name">{{ habit.name }}</span
+          ><span v-if="habit.stopped === true" class="stopped-text"
+            >-stopped</span
           >
         </div>
-        <div id="habit-buttons-container">
-          <img
-            v-if="!habit.stopped"
-            id="stop-button"
-            @mouseenter="setStopHover(habit.id, true)"
-            @mouseleave="setStopHover(habit.id, false)"
-            @touchstart="setStopHover(habit.id, true)"
-            @touchend="setStopHover(habit.id, false)"
-            src="../assets/stop.svg"
-            title="Toggle Stop habit"
-            alt="Stop sign"
-            @click="handleHabitStopToggle(habit.id)"
-          />
-          <img
-            v-if="habit.stopped"
-            id="stop-button-active"
-            @mouseenter="setStopHover(habit.id, true)"
-            @mouseleave="setStopHover(habit.id, false)"
-            @touchstart="setStopHover(habit.id, true)"
-            @touchend="setStopHover(habit.id, false)"
-            src="../assets/stop2.svg"
-            title="Toggle Stop habit"
-            alt="Stop sign"
-            @click="handleHabitStopToggle(habit.id)"
-          />
+        <div id="edit-tools-container">
+          <div id="weekday-toggles-container">
+            <span
+              v-for="(day, index) in weekDayToggles"
+              class="day-toggle"
+              :class="{ toggled: isActive(habit, index) }"
+              :key="index"
+              >{{ day }}</span
+            >
+          </div>
+          <div id="habit-buttons-container">
+            <img
+              v-if="!habit.stopped"
+              id="stop-button"
+              @mouseenter="setStopHover(habit.id, true)"
+              @mouseleave="setStopHover(habit.id, false)"
+              @touchstart="setStopHover(habit.id, true)"
+              @touchend="setStopHover(habit.id, false)"
+              src="../assets/stop.svg"
+              title="Toggle Stop habit"
+              alt="Hand sign stop empty"
+              @click="handleHabitStopToggle(habit.id)"
+            />
+            <img
+              v-if="habit.stopped"
+              id="stop-button-active"
+              @mouseenter="setStopHover(habit.id, true)"
+              @mouseleave="setStopHover(habit.id, false)"
+              @touchstart="setStopHover(habit.id, true)"
+              @touchend="setStopHover(habit.id, false)"
+              src="../assets/stop2.svg"
+              title="Toggle Stop habit"
+              alt="Hand sign stop filled"
+              @click="handleHabitStopToggle(habit.id)"
+            />
 
-          <img
-            id="edit-button"
-            @mouseenter="setEditHover(habit.id, true)"
-            @mouseleave="setEditHover(habit.id, false)"
-            @touchstart="setEditHover(habit.id, true)"
-            @touchend="setEditHover(habit.id, false)"
-            src="../assets/edit5.svg"
-            alt="edit pencil"
-            title="Edit Habit"
-            @click="editHabitId = habit.id"
-          /><img
-            id="delete-button"
-            @mouseenter="setDeleteHover(habit.id, true)"
-            @mouseleave="setDeleteHover(habit.id, false)"
-            @touchstart="setDeleteHover(habit.id, true)"
-            @touchend="setDeleteHover(habit.id, false)"
-            @click="handleDeleteHabit(habit.id)"
-            src="../assets/trash1.svg"
-            alt="trashcan"
-            title="Remove Habit"
-          />
+            <img
+              id="edit-button"
+              @mouseenter="setEditHover(habit.id, true)"
+              @mouseleave="setEditHover(habit.id, false)"
+              @touchstart="setEditHover(habit.id, true)"
+              @touchend="setEditHover(habit.id, false)"
+              src="../assets/edit5.svg"
+              alt="Edit pencil"
+              title="Edit Habit"
+              @click="editHabitId = habit.id"
+            /><img
+              id="delete-button"
+              @mouseenter="setDeleteHover(habit.id, true)"
+              @mouseleave="setDeleteHover(habit.id, false)"
+              @touchstart="setDeleteHover(habit.id, true)"
+              @touchend="setDeleteHover(habit.id, false)"
+              @click="handleDeleteHabit(habit.id)"
+              src="../assets/trash1.svg"
+              alt="Trashcan"
+              title="Remove Habit"
+            />
+          </div>
         </div>
+        <Transition name="fade" mode="out-in">
+          <EditHabitForm
+            id="edit-habit-form"
+            v-if="editHabitId === habit.id"
+            :habit="habit"
+            :categories="store.categories"
+            @close-form="editHabitId = null"
+            @update="handleHabitUpdate"
+          ></EditHabitForm
+        ></Transition>
       </div>
-      <Transition name="fade" mode="out-in">
-        <EditHabitForm
-          id="edit-habit-form"
-          v-if="editHabitId === habit.id"
-          :habit="habit"
-          :categories="store.categories"
-          @close-form="editHabitId = null"
-          @update="handleHabitUpdate"
-        ></EditHabitForm
-      ></Transition>
-    </div>
+    </transition-group>
   </div>
   <SuccessMessage
     v-if="success"
@@ -260,7 +262,7 @@ export default defineComponent({
   margin-right: 5px;
   transition:
     transform 0.3s ease,
-    border-color 0.3s ease;
+    background-color 0.3s ease;
 }
 img:hover {
   scale: 1.2;
@@ -270,7 +272,6 @@ img:active {
 }
 #delete-button:active {
   background-color: rgba(241, 31, 31, 0.489);
-  border-color: red;
 }
 .delete {
   background-color: rgba(241, 31, 31, 0.489);
@@ -289,7 +290,10 @@ img:active {
 }
 #edit-button:active {
   background-color: rgba(31, 87, 241, 0.489);
-  border-color: blue;
+}
+#stop-button:active,
+#stop-button-active:active {
+  background-color: rgba(199, 167, 50, 0.489);
 }
 .habit-item {
   display: flex;
@@ -343,7 +347,23 @@ img:active {
 .fade-leave-to {
   opacity: 0;
 }
+.slide-fade-enter-active {
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+}
 
+.slide-fade-leave-active {
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}
 @media (max-width: 600px) {
   .day-toggle {
     font-size: 16px;
@@ -369,9 +389,20 @@ img:active {
     height: 18px;
   }
   #edit-button,
-  #delete-button {
+  #delete-button,
+  #stop-button,
+  #stop-button-active {
     height: 30px;
     cursor: pointer;
+    margin: 0px;
+  }
+  @media (max-width: 380px) {
+    .day-toggle {
+      font-size: 10px;
+      font-weight: 400;
+      margin-left: 1px;
+      margin-right: 1px;
+    }
   }
 }
 </style>

@@ -15,7 +15,6 @@ export function getCurrentWeek() {
   }
   return week
 }
-
 export function getCurrentDay() {
   const date = new Date()
   return date.getDate()
@@ -87,7 +86,6 @@ export function getMonthDates(year, month) {
   }
   return dates
 }
-
 export function formatDate(date) {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')

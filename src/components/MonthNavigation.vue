@@ -5,7 +5,7 @@
         @click="returnPrevious"
         src="../assets/left.svg"
         title="previous month"
-        alt="arrow left"
+        alt="Arrow left"
       />
     </div>
     <div class="nav-button">
@@ -13,7 +13,7 @@
         @click="returnNext"
         src="../assets/right.svg"
         title="next month"
-        alt="arrow right"
+        alt="Arrow right"
       />
     </div>
   </div>

@@ -1,3 +1,39 @@
+<template>
+  <div>
+    <TopContainer id="title">
+      <Transition name="fade" mode="out-in">
+        <h1 v-if="show">{{ title }}</h1>
+        <h1 v-else>{{ title }}</h1>
+      </Transition>
+      <div id="add-habit" class="nav-button" @click="showForm">
+        <img
+          v-if="!show"
+          title="Add new habit"
+          src="../assets/add2.svg"
+          alt="Plus sign"
+        />
+        <img
+          v-if="show"
+          title="Back to habits"
+          src="../assets/back2.svg"
+          alt="Back arrow"
+        /></div
+    ></TopContainer>
+    <MainContainer
+      ><Transition name="fade" mode="out-in"
+        ><div v-if="!show">
+          <CategorySelect
+            v-model="habitCategory"
+            :categories="store.categories"
+          ></CategorySelect>
+          <HabitList :category="habitCategory" v-if="!show"></HabitList>
+        </div>
+        <HabitForm v-else></HabitForm>
+      </Transition>
+    </MainContainer>
+  </div>
+</template>
+
 <script setup>
 import HabitForm from '@/components/HabitForm.vue'
 import HabitList from '@/components/HabitList.vue'
@@ -15,35 +51,6 @@ const showForm = () => {
 const habitCategory = ref('All habits')
 const store = useCurrentWeek()
 </script>
-<template>
-  <div>
-    <TopContainer id="title">
-      <Transition name="fade" mode="out-in">
-        <h1 v-if="show">{{ title }}</h1>
-        <h1 v-else>{{ title }}</h1>
-      </Transition>
-      <div id="add-habit" class="nav-button" @click="showForm">
-        <img v-if="!show" title="Add new habit" src="../assets/add2.svg" />
-        <img
-          v-if="show"
-          title="Back to habits"
-          src="../assets/back2.svg"
-        /></div
-    ></TopContainer>
-    <MainContainer
-      ><Transition name="fade" mode="out-in"
-        ><div v-if="!show">
-          <CategorySelect
-            v-model="habitCategory"
-            :categories="store.categories"
-          ></CategorySelect>
-          <HabitList :category="habitCategory" v-if="!show"></HabitList>
-        </div>
-        <HabitForm v-else></HabitForm>
-      </Transition>
-    </MainContainer>
-  </div>
-</template>
 
 <style>
 .fade-enter-active,

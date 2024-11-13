@@ -14,7 +14,7 @@ export default class Habit {
     this.description = description || ''
     this.category = category
     this.userId = userId
-    this.weekdays = weekdays // Array of week days that is active e.g [0, 1, 2, 6]
+    this.weekdays = weekdays
     this.active = active
     this.stopped = stopped
   }

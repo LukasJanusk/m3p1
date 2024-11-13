@@ -14,7 +14,7 @@
           class="nav-button"
           src="../assets/add2.svg"
           title="Add category"
-          alt="Plus symbol inside rounded square"
+          alt="Plus sign"
           @click="addingCategory = !addingCategory"
         />
         <img
@@ -22,7 +22,7 @@
           class="nav-button"
           src="../assets/trash1.svg"
           title="Remove category"
-          alt="Trashcan symbol"
+          alt="Trashcan"
           @click="handleCategoryRemove"
         />
         <Transition name="fade" mode="out-in">

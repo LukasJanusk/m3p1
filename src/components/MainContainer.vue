@@ -14,7 +14,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .main-container {
-  min-width: 350px;
+  min-width: 320px;
   padding: 10px;
   height: 500px;
   background: linear-gradient(

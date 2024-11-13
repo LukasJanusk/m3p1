@@ -1,9 +1,7 @@
 <template>
   <div>
     <TopContainer>
-      <Transition name="fade" mode="out-in">
-        <SelectedDay id="selected-day"></SelectedDay>
-      </Transition>
+      <SelectedDay id="selected-day"></SelectedDay>
       <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
     </TopContainer>
     <MainContainer>

@@ -1,5 +1,9 @@
 <template>
-  <h2>{{ month }}{{ year }}</h2>
+  <div>
+    <Transition mode="out-in" name="fade">
+      <h2 :key="month">{{ month }}{{ year }}</h2>
+    </Transition>
+  </div>
 </template>
 
 <script>
@@ -24,4 +28,23 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

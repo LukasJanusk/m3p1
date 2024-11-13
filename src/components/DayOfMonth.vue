@@ -1,6 +1,8 @@
 <template>
-  <div class="day-item" :class="getActiveClass()" :title="getPercentage()">
-    <p>{{ dayObject.date.getDate() }}</p>
+  <div>
+    <div class="day-item" :class="getActiveClass()" :title="getPercentage()">
+      <p>{{ dayObject.date.getDate() }}</p>
+    </div>
   </div>
 </template>
 

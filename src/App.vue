@@ -19,20 +19,22 @@ import { RouterLink, RouterView } from 'vue-router'
     </div>
   </header>
   <router-view v-slot="{ Component }">
-    <transition>
-      <component :is="Component" />
+    <transition name="slide-fade" mode="out-in">
+      <component :is="Component" class="view" />
     </transition>
   </router-view>
 </template>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.8s ease;
+.slide-fade-enter-active {
+  transition: all 0.4s ease-out;
 }
-
-.fade-enter-from,
-.fade-leave-to {
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(1, 0.1, 0.1, 1);
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(100px);
   opacity: 0;
 }
 </style>

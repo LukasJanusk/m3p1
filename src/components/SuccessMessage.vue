@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Transition name="fade" mode="out-in" appear>
+    <Transition name="bounce" mode="out-in" appear>
       <div id="notification" v-if="visible">
         {{ message }}
       </div>
@@ -62,7 +62,32 @@ export default defineComponent({
   align-items: center;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.683);
 }
-.fade-enter-from {
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-out 0.5s;
+}
+@keyframes bounce-in {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.25);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes bounce-out {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+/* .fade-enter-from {
   opacity: 0;
   position: absolute;
   left: 50%;
@@ -88,5 +113,5 @@ export default defineComponent({
 }
 .fade-leave-to {
   opacity: 0;
-}
+} */
 </style>
