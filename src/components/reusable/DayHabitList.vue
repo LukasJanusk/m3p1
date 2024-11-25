@@ -50,8 +50,8 @@
   ></ErrorMessage>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script lang="ts">
+import { defineComponent, ref, PropType } from 'vue'
 import Day from '@/utils/day'
 import { useCurrentWeek } from '@/stores/dayStore'
 import ErrorMessage from './ErrorMessage.vue'
@@ -62,14 +62,14 @@ export default defineComponent({
   props: {
     day: {
       name: 'day',
-      type: Day,
+      type: Object as PropType<Day>,
     },
   },
   setup(props) {
     const store = useCurrentWeek()
     const error = ref(false)
     const message = ref('')
-    function toggleCheckbox(id) {
+    function toggleCheckbox(id: number): void {
       for (const habit of props.day.habits) {
         if (habit.id === id) {
           habit.active = !habit.active
@@ -79,11 +79,11 @@ export default defineComponent({
         }
       }
     }
-    const handleToggleInactive = () => {
+    const handleToggleInactive = (): void => {
       message.value = 'Cannot toggle habits in the future!'
       error.value = true
     }
-    const resetError = () => {
+    const resetError = (): void => {
       message.value = ''
       error.value = false
     }

@@ -9,9 +9,8 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      props: route => {
-        const dateParam =
-          route.query.date || new Date().toISOString().split('T')[0]
+      props: (route) => {
+        const dateParam = route.query.date
         return { date: dateParam }
       },
       children: [
@@ -27,9 +26,8 @@ const router = createRouter({
       path: '/calendar',
       name: 'calendar',
       component: CalendarView,
-      props: route => {
-        const dateParam =
-          route.query.date || new Date().toISOString().split('T')[0]
+      props: (route) => {
+        const dateParam = route.query.date
         return { date: dateParam }
       },
       children: [
@@ -46,7 +44,10 @@ const router = createRouter({
       name: 'habits',
       component: () => import('../views/HabitsView.vue'),
     },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/',
+    },
   ],
 })
-
 export default router

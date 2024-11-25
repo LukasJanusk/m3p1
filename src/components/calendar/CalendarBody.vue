@@ -29,6 +29,7 @@ import DayOfMonth from './DayOfMonth.vue'
 
 export default defineComponent({
   name: 'CalendarBody',
+  emits: ['daySelected'],
   components: { DayOfMonth },
   props: {
     startIndex: {
@@ -43,12 +44,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const weekdayTags = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     const calendarKey = computed(() => {
-      return props.monthDays.map(day => day.date.toISOString()).join('-')
+      return props.monthDays.map((day) => day.date.toISOString()).join('-')
     })
     const skip = computed(() => {
       return Array.from({ length: props.startIndex })
     })
-    const daySelected = day => {
+    const daySelected = (day) => {
       emit('daySelected', day)
     }
     return {

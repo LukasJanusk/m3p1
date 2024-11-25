@@ -12,7 +12,7 @@
         <img
           id="add-category-button"
           class="nav-button"
-          src="../assets/add2.svg"
+          src="/src/assets/add2.svg"
           title="Add category"
           alt="Plus sign"
           @click="addingCategory = !addingCategory"
@@ -20,7 +20,7 @@
         <img
           id="remove-category-button"
           class="nav-button"
-          src="../assets/trash1.svg"
+          src="/src/assets/trash1.svg"
           title="Remove category"
           alt="Trashcan"
           @click="handleCategoryRemove"
@@ -80,12 +80,12 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import SuccessMessage from './SuccessMessage.vue'
+import SuccessMessage from '../reusable/SuccessMessage.vue'
 import Habit from '@/utils/habits'
 import { useCurrentWeek } from '@/stores/dayStore'
-import CategorySelect from './CategorySelect.vue'
+import CategorySelect from '../reusable/CategorySelect.vue'
 import AddCategoryForm from './AddCategoryForm.vue'
-import ErrorMessage from './ErrorMessage.vue'
+import ErrorMessage from '../reusable/ErrorMessage.vue'
 
 export default defineComponent({
   name: 'HabitForm',
@@ -117,7 +117,7 @@ export default defineComponent({
     const isHidden = ref(false)
     const isFocused = ref(false)
     const addingCategory = ref(false)
-    const handleCategoryAdded = category => {
+    const handleCategoryAdded = (category) => {
       habitCategory.value = category.name
       addingCategory.value = false
       message.value = 'Category added succesfuly!'
@@ -125,11 +125,11 @@ export default defineComponent({
     }
     const handleCategoryRemove = () => {
       const categoryToDelete = store.categories.find(
-        category => category.name === habitCategory.value,
+        (category) => category.name === habitCategory.value,
       )
       if (categoryToDelete) {
         store.categories = store.categories.filter(
-          category => category.id !== categoryToDelete.id,
+          (category) => category.id !== categoryToDelete.id,
         )
         message.value = 'Category Removed Succesfuly!'
         success.value = true
@@ -140,7 +140,7 @@ export default defineComponent({
     }
     const createHabit = () => {
       let habitId = store.habits.length + 1
-      while (store.habits.some(habit => habit.id === habitId)) {
+      while (store.habits.some((habit) => habit.id === habitId)) {
         habitId++
       }
       if (!habitName.value || !habitCategory.value || !selectedDays.value) {
@@ -266,8 +266,6 @@ input {
   height: 22px;
   margin-left: 10px;
   border-radius: 0.5rem;
-  /* box-shadow: 0px 2px 4px; */
-  /* background: linear-gradient(30deg, rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0)); */
 }
 .focused {
   width: 80%;

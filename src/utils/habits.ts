@@ -1,38 +1,36 @@
 export default class Habit {
+  id: number
+  name: string
+  userId: number
+  category: string
+  description: string
+  weekdays: number[]
+  active: boolean
+  stopped: boolean
   constructor(
-    id,
-    name,
-    userId,
-    category,
-    description,
-    weekdays,
-    active = false,
-    stopped = false,
+    id: number,
+    name: string,
+    userId: number,
+    category: string,
+    description: string = '',
+    weekdays: number[],
+    active: boolean = false,
+    stopped: boolean = false,
   ) {
     this.id = id
     this.name = name
-    this.description = description || ''
+    this.description = description
     this.category = category
     this.userId = userId
     this.weekdays = weekdays
     this.active = active
     this.stopped = stopped
   }
-  // Save habits to local storage
-  static save() {
-    const habits = JSON.parse(localStorage.getItem('habits')) || []
-    const existingIndex = habits.findIndex(habit => habit.id === this.id)
-    if (existingIndex !== -1) {
-      habits[existingIndex] = this
-    } else {
-      habits.push(this)
-    }
-    localStorage.setItem('habits', JSON.stringify(habits))
-  }
+
   // Loads habits from local storage and creates instances of it
-  static getHabits() {
+  static getHabits(): Habit[] {
     const habitsParsed = JSON.parse(localStorage.getItem('habits')) || []
-    const habits = habitsParsed.map(habitData => {
+    const habits: Habit[] = habitsParsed.map((habitData: any) => {
       return new Habit(
         habitData.id,
         habitData.name,
@@ -47,7 +45,7 @@ export default class Habit {
     return habits
   }
   // Create a new Habit instance with the same properties
-  clone() {
+  clone(): Habit {
     return new Habit(
       this.id,
       this.name,
@@ -58,7 +56,7 @@ export default class Habit {
     )
   }
   // If matching ID is found it updates habit values with pased Habit object values
-  updateInPlace(habit) {
+  updateInPlace(habit: Habit) {
     if (this.id === habit.id) {
       this.name = habit.name
       this.description = habit.description

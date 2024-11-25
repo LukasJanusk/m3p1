@@ -19,6 +19,7 @@ import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'WeekdayButtons',
+  emits: ['dateSelected'],
   setup(props, { emit }) {
     const store = useCurrentWeek()
     function handleClick(day, index) {

@@ -36,7 +36,7 @@
               @mouseleave="setStopHover(habit.id, false)"
               @touchstart="setStopHover(habit.id, true)"
               @touchend="setStopHover(habit.id, false)"
-              src="../assets/stop.svg"
+              src="/src/assets/stop.svg"
               title="Toggle Stop habit"
               alt="Hand sign stop empty"
               @click="handleHabitStopToggle(habit.id)"
@@ -48,7 +48,7 @@
               @mouseleave="setStopHover(habit.id, false)"
               @touchstart="setStopHover(habit.id, true)"
               @touchend="setStopHover(habit.id, false)"
-              src="../assets/stop2.svg"
+              src="/src/assets/stop2.svg"
               title="Toggle Stop habit"
               alt="Hand sign stop filled"
               @click="handleHabitStopToggle(habit.id)"
@@ -60,7 +60,7 @@
               @mouseleave="setEditHover(habit.id, false)"
               @touchstart="setEditHover(habit.id, true)"
               @touchend="setEditHover(habit.id, false)"
-              src="../assets/edit5.svg"
+              src="/src/assets/edit5.svg"
               alt="Edit pencil"
               title="Edit Habit"
               @click="editHabitId = habit.id"
@@ -71,7 +71,7 @@
               @touchstart="setDeleteHover(habit.id, true)"
               @touchend="setDeleteHover(habit.id, false)"
               @click="handleDeleteHabit(habit.id)"
-              src="../assets/trash1.svg"
+              src="/src/assets/trash1.svg"
               alt="Trashcan"
               title="Remove Habit"
             />
@@ -106,8 +106,8 @@
 import { defineComponent, ref, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import EditHabitForm from './EditHabitForm.vue'
-import SuccessMessage from './SuccessMessage.vue'
-import ErrorMessage from './ErrorMessage.vue'
+import SuccessMessage from '../reusable/SuccessMessage.vue'
+import ErrorMessage from '../reusable/ErrorMessage.vue'
 
 export default defineComponent({
   name: 'HabitList',
@@ -132,12 +132,12 @@ export default defineComponent({
         if (props.category === 'All habits') {
           return store.habits
         }
-        return store.habits.filter(habit => habit.category === props.category)
+        return store.habits.filter((habit) => habit.category === props.category)
       } else {
         return store.habits
       }
     })
-    const handleHabitUpdate = newHabit => {
+    const handleHabitUpdate = (newHabit) => {
       editHabitId.value = null
       const updated = store.editHabit(newHabit)
       if (updated) {
@@ -148,8 +148,8 @@ export default defineComponent({
         error.value = true
       }
     }
-    const handleHabitStopToggle = habitId => {
-      const matchHabit = store.habits.find(habit => habit.id === habitId)
+    const handleHabitStopToggle = (habitId) => {
+      const matchHabit = store.habits.find((habit) => habit.id === habitId)
       if (matchHabit) {
         if (matchHabit.stopped === false) {
           const stopped = store.stopHabit(habitId)
@@ -172,7 +172,7 @@ export default defineComponent({
         }
       }
     }
-    const handleDeleteHabit = habitId => {
+    const handleDeleteHabit = (habitId) => {
       const deleted = store.deleteHabit(habitId)
       if (deleted === true) {
         message.value = 'Habit removed successfuly!'

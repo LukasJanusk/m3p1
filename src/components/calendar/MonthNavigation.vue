@@ -3,7 +3,7 @@
     <div class="nav-button">
       <img
         @click="returnPrevious"
-        src="../assets/left.svg"
+        src="/src/assets/left.svg"
         title="previous month"
         alt="Arrow left"
       />
@@ -11,7 +11,7 @@
     <div class="nav-button">
       <img
         @click="returnNext"
-        src="../assets/right.svg"
+        src="/src/assets/right.svg"
         title="next month"
         alt="Arrow right"
       />
@@ -21,14 +21,12 @@
 
 <script>
 import { defineComponent } from 'vue'
-// import { useCurrentWeek } from '@/stores/dayStore'
 
 export default defineComponent({
   name: 'MonthNavigation',
   emits: ['next', 'previous'],
 
   setup(props, { emit }) {
-    // const { previousMonth, nextMonth } = useCurrentWeek()
     const returnNext = () => {
       emit('next')
     }

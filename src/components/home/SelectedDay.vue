@@ -28,7 +28,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Fade in/out transition */
 .fade-enter-from {
   opacity: 0;
 }

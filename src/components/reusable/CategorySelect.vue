@@ -13,14 +13,15 @@
   ><br />
 </template>
 
-<script>
-import { defineComponent, computed } from 'vue'
+<script lang="ts">
+import { defineComponent, computed, PropType } from 'vue'
+import Category from '@/utils/category'
 
 export default defineComponent({
   name: 'CategorySelect',
   props: {
     categories: {
-      type: Array,
+      type: Array as PropType<Category[]>,
       required: true,
     },
     showAll: {
@@ -34,25 +35,22 @@ export default defineComponent({
       default: false,
     },
     modelValue: {
-      // This is for v-model binding
       type: String,
       required: true,
     },
   },
-  methods: {
-    handleInput(event) {
-      // Emit the selected category name to parent via update:modelValue
-      this.$emit('update:modelValue', event.target.value)
-    },
-  },
-  setup(props) {
+  setup(props, { emit }) {
+    const handleInput = (event: Event) => {
+      const target = event.target as HTMLInputElement
+      emit('update:modelValue', target.value)
+    }
     const categoriesFiltered = computed(() => {
       if (props.showAll === false) {
-        return props.categories.filter(category => category.id !== 0)
+        return props.categories.filter((category) => category.id !== 0)
       }
       return props.categories
     })
-    return { categoriesFiltered }
+    return { categoriesFiltered, handleInput }
   },
 })
 </script>

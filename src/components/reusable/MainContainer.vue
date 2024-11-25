@@ -2,14 +2,11 @@
   <div class="main-container"><slot></slot></div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'MainContainer',
-  setup() {
-    return {}
-  },
 })
 </script>
 <style scoped>

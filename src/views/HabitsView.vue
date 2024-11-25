@@ -9,13 +9,13 @@
         <img
           v-if="!show"
           title="Add new habit"
-          src="../assets/add2.svg"
+          src="/src/assets/add2.svg"
           alt="Plus sign"
         />
         <img
           v-if="show"
           title="Back to habits"
-          src="../assets/back2.svg"
+          src="/src/assets/back2.svg"
           alt="Back arrow"
         /></div
     ></TopContainer>
@@ -35,11 +35,11 @@
 </template>
 
 <script setup>
-import HabitForm from '@/components/HabitForm.vue'
-import HabitList from '@/components/HabitList.vue'
-import TopContainer from '@/components/TopContainer.vue'
-import MainContainer from '@/components/MainContainer.vue'
-import CategorySelect from '@/components/CategorySelect.vue'
+import HabitForm from '@/components/habits/HabitForm.vue'
+import HabitList from '@/components/habits/HabitList.vue'
+import TopContainer from '@/components/reusable/TopContainer.vue'
+import MainContainer from '@/components/reusable/MainContainer.vue'
+import CategorySelect from '@/components/reusable/CategorySelect.vue'
 import { ref, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 

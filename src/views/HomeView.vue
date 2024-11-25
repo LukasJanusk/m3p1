@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import WeekDayButtons from '@/components/WeekDayButtons.vue'
-import SelectedDay from '@/components/SelectedDay.vue'
-import MainContainer from '@/components/MainContainer.vue'
-import TopContainer from '@/components/TopContainer.vue'
+import WeekDayButtons from '@/components/home/WeekDayButtons.vue'
+import SelectedDay from '@/components/home/SelectedDay.vue'
+import MainContainer from '@/components/reusable/MainContainer.vue'
+import TopContainer from '@/components/reusable/TopContainer.vue'
 import { useCurrentWeek } from '@/stores/dayStore'
-import { adjustDayIndex } from '@/utils/dateUtils'
-import DayHabitList from '@/components/DayHabitList.vue'
+import { adjustDayIndex, validateDate, formatDate } from '@/utils/dateUtils'
+import DayHabitList from '@/components/reusable/DayHabitList.vue'
 
 export default {
   components: {
@@ -45,10 +45,32 @@ export default {
         store.setSelectedDay(urlDate)
       }
     })
-    const handleDateSelected = date => {
+    const handleDateSelected = (date) => {
       router.push({ name: 'HomeView', params: { date } })
     }
-
+    watch(
+      () => route.params.date,
+      (newDate) => {
+        if (validateDate(newDate)) {
+          const date = new Date(newDate)
+          date.setHours(0, 0, 0, 0)
+          const current = store.dayWeek.find(
+            (day) => formatDate(day.date) === formatDate(date),
+          )
+          if (current) {
+            store.selectedDay.value = date
+            store.activeIndex.index = adjustDayIndex(date)
+          }
+        } else {
+          router.push({ name: 'home' })
+          const updatedDate = new Date()
+          updatedDate.setHours(0, 0, 0, 0)
+          store.selectedDay = updatedDate
+          store.activeIndex.index = adjustDayIndex(updatedDate)
+        }
+      },
+      { immediate: true },
+    )
     return { store, date, handleDateSelected }
   },
 }

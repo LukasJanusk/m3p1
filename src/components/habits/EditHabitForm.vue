@@ -5,7 +5,7 @@
       <label for="habit-name">Name*</label>
       <img
         id="close-button"
-        src="../assets/close.svg"
+        src="/src/assets/close.svg"
         alt="X symbol"
         title="close"
         @click="closeForm"
@@ -50,9 +50,11 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import Habit from '@/utils/habits'
-import CategorySelect from './CategorySelect.vue'
+import CategorySelect from '../reusable/CategorySelect.vue'
+
 export default defineComponent({
   name: 'EditHabitForm',
+  emits: ['update', 'close-form'],
   components: { CategorySelect },
   props: {
     habit: {

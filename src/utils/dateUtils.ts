@@ -1,4 +1,4 @@
-export function getCurrentWeek() {
+export function getCurrentWeek(): Date[] {
   const today = new Date()
   const currentDayOfWeek = today.getDay()
   const startOfWeek = new Date(today)
@@ -15,29 +15,29 @@ export function getCurrentWeek() {
   }
   return week
 }
-export function getCurrentDay() {
+export function getCurrentDay(): number {
   const date = new Date()
   return date.getDate()
 }
-export function getCurrentWeekDay() {
+export function getCurrentWeekDay(): string {
   const date = new Date()
   const shortNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return shortNames[date.getDay()]
 }
-export function getWeekDay(dateObject) {
+export function getWeekDay(dateObject: Date): string {
   const shortNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return shortNames[dateObject.getDay()]
 }
-export function getDate(dateObject) {
+export function getDate(dateObject: Date): string {
   return dateObject.toISOString().split('T')[0]
 }
-export function getCurrentDayIndex() {
+export function getCurrentDayIndex(): number {
   const currentDate = new Date()
   const dayIndex = currentDate.getDay()
   const adjustedIndex = (dayIndex + 6) % 7
   return adjustedIndex
 }
-export function getCurrentDayString(dateObject) {
+export function getCurrentDayString(dateObject: Date): string {
   const longNames = [
     'Sunday',
     'Monday',
@@ -52,19 +52,19 @@ export function getCurrentDayString(dateObject) {
   const day = dateObject.getDay()
   return `${longNames[day]}, ${month} ${date}`
 }
-export function adjustDayIndex(date) {
+export function adjustDayIndex(date: Date): number {
   const dayIndex = date.getDay()
   return dayIndex === 0 ? 6 : dayIndex - 1
 }
-export function isSameDay(date1, date2) {
+export function isSameDay(date1: Date, date2: Date): boolean {
   return (
     date1.getFullYear() === date2.getFullYear() &&
     date1.getMonth() === date2.getMonth() &&
     date1.getDate() === date2.getDate()
   )
 }
-export function getCurrentMonthDates() {
-  const dates = []
+export function getCurrentMonthDates(): Date[] {
+  const dates: Date[] = []
   const now = new Date()
   const year = now.getFullYear()
   const month = now.getMonth()
@@ -76,7 +76,7 @@ export function getCurrentMonthDates() {
   }
   return dates
 }
-export function getMonthDates(year, month) {
+export function getMonthDates(year: number, month: number): Date[] {
   const dates = []
   const daysInMonth = new Date(year, month + 1, 0).getDate()
   for (let day = 1; day <= daysInMonth; day++) {
@@ -86,9 +86,16 @@ export function getMonthDates(year, month) {
   }
   return dates
 }
-export function formatDate(date) {
+export function formatDate(date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
+}
+/**
+ * Returns bool if date formated like 2024-12-11.
+ */
+export function validateDate(date: string): boolean {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+  return dateRegex.test(date)
 }

@@ -5,7 +5,7 @@
       <label for="category-name">Name*</label>
       <img
         id="close-button"
-        src="../assets/close.svg"
+        src="/src/assets/close.svg"
         alt="X symbol"
         title="close"
         @click="closeForm"
@@ -39,7 +39,7 @@
 import { defineComponent, ref } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import Category from '@/utils/category'
-import ErrorMessage from './ErrorMessage.vue'
+import ErrorMessage from '../reusable/ErrorMessage.vue'
 
 export default defineComponent({
   name: 'AddCategoryForm',
@@ -56,7 +56,9 @@ export default defineComponent({
         error.value = true
         message.value = 'Invalid category name!'
       } else if (
-        store.categories.some(category => category.name === categoryName.value)
+        store.categories.some(
+          (category) => category.name === categoryName.value,
+        )
       ) {
         message.value = 'Category already exist'
         error.value = true
@@ -71,7 +73,7 @@ export default defineComponent({
         categoryAdded(category)
       }
     }
-    const categoryAdded = category => {
+    const categoryAdded = (category) => {
       emit('category-added', category)
     }
     const closeForm = () => {

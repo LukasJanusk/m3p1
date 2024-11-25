@@ -2,14 +2,11 @@
   <div class="top-container"><slot></slot></div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'TopContainer',
-  setup() {
-    return {}
-  },
 })
 </script>
 <style scoped>

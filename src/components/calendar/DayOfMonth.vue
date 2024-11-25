@@ -21,7 +21,7 @@ export default defineComponent({
     const day = props.dayObject
     const totalHabits = ref(day.habits ? day.habits.length : 0)
     const activeCount = ref(
-      day.habits ? day.habits.filter(habit => habit.active).length : 0,
+      day.habits ? day.habits.filter((habit) => habit.active).length : 0,
     )
     const activePercentage = computed(() => {
       return Math.floor((activeCount.value / totalHabits.value) * 100)

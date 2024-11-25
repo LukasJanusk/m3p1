@@ -1,5 +1,10 @@
 export default class Category {
-  constructor(id, name, description) {
+  id: number
+  name: String
+  description: String
+  active: boolean
+
+  constructor(id: number, name: String, description: String) {
     this.id = id
     this.name = name
     this.description = description || ''

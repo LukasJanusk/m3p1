@@ -29,6 +29,7 @@
         />
       </div>
     </TopContainer>
+
     <MainContainer
       ><CalendarBody
         v-if="calendarView"
@@ -42,17 +43,17 @@
 </template>
 
 <script>
-import CalendarBody from '@/components/CalendarBody.vue'
-import TopContainer from '@/components/TopContainer.vue'
-import MainContainer from '@/components/MainContainer.vue'
-import SelectedMonth from '@/components/SelectedMonth.vue'
-import MonthNavigation from '@/components/MonthNavigation.vue'
-import DayHabitList from '@/components/DayHabitList.vue'
+import CalendarBody from '@/components/calendar/CalendarBody.vue'
+import TopContainer from '@/components/reusable/TopContainer.vue'
+import MainContainer from '@/components/reusable/MainContainer.vue'
+import SelectedMonth from '@/components/calendar/SelectedMonth.vue'
+import MonthNavigation from '@/components/calendar/MonthNavigation.vue'
+import DayHabitList from '@/components/reusable/DayHabitList.vue'
 import { useRouter, useRoute } from 'vue-router'
 import {
-  adjustDayIndex,
   formatDate,
   getCurrentDayString,
+  validateDate,
 } from '@/utils/dateUtils'
 import { useCurrentWeek } from '@/stores/dayStore'
 import { ref, watch, computed } from 'vue'
@@ -82,49 +83,44 @@ export default {
         return 'Cannot get selected Date'
       }
     })
-    store.monthDays.forEach(day => {
+    store.monthDays.forEach((day) => {
       const matchedDay = store.dayWeek.find(
-        d => d.date.toISOString() === day.date.toISOString(),
+        (d) => d.date.toISOString() === day.date.toISOString(),
       )
       if (matchedDay) {
         day.habits = matchedDay.habits
       }
     })
     Day.saveWeekdays(store.monthDays)
+
     watch(
       () => route.params.date,
-      newDate => {
-        if (newDate) {
+      (newDate) => {
+        if (validateDate(newDate)) {
           const date = new Date(newDate)
           date.setHours(0, 0, 0, 0)
           const current = store.monthDays.find(
-            day => formatDate(day.date) === formatDate(date),
+            (day) => formatDate(day.date) === formatDate(date),
           )
           if (current) {
             selectedDay.value = current
-          } else {
-            const day = new Day(date)
-            const dayIndex = adjustDayIndex(date)
-            day.habits = store.habits.filter(habit =>
-              habit.weekdays.includes(dayIndex),
-            )
-            if (day.date > new Date()) {
-              day.active = false
-            }
-            selectedDay.value = day
           }
           calendarView.value = false
+        } else {
+          router.push({ name: 'calendar' })
+          calendarView.value = true
         }
       },
-      { immediate: true }, // Trigger this watch immediately on component setup
+      { immediate: true },
     )
     // Toggle view and set the selected day
-    const toggleDayView = day => {
+    const toggleDayView = (day) => {
       calendarView.value = !calendarView.value
       selectedDay.value = day
       const dateString = formatDate(day.date)
       router.push({ name: 'CalendarView', params: { date: dateString } })
     }
+
     const toggleBacktoCalendar = () => {
       router.push({ name: 'calendar' })
       calendarView.value = true
