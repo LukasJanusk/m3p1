@@ -10,27 +10,27 @@ export default class Day {
     this.habits = []
     this.active = true
   }
-  // Creates new object Array of days of current week
+
   static getWeekdays(week: Date[], allHabits: Habit[]): Day[] {
-    const habits = allHabits.filter((habit) => habit.stopped === false)
+    const habits = allHabits.filter(habit => habit.stopped === false)
     const weekDays = this.getCurrentWeekSavedDays(week)
-    const dayIndexes = weekDays.map((day) => day.date.getDay())
+    const dayIndexes = weekDays.map(day => day.date.getDay())
     for (const day of week) {
       if (!dayIndexes.includes(day.getDay())) {
         const newDay = new Day(day)
         const dayIndex = adjustDayIndex(newDay.date)
-        const habitsToAdd = habits.filter((habit) =>
+        const habitsToAdd = habits.filter(habit =>
           habit.weekdays.includes(dayIndex),
         )
         if (habitsToAdd.length > 0) {
-          habitsToAdd.forEach((habit) => {
+          habitsToAdd.forEach(habit => {
             newDay.habits.push(habit.clone())
           })
         }
         weekDays.push(newDay)
       }
     }
-    weekDays.sort((a, b) => a.date - b.date)
+    weekDays.sort((a, b) => a.date.getTime() - b.date.getTime())
     const today = new Date()
     const todayIndex = adjustDayIndex(today)
     for (const day of weekDays) {
@@ -43,40 +43,40 @@ export default class Day {
     }
     return weekDays
   }
-  // Generates day objects for a month from local storage filling empty days with new objects
+
   static getMonthDays(year: number, month: number, allHabits: Habit[]): Day[] {
-    const habits = allHabits.filter((habit) => habit.stopped === false)
+    const habits = allHabits.filter(habit => habit.stopped === false)
     const days = this.loadWeekdays()
     const currentMonthDays = []
     if (days.length > 0) {
       currentMonthDays.push(
         ...days.filter(
-          (day) =>
+          day =>
             day.date.getMonth() === month && day.date.getFullYear() === year,
         ),
       )
     }
     const currentMonthDates = getMonthDates(year, month)
-    const datesToAdd = currentMonthDates.filter((date) => {
+    const datesToAdd = currentMonthDates.filter(date => {
       return !currentMonthDays.some(
-        (day) => day.date.toISOString() === date.toISOString(),
+        day => day.date.toISOString() === date.toISOString(),
       )
     })
     for (const date of datesToAdd) {
       const newDay = new Day(date)
       const dayIndex = adjustDayIndex(newDay.date)
-      const habitsToAdd = habits.filter((habit) =>
+      const habitsToAdd = habits.filter(habit =>
         habit.weekdays.includes(dayIndex),
       )
       if (habitsToAdd.length > 0) {
-        habitsToAdd.forEach((habit) => {
+        habitsToAdd.forEach(habit => {
           newDay.habits.push(habit.clone())
         })
       }
       currentMonthDays.push(newDay)
     }
     const today = new Date()
-    currentMonthDays.forEach((day) => {
+    currentMonthDays.forEach(day => {
       if (day.date > today) {
         day.active = false
       } else {
@@ -85,12 +85,12 @@ export default class Day {
     })
     return currentMonthDays.sort((a, b) => a.date - b.date)
   }
-  // Saves array of day objects to local storage
-  static saveWeekdays(weekDays) {
+
+  static saveWeekdays(weekDays: Day[]): void {
     const savedDays = this.loadWeekdays() || []
     for (const d of weekDays) {
       const existingDay = savedDays.find(
-        (day) => day.date.toISOString() === d.date.toISOString(),
+        day => day.date.toISOString() === d.date.toISOString(),
       )
       if (existingDay) {
         existingDay.habits = d.habits
@@ -101,13 +101,18 @@ export default class Day {
     }
     localStorage.setItem('days', JSON.stringify(savedDays))
   }
-  // Returns Day objects from local storage
-  static loadWeekdays() {
+
+  static loadWeekdays(): Day[] {
     const savedData = localStorage.getItem('days')
     if (!savedData) return []
+    interface DayData {
+      date: string
+      active?: boolean
+      habits?: Habit[]
+    }
+    const parsedData: DayData[] = JSON.parse(savedData)
 
-    const parsedData = JSON.parse(savedData)
-    return parsedData.map((dayData) => {
+    return parsedData.map(dayData => {
       const dateObject = new Date(dayData.date)
       return Object.assign(new Day(dateObject), {
         ...dayData,
@@ -115,8 +120,8 @@ export default class Day {
       })
     })
   }
-  // Returns an array of day objects created from passed Date objects
-  static getCurrentWeekSavedDays(week) {
+
+  static getCurrentWeekSavedDays(week: Date[]): Day[] {
     const loadedWeekdays = this.loadWeekdays()
     const currentWeek = []
     if (!loadedWeekdays) {
@@ -131,5 +136,32 @@ export default class Day {
       }
       return currentWeek
     }
+  }
+  static addHabitToDays(days: Day[], habit: Habit): void {
+    days.forEach(day => {
+      const dayIndex = adjustDayIndex(day.date)
+      if (
+        habit.weekdays.includes(dayIndex) &&
+        !day.habits.some(habit => habit.id === habit.id)
+      ) {
+        day.habits.push(habit.clone())
+      } else {
+        day.habits.forEach(h => {
+          if (h.id === habit.id) {
+            if (!habit.weekdays.includes(dayIndex)) {
+              day.habits = day.habits.filter(habit => habit.id !== h.id)
+            } else {
+              h.name = habit.name
+              h.description = habit.description
+              h.category = habit.category
+              h.userId = habit.userId
+              h.active = habit.active
+              h.weekdays = habit.weekdays
+              h.stopped = habit.stopped
+            }
+          }
+        })
+      }
+    })
   }
 }

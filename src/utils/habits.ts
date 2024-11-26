@@ -27,24 +27,29 @@ export default class Habit {
     this.stopped = stopped
   }
 
-  // Loads habits from local storage and creates instances of it
   static getHabits(): Habit[] {
-    const habitsParsed = JSON.parse(localStorage.getItem('habits')) || []
-    const habits: Habit[] = habitsParsed.map((habitData: any) => {
-      return new Habit(
-        habitData.id,
-        habitData.name,
-        habitData.userId,
-        habitData.category,
-        habitData.description,
-        habitData.weekdays,
-        habitData.active,
-        habitData.stopped,
+    try {
+      const habitsParsed = JSON.parse(localStorage.getItem('habits')) || []
+      const habits: Habit[] = habitsParsed.map((habitData: any) => {
+        return new Habit(
+          habitData.id,
+          habitData.name,
+          habitData.userId,
+          habitData.category,
+          habitData.description,
+          habitData.weekdays,
+          habitData.active,
+          habitData.stopped,
+        )
+      })
+      return habits
+    } catch (error) {
+      console.error(
+        `Unable to fetch habits from local storage: ${error.message}`,
       )
-    })
-    return habits
+    }
   }
-  // Create a new Habit instance with the same properties
+
   clone(): Habit {
     return new Habit(
       this.id,
@@ -55,7 +60,7 @@ export default class Habit {
       [...this.weekdays],
     )
   }
-  // If matching ID is found it updates habit values with pased Habit object values
+
   updateInPlace(habit: Habit) {
     if (this.id === habit.id) {
       this.name = habit.name

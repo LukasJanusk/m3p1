@@ -5,11 +5,11 @@
       <Transition name="fade" mode="out-in">
         <SelectedMonth v-if="calendarView"></SelectedMonth>
         <div v-else>
-          <transition name="fade" mode="out-in">
+          <Transition name="fade" mode="out-in">
             <div :key="dateToShow">
               <h2>{{ dateToShow }}</h2>
             </div>
-          </transition>
+          </Transition>
         </div>
       </Transition>
       <div v-if="calendarView" class="navigation-container">
@@ -29,7 +29,6 @@
         />
       </div>
     </TopContainer>
-
     <MainContainer
       ><CalendarBody
         v-if="calendarView"
@@ -83,9 +82,9 @@ export default {
         return 'Cannot get selected Date'
       }
     })
-    store.monthDays.forEach((day) => {
+    store.monthDays.forEach(day => {
       const matchedDay = store.dayWeek.find(
-        (d) => d.date.toISOString() === day.date.toISOString(),
+        d => d.date.toISOString() === day.date.toISOString(),
       )
       if (matchedDay) {
         day.habits = matchedDay.habits
@@ -95,12 +94,12 @@ export default {
 
     watch(
       () => route.params.date,
-      (newDate) => {
+      newDate => {
         if (validateDate(newDate)) {
           const date = new Date(newDate)
           date.setHours(0, 0, 0, 0)
           const current = store.monthDays.find(
-            (day) => formatDate(day.date) === formatDate(date),
+            day => formatDate(day.date) === formatDate(date),
           )
           if (current) {
             selectedDay.value = current
@@ -113,8 +112,8 @@ export default {
       },
       { immediate: true },
     )
-    // Toggle view and set the selected day
-    const toggleDayView = (day) => {
+
+    const toggleDayView = day => {
       calendarView.value = !calendarView.value
       selectedDay.value = day
       const dateString = formatDate(day.date)

@@ -9,7 +9,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      props: (route) => {
+      props: route => {
         const dateParam = route.query.date
         return { date: dateParam }
       },
@@ -26,7 +26,7 @@ const router = createRouter({
       path: '/calendar',
       name: 'calendar',
       component: CalendarView,
-      props: (route) => {
+      props: route => {
         const dateParam = route.query.date
         return { date: dateParam }
       },

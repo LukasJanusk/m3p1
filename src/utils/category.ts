@@ -10,16 +10,14 @@ export default class Category {
     this.description = description || ''
     this.active = true
   }
-  // Save habits to local storage
-  static save(categories) {
+
+  static save(categories: Category[]) {
     localStorage.setItem('categories', JSON.stringify(categories))
   }
-  // Load categories from local storage and return array of found ones
-  static load() {
+
+  static load(): Category[] {
     const storedCategories = localStorage.getItem('categories')
     const categories = storedCategories ? JSON.parse(storedCategories) : []
-
-    // If no categories are found, create default ones
     if (categories.length === 0) {
       const defaultCategories = [
         new Category(0, 'All habits', 'Show habits of all categories'),
@@ -34,7 +32,6 @@ export default class Category {
         ),
         new Category(6, 'Spiritual', 'Habits for spiritual growth'),
       ]
-      // Save the default categories to local storage
       Category.save(defaultCategories)
       return defaultCategories
     }

@@ -14,5 +14,5 @@ export default [
 
   ts.configs.recommended,
   ...pluginVue.configs['flat/essential'],
-  // 'plugin:prettier/recommended',
+  'plugin:prettier/recommended',
 ]

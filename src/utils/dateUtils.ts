@@ -15,28 +15,34 @@ export function getCurrentWeek(): Date[] {
   }
   return week
 }
+
 export function getCurrentDay(): number {
   const date = new Date()
   return date.getDate()
 }
+
 export function getCurrentWeekDay(): string {
   const date = new Date()
   const shortNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return shortNames[date.getDay()]
 }
+
 export function getWeekDay(dateObject: Date): string {
   const shortNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return shortNames[dateObject.getDay()]
 }
+
 export function getDate(dateObject: Date): string {
   return dateObject.toISOString().split('T')[0]
 }
+
 export function getCurrentDayIndex(): number {
   const currentDate = new Date()
   const dayIndex = currentDate.getDay()
   const adjustedIndex = (dayIndex + 6) % 7
   return adjustedIndex
 }
+
 export function getCurrentDayString(dateObject: Date): string {
   const longNames = [
     'Sunday',
@@ -52,10 +58,12 @@ export function getCurrentDayString(dateObject: Date): string {
   const day = dateObject.getDay()
   return `${longNames[day]}, ${month} ${date}`
 }
+
 export function adjustDayIndex(date: Date): number {
   const dayIndex = date.getDay()
   return dayIndex === 0 ? 6 : dayIndex - 1
 }
+
 export function isSameDay(date1: Date, date2: Date): boolean {
   return (
     date1.getFullYear() === date2.getFullYear() &&
@@ -63,6 +71,7 @@ export function isSameDay(date1: Date, date2: Date): boolean {
     date1.getDate() === date2.getDate()
   )
 }
+
 export function getCurrentMonthDates(): Date[] {
   const dates: Date[] = []
   const now = new Date()
@@ -76,6 +85,7 @@ export function getCurrentMonthDates(): Date[] {
   }
   return dates
 }
+
 export function getMonthDates(year: number, month: number): Date[] {
   const dates = []
   const daysInMonth = new Date(year, month + 1, 0).getDate()
@@ -86,15 +96,14 @@ export function getMonthDates(year: number, month: number): Date[] {
   }
   return dates
 }
+
 export function formatDate(date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
 }
-/**
- * Returns bool if date formated like 2024-12-11.
- */
+
 export function validateDate(date: string): boolean {
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/
   return dateRegex.test(date)
