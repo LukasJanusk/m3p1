@@ -2,33 +2,35 @@
   <div>
     <TopContainer id="title">
       <Transition name="fade" mode="out-in">
-        <h1 v-if="show">{{ title }}</h1>
+        <h1 v-if="formVisible">{{ title }}</h1>
         <h1 v-else>{{ title }}</h1>
       </Transition>
       <div id="add-habit" class="nav-button" @click="showForm">
         <img
-          v-if="!show"
+          v-if="!formVisible"
           title="Add new habit"
           src="/src/assets/add2.svg"
           alt="Plus sign"
         />
         <img
-          v-if="show"
+          v-if="formVisible"
           title="Back to habits"
           src="/src/assets/back2.svg"
           alt="Back arrow"
         /></div
     ></TopContainer>
-    <MainContainer
+    <MainContainer id="main-container"
       ><Transition name="fade" mode="out-in"
-        ><div v-if="!show">
+        ><div class="main-container-item" v-if="!formVisible">
           <CategorySelect
             v-model="habitCategory"
             :categories="store.categories"
           ></CategorySelect>
-          <HabitList :category="habitCategory" v-if="!show"></HabitList>
+          <HabitList :category="habitCategory" v-if="!formVisible"></HabitList>
         </div>
-        <HabitForm v-else></HabitForm>
+        <div class="main-container-item" v-else>
+          <HabitForm></HabitForm>
+        </div>
       </Transition>
     </MainContainer>
   </div>
@@ -43,10 +45,10 @@ import CategorySelect from '@/components/reusable/CategorySelect.vue'
 import { ref, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 
-const show = ref(false)
-const title = computed(() => (show.value ? 'Add Habit' : 'My Habits'))
+const formVisible = ref(false)
+const title = computed(() => (formVisible.value ? 'Add Habit' : 'My Habits'))
 const showForm = () => {
-  show.value = !show.value
+  formVisible.value = !formVisible.value
 }
 const habitCategory = ref('All habits')
 const store = useCurrentWeek()
@@ -92,6 +94,17 @@ h1 {
   transform: scale(0.95);
   border-color: #42b983;
   background-color: #42b983;
+}
+#main-container {
+  display: flex;
+  /* align-items: center;
+  align-content: center; */
+  justify-content: center;
+}
+#main-container-item {
+  border: 1px solid red;
+  max-width: 500px;
+  width: inherit;
 }
 @media (min-width: 1024px) {
   .habit-container {

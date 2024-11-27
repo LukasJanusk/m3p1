@@ -46,7 +46,7 @@ export default defineComponent({
     }
     const categoriesFiltered = computed(() => {
       if (props.showAll === false) {
-        return props.categories.filter((category) => category.id !== 0)
+        return props.categories.filter(category => category.id !== 0)
       }
       return props.categories
     })
@@ -63,16 +63,12 @@ select {
   border-radius: 18px;
   padding: 5px;
   color: #333;
+  width: 100%;
 }
 option {
   background-color: rgba(255, 255, 255, 0.409);
   color: #333;
   padding: 10px;
   border-radius: 18px;
-}
-@media (max-width: 500px) {
-  select {
-    width: 100%;
-  }
 }
 </style>

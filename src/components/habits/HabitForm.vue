@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="form-container">
     <form id="add-habit-form" @submit.prevent="createHabit">
       <label for="category">Category*</label><br />
       <div id="category-select-container">
@@ -48,18 +48,19 @@
         v-model="habitDescription"
       ></textarea
       ><br />
-
-      <label for="weekday-select">Select habit activity days*</label>
-      <div id="weekday-select" v-for="(day, index) in weekdays" :key="index">
-        <label>
-          <input
-            class="checkbox"
-            type="checkbox"
-            :value="index"
-            v-model="selectedDays"
-          />
-          {{ day }}
-        </label>
+      <label for="weekday-select-container">Select habit activity days*</label>
+      <div id="weekday-select-container">
+        <div id="weekday-select" v-for="(day, index) in weekdays" :key="index">
+          <label>
+            <input
+              class="checkbox"
+              type="checkbox"
+              :value="index"
+              v-model="selectedDays"
+            />
+            {{ day }}
+          </label>
+        </div>
       </div>
       <button class="submit-button" @click.stop type="submit" id="submit">
         Add Habit
@@ -117,7 +118,7 @@ export default defineComponent({
     const isHidden = ref(false)
     const isFocused = ref(false)
     const addingCategory = ref(false)
-    const handleCategoryAdded = (category) => {
+    const handleCategoryAdded = category => {
       habitCategory.value = category.name
       addingCategory.value = false
       message.value = 'Category added succesfuly!'
@@ -125,11 +126,11 @@ export default defineComponent({
     }
     const handleCategoryRemove = () => {
       const categoryToDelete = store.categories.find(
-        (category) => category.name === habitCategory.value,
+        category => category.name === habitCategory.value,
       )
       if (categoryToDelete) {
         store.categories = store.categories.filter(
-          (category) => category.id !== categoryToDelete.id,
+          category => category.id !== categoryToDelete.id,
         )
         message.value = 'Category Removed Succesfuly!'
         success.value = true
@@ -140,7 +141,7 @@ export default defineComponent({
     }
     const createHabit = () => {
       let habitId = store.habits.length + 1
-      while (store.habits.some((habit) => habit.id === habitId)) {
+      while (store.habits.some(habit => habit.id === habitId)) {
         habitId++
       }
       if (!habitName.value || !habitCategory.value || !selectedDays.value) {
@@ -233,9 +234,15 @@ input {
 .checkbox:hover {
   accent-color: rgb(80, 168, 139);
 }
+#name {
+  width: 95%;
+  max-width: 500px;
+}
 #description {
-  width: 200px;
+  width: 95%;
   height: 50px;
+  max-height: 100px;
+  max-width: 500px;
   background-color: transparent;
   border: 1px solid #ccc;
   border-radius: 18px;
@@ -244,6 +251,7 @@ input {
 }
 #category-select-container {
   display: flex;
+  width: 95%;
 }
 #remove-category-button {
   height: 22px;
@@ -278,34 +286,39 @@ input {
 .hidden {
   display: none;
 }
-.fade-enter-active {
-  transition: opacity 0.5s ease-in;
+.submit-button {
+  max-width: 463px;
+  width: 463px;
+  border-radius: 10px;
+  margin-top: 10px;
+  height: 40px;
+  bottom: 10px;
+  justify-self: flex-end;
 }
-.fade-leave-active {
-  transition: opacity 1s ease-out;
+#form-container {
+  display: flex;
+  padding: 5px;
+  height: 490px;
+  border: 2px solid rgba(0, 0, 0, 0.035);
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.041);
 }
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
+form {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
 }
 @media (max-width: 500px) {
-  #name {
-    width: 95%;
+  #form-container {
+    width: auto;
   }
-  #description {
-    width: 95%;
-  }
-  #submit {
-    width: 100%;
-    height: 40px;
-    margin-top: 10px;
-    border-radius: 10px;
-  }
-}
-@media (min-width: 1280px) {
-  #weekday-select {
+  form {
     display: flex;
-    flex-direction: row;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+  .submit-button {
+    width: 100%;
   }
 }
 </style>
