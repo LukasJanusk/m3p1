@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { getCurrentDayString } from '@/utils/dateUtils'
 import { useCurrentWeek } from '@/stores/dayStore'
@@ -18,8 +18,7 @@ export default defineComponent({
 
   setup() {
     const currentWeek = useCurrentWeek()
-
-    const dateToDisplay = computed(() => {
+    const dateToDisplay = computed((): string => {
       return getCurrentDayString(currentWeek.selectedDay)
     })
     return { dateToDisplay }

@@ -12,17 +12,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 import { formatDate, getWeekDay } from '@/utils/dateUtils'
 import { useCurrentWeek } from '@/stores/dayStore'
+import Day from '@/utils/day'
 
 export default defineComponent({
   name: 'WeekdayButtons',
   emits: ['dateSelected'],
   setup(props, { emit }) {
     const store = useCurrentWeek()
-    function handleClick(day, index) {
+    function handleClick(day: Day, index: number) {
       store.activeIndex.index = index
       store.setSelectedDay(day.date)
       const dateString = formatDate(day.date)
