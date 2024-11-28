@@ -6,14 +6,15 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import Day from '@/utils/day'
 
 export default defineComponent({
   name: 'DayOfMonth',
   props: {
     dayObject: {
-      type: Object,
+      type: Day,
       required: true,
     },
   },
@@ -21,12 +22,12 @@ export default defineComponent({
     const day = props.dayObject
     const totalHabits = ref(day.habits ? day.habits.length : 0)
     const activeCount = ref(
-      day.habits ? day.habits.filter((habit) => habit.active).length : 0,
+      day.habits ? day.habits.filter(habit => habit.active).length : 0,
     )
-    const activePercentage = computed(() => {
+    const activePercentage = computed((): number => {
       return Math.floor((activeCount.value / totalHabits.value) * 100)
     })
-    const getActiveClass = () => {
+    const getActiveClass = (): string => {
       if (activePercentage.value >= 20 && activePercentage.value < 40) {
         return 'twenty'
       } else if (activePercentage.value >= 40 && activePercentage.value < 60) {
@@ -41,7 +42,7 @@ export default defineComponent({
         return ''
       }
     }
-    const getPercentage = () => {
+    const getPercentage = (): string => {
       return `Completed ${activePercentage.value}% of Habits`
     }
 

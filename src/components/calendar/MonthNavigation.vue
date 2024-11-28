@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -27,10 +27,10 @@ export default defineComponent({
   emits: ['next', 'previous'],
 
   setup(props, { emit }) {
-    const returnNext = () => {
+    const returnNext = (): void => {
       emit('next')
     }
-    const returnPrevious = () => {
+    const returnPrevious = (): void => {
       emit('previous')
     }
 

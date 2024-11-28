@@ -145,7 +145,6 @@ export default class Day {
         !day.habits.some(h => h.id === habit.id)
       ) {
         day.habits.push(habit.clone())
-        console.log(`Habit was pushed to ${day.date.toISOString()}`)
       } else {
         day.habits.forEach(h => {
           if (h.id === habit.id) {

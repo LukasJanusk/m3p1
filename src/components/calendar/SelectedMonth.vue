@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 
@@ -15,12 +15,12 @@ export default defineComponent({
 
   setup() {
     const store = useCurrentWeek()
-    const month = computed(() => {
+    const month = computed((): string => {
       return store.monthDays[0].date.toLocaleString('default', {
         month: 'long',
       })
     })
-    const year = computed(() => {
+    const year = computed((): string => {
       return ' ' + store.monthDays[0].date.getFullYear()
     })
     return { month, year }
