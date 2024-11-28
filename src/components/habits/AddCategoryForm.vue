@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import Category from '@/utils/category'
@@ -51,13 +51,13 @@ export default defineComponent({
     const categoryDescription = ref('')
     const error = ref(false)
     const message = ref('')
-    const updateCategories = () => {
+    const updateCategories = (): void => {
       if (!categoryName.value) {
         error.value = true
         message.value = 'Invalid category name!'
       } else if (
         store.categories.some(
-          (category) => category.name === categoryName.value,
+          (category: Category) => category.name === categoryName.value,
         )
       ) {
         message.value = 'Category already exist'
@@ -73,13 +73,13 @@ export default defineComponent({
         categoryAdded(category)
       }
     }
-    const categoryAdded = (category) => {
+    const categoryAdded = (category: Category): void => {
       emit('category-added', category)
     }
-    const closeForm = () => {
+    const closeForm = (): void => {
       emit('close-form')
     }
-    const resetError = () => {
+    const resetError = (): void => {
       message.value = ''
       error.value = false
     }

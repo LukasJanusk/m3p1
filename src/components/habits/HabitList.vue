@@ -102,7 +102,7 @@
   ></ErrorMessage>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import EditHabitForm from './EditHabitForm.vue'
@@ -128,17 +128,19 @@ export default defineComponent({
     const success = ref(false)
     const error = ref(false)
     const message = ref('')
-    const habitList = computed(() => {
+    const habitList = computed((): Habit[] => {
       if (props.category) {
         if (props.category === 'All habits') {
           return store.habits
         }
-        return store.habits.filter(habit => habit.category === props.category)
+        return store.habits.filter(
+          (habit: Habit) => habit.category === props.category,
+        )
       } else {
         return store.habits
       }
     })
-    const handleHabitUpdate = newHabit => {
+    const handleHabitUpdate = (newHabit: Habit): void => {
       editHabitId.value = null
       const updated = store.editHabit(newHabit)
       if (updated) {
@@ -149,8 +151,10 @@ export default defineComponent({
         error.value = true
       }
     }
-    const handleHabitStopToggle = habitId => {
-      const matchHabit = store.habits.find(habit => habit.id === habitId)
+    const handleHabitStopToggle = (habitId: number): void => {
+      const matchHabit = store.habits.find(
+        (habit: Habit) => habit.id === habitId,
+      )
       if (matchHabit) {
         if (matchHabit.stopped === false) {
           const stopped = store.stopHabit(habitId)
@@ -173,7 +177,7 @@ export default defineComponent({
         }
       }
     }
-    const handleDeleteHabit = habitId => {
+    const handleDeleteHabit = (habitId: number): void => {
       const deleted = store.deleteHabit(habitId)
       if (deleted === true) {
         message.value = 'Habit removed successfuly!'
@@ -183,23 +187,23 @@ export default defineComponent({
         error.value = true
       }
     }
-    const setDeleteHover = (id, state) => {
+    const setDeleteHover = (id: number, state: boolean): void => {
       deleteHover.value = { ...deleteHover.value, [id]: state }
     }
-    const setStopHover = (id, state) => {
+    const setStopHover = (id: number, state: boolean): void => {
       stopHover.value = { ...stopHover.value, [id]: state }
     }
-    const setEditHover = (id, state) => {
+    const setEditHover = (id: number, state: boolean): void => {
       editHover.value = { ...editHover.value, [id]: state }
     }
-    const isActive = (habit, index) => {
+    const isActive = (habit: Habit, index: number): boolean => {
       return habit.weekdays.includes(index)
     }
-    const resetError = () => {
+    const resetError = (): void => {
       message.value = ''
       error.value = false
     }
-    const resetSuccess = () => {
+    const resetSuccess = (): void => {
       message.value = ''
       success.value = false
     }

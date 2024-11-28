@@ -79,7 +79,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from 'vue'
 import SuccessMessage from '../reusable/SuccessMessage.vue'
 import Habit from '@/utils/habits'
@@ -87,6 +87,7 @@ import { useCurrentWeek } from '@/stores/dayStore'
 import CategorySelect from '../reusable/CategorySelect.vue'
 import AddCategoryForm from './AddCategoryForm.vue'
 import ErrorMessage from '../reusable/ErrorMessage.vue'
+import Category from '@/utils/category'
 
 export default defineComponent({
   name: 'HabitForm',
@@ -110,27 +111,25 @@ export default defineComponent({
     const message = ref('Habit added succesfully')
     const success = ref(false)
     const error = ref(false)
-    const userId = 1 // Placeholder
+    const userId = 1 // Placeholder - will need updates if app needs accept multiple users
     const habitName = ref('')
     const habitDescription = ref('')
     const selectedDays = ref([])
     const habitCategory = ref('Select a category')
-    const isHidden = ref(false)
-    const isFocused = ref(false)
     const addingCategory = ref(false)
-    const handleCategoryAdded = category => {
+    const handleCategoryAdded = (category: Category): void => {
       habitCategory.value = category.name
       addingCategory.value = false
       message.value = 'Category added succesfuly!'
       success.value = true
     }
-    const handleCategoryRemove = () => {
+    const handleCategoryRemove = (): void => {
       const categoryToDelete = store.categories.find(
-        category => category.name === habitCategory.value,
+        (category: Category) => category.name === habitCategory.value,
       )
       if (categoryToDelete) {
         store.categories = store.categories.filter(
-          category => category.id !== categoryToDelete.id,
+          (category: Category) => category.id !== categoryToDelete.id,
         )
         message.value = 'Category Removed Succesfuly!'
         success.value = true
@@ -139,9 +138,9 @@ export default defineComponent({
         error.value = true
       }
     }
-    const createHabit = () => {
+    const createHabit = (): void => {
       let habitId = store.habits.length + 1
-      while (store.habits.some(habit => habit.id === habitId)) {
+      while (store.habits.some((habit: Habit) => habit.id === habitId)) {
         habitId++
       }
       if (!habitName.value || !habitCategory.value || !selectedDays.value) {
@@ -156,10 +155,8 @@ export default defineComponent({
           habitDescription.value,
           selectedDays.value,
         )
-        // update for runtime and save to local storage
         const added = store.addHabit(habit, selectedDays.value)
         if (added === true) {
-          // reset form values
           message.value = 'Habit added successfuly!'
           success.value = true
           habitName.value = ''
@@ -172,11 +169,11 @@ export default defineComponent({
         }
       }
     }
-    const resetError = () => {
+    const resetError = (): void => {
       message.value = ''
       error.value = false
     }
-    const resetSuccess = () => {
+    const resetSuccess = (): void => {
       message.value = ''
       success.value = false
     }
@@ -190,8 +187,6 @@ export default defineComponent({
       habitName,
       habitDescription,
       habitCategory,
-      isHidden,
-      isFocused,
       addingCategory,
       createHabit,
       handleCategoryAdded,

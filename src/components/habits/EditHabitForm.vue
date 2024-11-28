@@ -47,10 +47,11 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script lang="ts">
+import { defineComponent, ref, PropType } from 'vue'
 import Habit from '@/utils/habits'
 import CategorySelect from '../reusable/CategorySelect.vue'
+import Category from '@/utils/category'
 
 export default defineComponent({
   name: 'EditHabitForm',
@@ -62,7 +63,7 @@ export default defineComponent({
       required: true,
     },
     categories: {
-      type: Array,
+      type: Array as PropType<Category[]>,
       required: true,
     },
   },
@@ -80,7 +81,7 @@ export default defineComponent({
     const habitDescription = ref(props.habit.description)
     const habitWeekdays = ref(props.habit.weekdays)
     const habitCategory = ref(props.habit.category)
-    const updateHabit = () => {
+    const updateHabit = (): void => {
       emit(
         'update',
         new Habit(
@@ -94,7 +95,7 @@ export default defineComponent({
       )
     }
 
-    const closeForm = () => {
+    const closeForm = (): void => {
       emit('close-form')
     }
     return {
