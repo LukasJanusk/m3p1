@@ -90,7 +90,7 @@ export default defineComponent({
     font-size: 12px;
     min-width: 40px;
     margin: 2px;
-    width: 1/7;
+    width: auto;
   }
 }
 @media (min-width: 600px) {

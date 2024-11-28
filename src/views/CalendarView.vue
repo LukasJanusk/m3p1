@@ -29,14 +29,22 @@
         />
       </div>
     </TopContainer>
-    <MainContainer
-      ><CalendarBody
-        v-if="calendarView"
-        :startIndex="store.startIndex"
-        :monthDays="store.monthDays"
-        @daySelected="toggleDayView"
-      ></CalendarBody>
-      <DayHabitList v-if="!calendarView" :day="selectedDay"></DayHabitList>
+    <MainContainer id="main-container">
+      <Transition name="fade" mode="out-in">
+        <CalendarBody
+          class="main-container-item"
+          v-if="calendarView"
+          :startIndex="store.startIndex"
+          :monthDays="store.monthDays"
+          @daySelected="toggleDayView"
+        ></CalendarBody>
+
+        <DayHabitList
+          class="main-container-item"
+          v-else
+          :day="selectedDay"
+        ></DayHabitList
+      ></Transition>
     </MainContainer>
   </div>
 </template>
@@ -154,6 +162,14 @@ export default {
 }
 .fade-leave-to {
   opacity: 0;
+}
+#main-container {
+  display: flex;
+  justify-content: center;
+}
+.main-container-item {
+  max-width: 500px;
+  width: 100%;
 }
 .navigation-container {
   display: flex;

@@ -97,14 +97,11 @@ h1 {
 }
 #main-container {
   display: flex;
-  /* align-items: center;
-  align-content: center; */
   justify-content: center;
 }
-#main-container-item {
-  border: 1px solid red;
+.main-container-item {
   max-width: 500px;
-  width: inherit;
+  width: 100%;
 }
 @media (min-width: 1024px) {
   .habit-container {

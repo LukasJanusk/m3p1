@@ -242,7 +242,7 @@ input {
   width: 95%;
   height: 50px;
   max-height: 100px;
-  max-width: 500px;
+  max-width: 475px;
   background-color: transparent;
   border: 1px solid #ccc;
   border-radius: 18px;
@@ -297,6 +297,7 @@ input {
 }
 #form-container {
   display: flex;
+  justify-content: center;
   padding: 5px;
   height: 490px;
   border: 2px solid rgba(0, 0, 0, 0.035);
@@ -313,9 +314,7 @@ form {
     width: auto;
   }
   form {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
+    width: 100%;
   }
   .submit-button {
     width: 100%;

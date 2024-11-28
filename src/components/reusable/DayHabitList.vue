@@ -1,53 +1,55 @@
 <template>
-  <div v-if="day.active === true" id="habits-container">
-    <transition-group name="slide-fade" tag="div">
-      <div
-        v-for="habit in day.habits"
-        :key="habit.id"
-        :title="habit.description"
-        class="habit-item"
-        :class="{ active: habit.active }"
-        @click="toggleCheckbox(habit.id)"
-      >
-        <label
+  <div>
+    <div v-if="day.active === true" id="habits-container">
+      <transition-group name="slide-fade" tag="div">
+        <div
+          v-for="habit in day.habits"
+          :key="habit.id"
+          :title="habit.description"
+          class="habit-item"
+          :class="{ active: habit.active }"
           @click="toggleCheckbox(habit.id)"
-          :for="`checkbox-${habit.id}`"
-          >{{ habit.name }}</label
         >
-        <input
-          class="checkbox"
-          type="checkbox"
-          :id="`checkbox-${habit.id}`"
-          :checked="habit.active"
-          @click.stop="toggleCheckbox(habit.id)"
-        /></div
-    ></transition-group>
-  </div>
-  <div v-else id="habits-container-inactive">
-    <transition-group name="slide-fade" tag="div">
-      <div
-        v-for="habit in day.habits"
-        :key="habit.id"
-        class="habit-item-inactive"
-        title="Cannot toggle habits for the future days"
-        @click="handleToggleInactive"
-      >
-        <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
-        <input
-          hidden
-          class="checkbox"
-          type="checkbox"
-          :id="`checkbox-${habit.id}`"
-        /></div
-    ></transition-group>
-  </div>
+          <label
+            @click="toggleCheckbox(habit.id)"
+            :for="`checkbox-${habit.id}`"
+            >{{ habit.name }}</label
+          >
+          <input
+            class="checkbox"
+            type="checkbox"
+            :id="`checkbox-${habit.id}`"
+            :checked="habit.active"
+            @click.stop="toggleCheckbox(habit.id)"
+          /></div
+      ></transition-group>
+    </div>
+    <div v-else id="habits-container-inactive">
+      <transition-group name="slide-fade" tag="div">
+        <div
+          v-for="habit in day.habits"
+          :key="habit.id"
+          class="habit-item-inactive"
+          title="Cannot toggle habits for the future days"
+          @click="handleToggleInactive"
+        >
+          <label :for="`checkbox-${habit.id}`">{{ habit.name }}</label>
+          <input
+            hidden
+            class="checkbox"
+            type="checkbox"
+            :id="`checkbox-${habit.id}`"
+          /></div
+      ></transition-group>
+    </div>
 
-  <ErrorMessage
-    :message="message"
-    :duration="3000"
-    @dismiss="resetError"
-    v-if="error"
-  ></ErrorMessage>
+    <ErrorMessage
+      :message="message"
+      :duration="3000"
+      @dismiss="resetError"
+      v-if="error"
+    ></ErrorMessage>
+  </div>
 </template>
 
 <script lang="ts">
@@ -106,11 +108,14 @@ export default defineComponent({
 }
 #habits-container,
 #habits-container-inactive {
+  width: 100%;
+  max-width: 500px;
   height: 500px;
   overflow-y: auto;
   scrollbar-width: none;
   border: 2px solid rgba(0, 0, 0, 0.035);
   border-radius: 20px;
+  background: rgba(0, 0, 0, 0.041);
 }
 .habit-item {
   display: flex;

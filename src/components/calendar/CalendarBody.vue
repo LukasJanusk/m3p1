@@ -44,12 +44,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const weekdayTags = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     const calendarKey = computed(() => {
-      return props.monthDays.map((day) => day.date.toISOString()).join('-')
+      return props.monthDays.map(day => day.date.toISOString()).join('-')
     })
     const skip = computed(() => {
       return Array.from({ length: props.startIndex })
     })
-    const daySelected = (day) => {
+    const daySelected = day => {
       emit('daySelected', day)
     }
     return {
@@ -82,7 +82,11 @@ export default defineComponent({
   opacity: 0;
 }
 #calendar-body {
-  height: inherit;
+  padding: 5px;
+  height: 490px;
+  border: 2px solid rgba(0, 0, 0, 0.035);
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.041);
 }
 #calendar-container {
   display: grid;

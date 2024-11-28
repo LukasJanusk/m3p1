@@ -2,12 +2,16 @@
   <div>
     <TopContainer>
       <SelectedDay id="selected-day"></SelectedDay>
-      <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
+      <div class="top-container-item">
+        <WeekDayButtons @dateSelected="handleDateSelected"></WeekDayButtons>
+      </div>
     </TopContainer>
-    <MainContainer>
-      <DayHabitList
-        :day="store.dayWeek[store.activeIndex.index]"
-      ></DayHabitList>
+    <MainContainer id="main-container">
+      <div class="main-container-item">
+        <DayHabitList
+          :day="store.dayWeek[store.activeIndex.index]"
+        ></DayHabitList>
+      </div>
     </MainContainer>
   </div>
 </template>
@@ -45,17 +49,17 @@ export default {
         store.setSelectedDay(urlDate)
       }
     })
-    const handleDateSelected = (date) => {
+    const handleDateSelected = date => {
       router.push({ name: 'HomeView', params: { date } })
     }
     watch(
       () => route.params.date,
-      (newDate) => {
+      newDate => {
         if (validateDate(newDate)) {
           const date = new Date(newDate)
           date.setHours(0, 0, 0, 0)
           const current = store.dayWeek.find(
-            (day) => formatDate(day.date) === formatDate(date),
+            day => formatDate(day.date) === formatDate(date),
           )
           if (current) {
             store.selectedDay.value = date
@@ -92,5 +96,19 @@ export default {
 }
 #habit-list::-webkit-scrollbar {
   display: none;
+}
+#main-container {
+  display: flex;
+  justify-content: center;
+}
+.main-container-item {
+  max-width: 500px;
+  width: 100%;
+}
+.top-container-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>
