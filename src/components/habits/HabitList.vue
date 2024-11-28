@@ -108,6 +108,7 @@ import { useCurrentWeek } from '@/stores/dayStore'
 import EditHabitForm from './EditHabitForm.vue'
 import SuccessMessage from '../reusable/SuccessMessage.vue'
 import ErrorMessage from '../reusable/ErrorMessage.vue'
+import Habit from '@/utils/habits'
 
 export default defineComponent({
   name: 'HabitList',
@@ -132,12 +133,12 @@ export default defineComponent({
         if (props.category === 'All habits') {
           return store.habits
         }
-        return store.habits.filter((habit) => habit.category === props.category)
+        return store.habits.filter(habit => habit.category === props.category)
       } else {
         return store.habits
       }
     })
-    const handleHabitUpdate = (newHabit) => {
+    const handleHabitUpdate = newHabit => {
       editHabitId.value = null
       const updated = store.editHabit(newHabit)
       if (updated) {
@@ -148,8 +149,8 @@ export default defineComponent({
         error.value = true
       }
     }
-    const handleHabitStopToggle = (habitId) => {
-      const matchHabit = store.habits.find((habit) => habit.id === habitId)
+    const handleHabitStopToggle = habitId => {
+      const matchHabit = store.habits.find(habit => habit.id === habitId)
       if (matchHabit) {
         if (matchHabit.stopped === false) {
           const stopped = store.stopHabit(habitId)
@@ -172,7 +173,7 @@ export default defineComponent({
         }
       }
     }
-    const handleDeleteHabit = (habitId) => {
+    const handleDeleteHabit = habitId => {
       const deleted = store.deleteHabit(habitId)
       if (deleted === true) {
         message.value = 'Habit removed successfuly!'

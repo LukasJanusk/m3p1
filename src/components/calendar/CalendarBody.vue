@@ -23,9 +23,10 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, computed } from 'vue'
+<script lang="ts">
+import { defineComponent, computed, PropType } from 'vue'
 import DayOfMonth from './DayOfMonth.vue'
+import Day from '@/utils/day'
 
 export default defineComponent({
   name: 'CalendarBody',
@@ -37,7 +38,7 @@ export default defineComponent({
       required: true,
     },
     monthDays: {
-      type: Array,
+      type: Array as PropType<Day[]>,
       required: true,
     },
   },
@@ -49,7 +50,7 @@ export default defineComponent({
     const skip = computed(() => {
       return Array.from({ length: props.startIndex })
     })
-    const daySelected = day => {
+    const daySelected = (day: Day) => {
       emit('daySelected', day)
     }
     return {
