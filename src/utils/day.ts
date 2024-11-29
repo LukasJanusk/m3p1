@@ -87,19 +87,23 @@ export default class Day {
   }
 
   static saveWeekdays(weekDays: Day[]): void {
-    const savedDays = this.loadWeekdays() || []
-    for (const d of weekDays) {
-      const existingDay = savedDays.find(
-        day => day.date.toISOString() === d.date.toISOString(),
-      )
-      if (existingDay) {
-        existingDay.habits = d.habits
-        existingDay.active = d.active
-      } else {
-        savedDays.push(d)
+    try {
+      const savedDays = this.loadWeekdays() || []
+      for (const d of weekDays) {
+        const existingDay = savedDays.find(
+          day => day.date.toISOString() === d.date.toISOString(),
+        )
+        if (existingDay) {
+          existingDay.habits = d.habits
+          existingDay.active = d.active
+        } else {
+          savedDays.push(d)
+        }
       }
+      localStorage.setItem('days', JSON.stringify(savedDays))
+    } catch (error: any) {
+      console.error(`Could not save Days to localStorage: ${error.message}`)
     }
-    localStorage.setItem('days', JSON.stringify(savedDays))
   }
 
   static loadWeekdays(): Day[] {

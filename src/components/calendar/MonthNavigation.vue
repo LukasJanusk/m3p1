@@ -26,7 +26,7 @@ export default defineComponent({
   name: 'MonthNavigation',
   emits: ['next', 'previous'],
 
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const returnNext = (): void => {
       emit('next')
     }

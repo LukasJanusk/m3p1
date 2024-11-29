@@ -12,6 +12,7 @@ node_modules
 dist
 dist-ssr
 coverage
+android
 *.local
 
 /cypress/videos/
@@ -27,6 +28,3 @@ coverage
 *.sln
 *.sw?
 *.tsbuildinfo
-
-# Android build
-android/

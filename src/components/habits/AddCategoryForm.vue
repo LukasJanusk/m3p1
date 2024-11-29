@@ -45,7 +45,7 @@ export default defineComponent({
   name: 'AddCategoryForm',
   components: { ErrorMessage },
   emits: ['category-added', 'close-form'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const store = useCurrentWeek()
     const categoryName = ref('')
     const categoryDescription = ref('')
