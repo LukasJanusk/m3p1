@@ -47,7 +47,7 @@ export default class Day {
   static getMonthDays(year: number, month: number, allHabits: Habit[]): Day[] {
     const habits = allHabits.filter(habit => habit.stopped === false)
     const days = this.loadWeekdays()
-    const currentMonthDays = []
+    const currentMonthDays: Day[] = []
     if (days.length > 0) {
       currentMonthDays.push(
         ...days.filter(
@@ -83,7 +83,7 @@ export default class Day {
         day.active = true
       }
     })
-    return currentMonthDays.sort((a, b) => a.date - b.date)
+    return currentMonthDays.sort((a: any, b: any) => a.date - b.date)
   }
 
   static saveWeekdays(weekDays: Day[]): void {
@@ -103,22 +103,27 @@ export default class Day {
   }
 
   static loadWeekdays(): Day[] {
-    const savedData = localStorage.getItem('days')
-    if (!savedData) return []
-    interface DayData {
-      date: string
-      active?: boolean
-      habits?: Habit[]
-    }
-    const parsedData: DayData[] = JSON.parse(savedData)
+    try {
+      const savedData = localStorage.getItem('days')
+      if (!savedData) return []
+      interface DayData {
+        date: string
+        active?: boolean
+        habits?: Habit[]
+      }
+      const parsedData: DayData[] = JSON.parse(savedData)
 
-    return parsedData.map(dayData => {
-      const dateObject = new Date(dayData.date)
-      return Object.assign(new Day(dateObject), {
-        ...dayData,
-        date: dateObject,
+      return parsedData.map(dayData => {
+        const dateObject = new Date(dayData.date)
+        return Object.assign(new Day(dateObject), {
+          ...dayData,
+          date: dateObject,
+        })
       })
-    })
+    } catch (error: any) {
+      console.error(`Could not load Days from localStorage: ${error.message}`)
+      return []
+    }
   }
 
   static getCurrentWeekSavedDays(week: Date[]): Day[] {

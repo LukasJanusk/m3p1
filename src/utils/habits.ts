@@ -29,24 +29,29 @@ export default class Habit {
 
   static getHabits(): Habit[] {
     try {
-      const habitsParsed = JSON.parse(localStorage.getItem('habits')) || []
-      const habits: Habit[] = habitsParsed.map((habitData: any) => {
-        return new Habit(
-          habitData.id,
-          habitData.name,
-          habitData.userId,
-          habitData.category,
-          habitData.description,
-          habitData.weekdays,
-          habitData.active,
-          habitData.stopped,
-        )
-      })
-      return habits
-    } catch (error) {
+      const storagedHabits = localStorage.getItem('habits')
+      if (storagedHabits) {
+        const habitsParsed = JSON.parse(storagedHabits)
+        const habits: Habit[] = habitsParsed.map((habitData: any) => {
+          return new Habit(
+            habitData.id,
+            habitData.name,
+            habitData.userId,
+            habitData.category,
+            habitData.description,
+            habitData.weekdays,
+            habitData.active,
+            habitData.stopped,
+          )
+        })
+        return habits
+      }
+      return []
+    } catch (error: any) {
       console.error(
         `Unable to fetch habits from local storage: ${error.message}`,
       )
+      return []
     }
   }
 
