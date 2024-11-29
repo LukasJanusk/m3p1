@@ -4,7 +4,7 @@
       v-for="(day, index) in store.dayWeek"
       class="week-day"
       :class="{ active: store.activeIndex.index === index }"
-      :key="day.date"
+      :key="day.date.toISOString()"
       @click="handleClick(day, index)"
     >
       {{ getWeekDay(day.date) }}
@@ -21,7 +21,7 @@ import Day from '@/utils/day'
 export default defineComponent({
   name: 'WeekdayButtons',
   emits: ['dateSelected'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const store = useCurrentWeek()
     function handleClick(day: Day, index: number) {
       store.activeIndex.index = index

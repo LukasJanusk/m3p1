@@ -65,6 +65,7 @@ export default defineComponent({
     day: {
       name: 'day',
       type: Object as PropType<Day>,
+      required: true,
     },
   },
   setup(props) {

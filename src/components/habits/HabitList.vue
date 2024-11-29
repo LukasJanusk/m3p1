@@ -121,10 +121,10 @@ export default defineComponent({
   },
   setup(props) {
     const store = useCurrentWeek()
-    const deleteHover = ref({})
-    const editHover = ref({})
-    const stopHover = ref({})
-    const editHabitId = ref(null)
+    const deleteHover = ref<Record<number, boolean>>({})
+    const editHover = ref<Record<number, boolean>>({})
+    const stopHover = ref<Record<number, boolean>>({})
+    const editHabitId = ref<number | null>(null)
     const success = ref(false)
     const error = ref(false)
     const message = ref('')

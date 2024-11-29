@@ -11,7 +11,6 @@ import Day from '@/utils/day'
 
 export const useCurrentWeek = defineStore('weekStore', () => {
   // Habits
-
   const habits = ref(Habit.getHabits())
   watch(
     habits,
@@ -39,7 +38,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
         }
       })
       return true
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Failed to add habit: ${error.message}`)
       return false
     }
@@ -48,7 +47,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     try {
       const habitsJson = JSON.stringify(habits.value)
       localStorage.setItem('habits', habitsJson)
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Failed to save Habits: ${error.message}`)
     }
   }
@@ -65,17 +64,19 @@ export const useCurrentWeek = defineStore('weekStore', () => {
         Day.addHabitToDays(monthDays.value, habitToEdit)
       }
       return true
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Failed to edit Habit: ${error.message}`)
       return false
     }
   }
 
-  const stopHabit = habitId => {
+  const stopHabit = (habitId: number): boolean => {
     const habitToStop = habits.value.find(h => habitId === h.id)
-    if (habitToStop) {
-      habitToStop.stopped = true
+    if (!habitToStop) {
+      console.error(`Habit with id ${habitId} not found.`)
+      return false
     }
+    habitToStop.stopped = true
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     dayWeek.value.forEach(day => {
@@ -88,16 +89,16 @@ export const useCurrentWeek = defineStore('weekStore', () => {
         day.habits = day.habits.filter(habit => habit.id !== habitId)
       }
     })
-    // Day.saveWeekdays(dayWeek.value)
-    // Day.saveWeekdays(monthDays.value)
     return true
   }
 
-  const activateStoppedHabit = (habitId: number) => {
+  const activateStoppedHabit = (habitId: number): boolean => {
     const habitToActivate = habits.value.find(h => habitId === h.id)
-    if (habitToActivate) {
-      habitToActivate.stopped = false
+    if (!habitToActivate) {
+      console.error(`Habit with id ${habitId} not found.`)
+      return false
     }
+    habitToActivate.stopped = false
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     dayWeek.value.forEach(day => {
@@ -120,8 +121,6 @@ export const useCurrentWeek = defineStore('weekStore', () => {
         day.habits.push(habitToActivate.clone())
       }
     })
-    // Day.saveWeekdays(dayWeek.value)
-    // Day.saveWeekdays(monthDays.value)
     return true
   }
   const deleteHabit = (habitId: number) => {
@@ -138,8 +137,6 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     monthDays.value.forEach(day => {
       day.habits = day.habits.filter(habit => habit.id !== habitId)
     })
-    // Day.saveWeekdays(dayWeek.value)
-    // Day.saveWeekdays(monthDays.value)
     return true
   }
   // categories
@@ -149,7 +146,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
   const activeIndex = ref({ index: getCurrentDayIndex() })
   const selectedDay = ref(new Date())
   selectedDay.value.setHours(0, 0, 0, 0)
-  const setSelectedDay = newDate => {
+  const setSelectedDay = (newDate: Date) => {
     selectedDay.value = newDate
   }
   const dayWeek = ref(Day.getWeekdays(week.value, habits.value))
@@ -160,7 +157,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     },
     { deep: true },
   )
-  const updateWeek = day => {
+  const updateWeek = (day: Day): void => {
     const match = dayWeek.value.find(d => {
       return d.date.toISOString() === day.date.toISOString()
     })
@@ -186,7 +183,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     { deep: true },
   )
   const startIndex = ref(adjustDayIndex(monthDays.value[0].date))
-  const updateMonth = day => {
+  const updateMonth = (day: Day): void => {
     const match = monthDays.value.find(d => {
       return d.date.toISOString() === day.date.toISOString()
     })
@@ -195,7 +192,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
       match.active = day.active
     }
   }
-  const nextMonth = () => {
+  const nextMonth = (): void => {
     const nextMonthDate = new Date(monthDays.value[0].date)
     nextMonthDate.setMonth(monthDays.value[0].date.getMonth() + 1)
     const year = nextMonthDate.getFullYear()
@@ -204,7 +201,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     monthDays.value = [...Day.getMonthDays(year, month, habits.value)]
     startIndex.value = adjustDayIndex(monthDays.value[0].date)
   }
-  const previousMonth = () => {
+  const previousMonth = (): void => {
     const previousMonthDate = new Date(monthDays.value[0].date)
     previousMonthDate.setMonth(monthDays.value[0].date.getMonth() - 1)
     const year = previousMonthDate.getFullYear()
