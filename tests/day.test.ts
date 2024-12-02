@@ -35,22 +35,24 @@ const habits = [
   ),
 ]
 describe('Tests functionality of Day class', () => {
-  const dayWeek = Day.getWeekdays(week, habits)
-  const monthDays1 = Day.getMonthDays(2024, 11, habits)
-  const monthDays2 = Day.getMonthDays(2024, 10, habits)
-  const day1 = new Day(new Date())
-  const day2 = new Day(new Date())
-  day2.habits = [new Habit(3, 'testing', 1, 'test', 'test', [], false, false)]
   it('Returns Day objects of provided Date object week', () => {
+    const dayWeek = Day.getWeekdays(week, habits)
     expect(dayWeek.length).toBe(7)
     expect(dayWeek[0].habits.length).toBe(2)
   })
   it('Returns Day objects of provided year and month', () => {
+    const monthDays1 = Day.getMonthDays(2024, 11, habits)
+    const monthDays2 = Day.getMonthDays(2024, 10, habits)
     expect(monthDays1.length).toBe(31)
     expect(monthDays2.length).toBe(30)
   })
   it(`Adds Habit to Day objects`),
     () => {
+      const day1 = new Day(new Date())
+      const day2 = new Day(new Date())
+      day2.habits = [
+        new Habit(3, 'testing', 1, 'test', 'test', [], false, false),
+      ]
       expect(day1.habits.length).toBe(0)
       expect(day2.habits.length).toBe(1)
       Day.addHabitToDays(
