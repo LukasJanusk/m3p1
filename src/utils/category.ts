@@ -12,13 +12,21 @@ export default class Category {
   }
 
   static save(categories: Category[]) {
-    localStorage.setItem('categories', JSON.stringify(categories))
+    try {
+      localStorage.setItem('categories', JSON.stringify(categories))
+    } catch (error: any) {
+      console.error(
+        `Could not save categories to local storage: ${error.message}`,
+      )
+    }
   }
 
   static load(): Category[] {
-    const storedCategories = localStorage.getItem('categories')
-    const categories = storedCategories ? JSON.parse(storedCategories) : []
-    if (categories.length === 0) {
+    try {
+      const storedCategories = localStorage.getItem('categories')
+      if (storedCategories) {
+        return JSON.parse(storedCategories)
+      }
       const defaultCategories = [
         new Category(0, 'All habits', 'Show habits of all categories'),
         new Category(1, 'Fitness', 'Health and fitness related activities'),
@@ -34,8 +42,11 @@ export default class Category {
       ]
       Category.save(defaultCategories)
       return defaultCategories
+    } catch (error: any) {
+      console.error(
+        `Could not load Categories from local storage: ${error.message}`,
+      )
+      return []
     }
-
-    return categories
   }
 }

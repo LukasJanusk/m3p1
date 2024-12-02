@@ -65,16 +65,4 @@ export default class Habit {
       [...this.weekdays],
     )
   }
-
-  updateInPlace(habit: Habit) {
-    if (this.id === habit.id) {
-      this.name = habit.name
-      this.description = habit.description
-      this.category = habit.category
-      this.userId = habit.userId
-      this.active = habit.active
-      this.weekdays = habit.weekdays
-      this.stopped = habit.stopped
-    }
-  }
 }

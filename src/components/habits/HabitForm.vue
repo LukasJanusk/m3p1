@@ -314,5 +314,8 @@ form {
   .submit-button {
     width: 100%;
   }
+  #description {
+    max-width: 95%;
+  }
 }
 </style>

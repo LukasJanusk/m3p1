@@ -118,7 +118,7 @@ export default defineComponent({
   transform: scale(0.99);
 }
 textarea {
-  max-width: 99%;
+  max-width: 95%;
   width: 90%;
   width: 200px;
   height: 50px;
@@ -131,6 +131,8 @@ textarea {
   margin-bottom: 10px;
 }
 input {
+  max-width: 95%;
+  width: 90%;
   background-color: rgba(255, 255, 255, 0.37);
   border: 1px solid #ccc;
   border-radius: 18px;
