@@ -6,7 +6,7 @@ import {
   formatDate,
   getMonthDates,
   getWeekDay,
-} from '../src/utils/dateUtils'
+} from '../../src/utils/dateUtils'
 import { describe, expect, it } from 'vitest'
 
 const testDate1 = new Date('2023-12-12')

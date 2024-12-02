@@ -1,7 +1,7 @@
 <template>
   <div id="form-container">
     <form id="add-habit-form" @submit.prevent="createHabit">
-      <label for="category">Category*</label><br />
+      <label for="category">Category*</label>
       <div id="category-select-container">
         <CategorySelect
           v-model="habitCategory"
@@ -33,21 +33,20 @@
           ></AddCategoryForm
         ></Transition>
       </div>
-      <label for="name" required>Habit name*</label><br />
+      <label for="name" required>Habit name*</label>
       <input
         placeholder="e.g. Running"
         id="name"
         type="text"
         maxlength="20"
         v-model="habitName"
-      /><br />
-      <label for="description">Description</label><br />
+      />
+      <label for="description">Description</label>
       <textarea
         id="description"
         placeholder="description"
         v-model="habitDescription"
-      ></textarea
-      ><br />
+      ></textarea>
       <label for="weekday-select-container">Select habit activity days*</label>
       <div id="weekday-select-container">
         <div id="weekday-select" v-for="(day, index) in weekdays" :key="index">
@@ -235,7 +234,8 @@ input {
 }
 #description {
   width: 95%;
-  height: 50px;
+  height: auto;
+  min-height: 100px;
   max-height: 100px;
   max-width: 475px;
   background-color: transparent;
@@ -243,6 +243,7 @@ input {
   border-radius: 18px;
   padding: 5px;
   color: #333;
+  box-sizing: border-box;
 }
 #category-select-container {
   display: flex;
@@ -292,7 +293,7 @@ input {
 }
 #form-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   padding: 5px;
   height: 490px;
   border: 2px solid rgba(0, 0, 0, 0.035);

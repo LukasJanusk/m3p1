@@ -1,5 +1,5 @@
-import Day from '../src/utils/day'
-import Habit from '../src/utils/habits'
+import Day from '../../src/utils/day'
+import Habit from '../../src/utils/habits'
 import { describe, expect, it } from 'vitest'
 const getWeek = (): Date[] => {
   const weekDates: Date[] = []
