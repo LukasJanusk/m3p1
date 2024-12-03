@@ -128,12 +128,10 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     days.forEach(day => {
       day.habits = day.habits.filter(habit => habit.id !== habitId)
     })
-
     habits.value = habits.value.filter(habit => habit.id !== habitId)
     dayWeek.value.forEach(day => {
       day.habits = day.habits.filter(habit => habit.id !== habitId)
     })
-
     monthDays.value.forEach(day => {
       day.habits = day.habits.filter(habit => habit.id !== habitId)
     })
@@ -141,6 +139,9 @@ export const useCurrentWeek = defineStore('weekStore', () => {
   }
   // categories
   const categories = ref(Category.load())
+  watch(categories, () => {
+    Category.save(categories.value)
+  })
   //week
   const week = ref(getCurrentWeek())
   const activeIndex = ref({ index: getCurrentDayIndex() })

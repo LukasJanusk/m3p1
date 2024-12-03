@@ -60,7 +60,7 @@ export default defineComponent({
           (category: Category) => category.name === categoryName.value,
         )
       ) {
-        message.value = 'Category already exist'
+        message.value = 'Category already exist!'
         error.value = true
       } else {
         const category = new Category(

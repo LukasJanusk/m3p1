@@ -107,7 +107,7 @@ export default defineComponent({
       'Saturday',
       'Sunday',
     ]
-    const message = ref('Habit added succesfully')
+    const message = ref('Habit added successfully')
     const success = ref(false)
     const error = ref(false)
     const userId = 1 // Placeholder - will need updates if app needs accept multiple users
@@ -119,7 +119,7 @@ export default defineComponent({
     const handleCategoryAdded = (category: Category): void => {
       habitCategory.value = category.name
       addingCategory.value = false
-      message.value = 'Category added succesfuly!'
+      message.value = 'Category added successfully!'
       success.value = true
     }
     const handleCategoryRemove = (): void => {
@@ -130,7 +130,7 @@ export default defineComponent({
         store.categories = store.categories.filter(
           (category: Category) => category.id !== categoryToDelete.id,
         )
-        message.value = 'Category Removed Succesfuly!'
+        message.value = 'Category removed Successfully!'
         success.value = true
       } else {
         message.value = 'Select a category to remove!'
@@ -156,7 +156,7 @@ export default defineComponent({
         )
         const added = store.addHabit(habit, selectedDays.value)
         if (added === true) {
-          message.value = 'Habit added successfuly!'
+          message.value = 'Habit added successfully!'
           success.value = true
           habitName.value = ''
           habitDescription.value = ''

@@ -98,8 +98,6 @@ export default {
         day.habits = matchedDay.habits
       }
     })
-    Day.saveWeekdays(store.monthDays)
-
     watch(
       () => route.params.date,
       newDate => {

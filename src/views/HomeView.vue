@@ -26,6 +26,7 @@ import TopContainer from '@/components/reusable/TopContainer.vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import { adjustDayIndex, validateDate, formatDate } from '@/utils/dateUtils'
 import DayHabitList from '@/components/reusable/DayHabitList.vue'
+import Day from '@/utils/day'
 
 export default {
   components: {
@@ -46,7 +47,13 @@ export default {
       const urlDate = new Date(date.value)
       if (!isNaN(urlDate.getTime())) {
         store.activeIndex.index = adjustDayIndex(urlDate)
+        urlDate.setHours(0, 0, 0, 0)
         store.setSelectedDay(urlDate)
+        const newDay = new Day(urlDate)
+        store.habits.forEach(habit => {
+          Day.addHabitToDays([newDay], habit)
+        })
+        Day.saveWeekdays([newDay])
       }
     })
     const handleDateSelected = date => {
@@ -62,8 +69,12 @@ export default {
             day => formatDate(day.date) === formatDate(date),
           )
           if (current) {
-            store.selectedDay.value = date
+            store.setSelectedDay(date)
             store.activeIndex.index = adjustDayIndex(date)
+          } else {
+            const newDay = new Day(date)
+            Day.addHabitToDays([newDay], store.habits)
+            Day.saveWeekdays([newDay])
           }
         } else {
           router.push({ name: 'home' })
@@ -71,6 +82,11 @@ export default {
           updatedDate.setHours(0, 0, 0, 0)
           store.selectedDay = updatedDate
           store.activeIndex.index = adjustDayIndex(updatedDate)
+          const newDay = new Day(updatedDate)
+          store.habits.forEach(habit => {
+            Day.addHabitToDays([newDay], habit)
+          })
+          Day.saveWeekdays([newDay])
         }
       },
       { immediate: true },

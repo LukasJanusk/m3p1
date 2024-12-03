@@ -144,7 +144,7 @@ export default defineComponent({
       editHabitId.value = null
       const updated = store.editHabit(newHabit)
       if (updated) {
-        message.value = 'Habit updated succesfuly!'
+        message.value = 'Habit updated successfully!'
         success.value = true
       } else {
         message.value = 'Failed to update habit!'
@@ -159,7 +159,7 @@ export default defineComponent({
         if (matchHabit.stopped === false) {
           const stopped = store.stopHabit(habitId)
           if (stopped === true) {
-            message.value = 'Habit stopped succesfully!'
+            message.value = 'Habit stopped successfully!'
             success.value = true
           } else {
             message.value = 'Failed to stop habit!'
@@ -168,7 +168,7 @@ export default defineComponent({
         } else if (matchHabit.stopped === true) {
           const activated = store.activateStoppedHabit(habitId)
           if (activated === true) {
-            message.value = 'Habit activated succesfully!'
+            message.value = 'Habit activated successfully!'
             success.value = true
           } else {
             message.value = 'Failed to activate habit!'
@@ -180,7 +180,7 @@ export default defineComponent({
     const handleDeleteHabit = (habitId: number): void => {
       const deleted = store.deleteHabit(habitId)
       if (deleted === true) {
-        message.value = 'Habit removed successfuly!'
+        message.value = 'Habit removed successfully!'
         success.value = true
       } else {
         message.value = 'Failed to remove Habit!'

@@ -43,6 +43,11 @@
       <button class="submit-button" @click.stop type="submit" id="submit">
         Save Habit
       </button>
+      <ErrorMessage
+        v-if="error"
+        :message="message"
+        @dismiss="resetError"
+      ></ErrorMessage>
     </form>
   </div>
 </template>
@@ -52,11 +57,12 @@ import { defineComponent, ref, PropType } from 'vue'
 import Habit from '@/utils/habits'
 import CategorySelect from '../reusable/CategorySelect.vue'
 import Category from '@/utils/category'
+import ErrorMessage from '../reusable/ErrorMessage.vue'
 
 export default defineComponent({
   name: 'EditHabitForm',
   emits: ['update', 'close-form'],
-  components: { CategorySelect },
+  components: { CategorySelect, ErrorMessage },
   props: {
     habit: {
       type: Habit,
@@ -77,11 +83,22 @@ export default defineComponent({
       'Saturday',
       'Sunday',
     ]
+    const message = ref('')
+    const error = ref(false)
     const habitName = ref(props.habit.name)
     const habitDescription = ref(props.habit.description)
     const habitWeekdays = ref(props.habit.weekdays)
     const habitCategory = ref(props.habit.category)
     const updateHabit = (): void => {
+      if (
+        habitName.value.length < 1 ||
+        habitWeekdays.value.length < 1 ||
+        habitCategory.value.length < 1
+      ) {
+        message.value = 'Please fill all required fields!'
+        error.value = true
+        return
+      }
       emit(
         'update',
         new Habit(
@@ -94,11 +111,16 @@ export default defineComponent({
         ),
       )
     }
-
+    const resetError = () => {
+      message.value = ''
+      error.value = false
+    }
     const closeForm = (): void => {
       emit('close-form')
     }
     return {
+      message,
+      error,
       weekdays,
       habitName,
       habitDescription,
@@ -106,6 +128,7 @@ export default defineComponent({
       habitCategory,
       closeForm,
       updateHabit,
+      resetError,
     }
   },
 })
