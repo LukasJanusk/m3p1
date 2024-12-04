@@ -17,9 +17,9 @@ export default defineComponent({
   name: 'SelectedDate',
 
   setup() {
-    const currentWeek = useCurrentWeek()
+    const store = useCurrentWeek()
     const dateToDisplay = computed((): string => {
-      return getCurrentDayString(currentWeek.selectedDay)
+      return getCurrentDayString(store.dayWeek[store.activeIndex.index].date)
     })
     return { dateToDisplay }
   },

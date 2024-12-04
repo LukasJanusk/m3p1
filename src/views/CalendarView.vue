@@ -60,6 +60,7 @@ import { useRouter, useRoute } from 'vue-router'
 import {
   formatDate,
   getCurrentDayString,
+  isSameDay,
   validateDate,
 } from '@/utils/dateUtils'
 import { useCurrentWeek } from '@/stores/dayStore'
@@ -81,9 +82,11 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const calendarView = ref(true)
-    const selectedDay = ref()
+    const selectedDay = ref(null)
     const dateToShow = computed(() => {
-      const dateString = getCurrentDayString(selectedDay.value.date)
+      const dateString = selectedDay.value
+        ? getCurrentDayString(selectedDay.value.date)
+        : getCurrentDayString(new Date())
       if (dateString) {
         return dateString
       } else {
@@ -109,6 +112,15 @@ export default {
           )
           if (current) {
             selectedDay.value = current
+          } else {
+            store.monthDays = Day.getMonthDays(
+              date.getFullYear(),
+              date.getMonth(),
+              store.habits,
+            )
+            selectedDay.value = store.monthDays.find(d => {
+              return isSameDay(d.date, date)
+            })
           }
           calendarView.value = false
         } else {

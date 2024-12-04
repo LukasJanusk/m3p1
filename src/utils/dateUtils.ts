@@ -15,7 +15,22 @@ export function getCurrentWeek(): Date[] {
   }
   return week
 }
-
+export function getWeekDates(date: Date): Date[] {
+  const currentDayOfWeek = date.getDay()
+  const startOfWeek = new Date(date)
+  const week = []
+  startOfWeek.setDate(
+    date.getDate() - (currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1),
+  )
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startOfWeek)
+    d.setHours(0, 0, 0, 0)
+    d.setDate(startOfWeek.getDate() + i)
+    d.setHours(0, 0, 0, 0)
+    week.push(d)
+  }
+  return week
+}
 export function getCurrentDay(): number {
   const date = new Date()
   return date.getDate()

@@ -9,8 +9,8 @@
       :value="category.name"
     >
       {{ category.name }}
-    </option></select
-  ><br />
+    </option>
+  </select>
 </template>
 
 <script lang="ts">

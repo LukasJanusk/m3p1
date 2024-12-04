@@ -12,33 +12,67 @@ export default class Day {
   }
 
   static getWeekdays(week: Date[], allHabits: Habit[]): Day[] {
-    const habits = allHabits.filter(habit => habit.stopped === false)
+    const habits = allHabits
     const weekDays = this.getCurrentWeekSavedDays(week)
     const dayIndexes = weekDays.map(day => day.date.getDay())
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
     for (const day of week) {
       if (!dayIndexes.includes(day.getDay())) {
         const newDay = new Day(day)
-        const dayIndex = adjustDayIndex(newDay.date)
+        // const dayIndex = adjustDayIndex(newDay.date)
+        // const habitsToAdd = habits.filter(habit =>
+        //   habit.weekdays.includes(dayIndex),
+        // )
+        // if (habitsToAdd.length > 0) {
+        //   habitsToAdd.forEach(habit => {
+        //     newDay.habits.push(habit.clone())
+        //   })
+        // }
+        weekDays.push(newDay)
+      }
+    }
+    weekDays.sort((a, b) => a.date.getTime() - b.date.getTime())
+
+    for (const day of weekDays) {
+      const dayIndex = adjustDayIndex(day.date)
+      if (isSameDay(day.date, today)) {
+        day.active = true
+        const habitsToAdd = habits.filter(
+          habit => habit.weekdays.includes(dayIndex) && !habit.stopped,
+        )
+        if (habitsToAdd.length > 0) {
+          habitsToAdd.forEach(habit => {
+            if (!day.habits.some(h => h.id === habit.id)) {
+              day.habits.push(habit.clone())
+            }
+          })
+        }
+        day.active = true
+      } else if (day.date > today) {
+        day.active = false
+        const habitsToAdd = habits.filter(
+          habit => habit.weekdays.includes(dayIndex) && !habit.stopped,
+        )
+        if (habitsToAdd.length > 0) {
+          habitsToAdd.forEach(habit => {
+            if (!day.habits.some(h => h.id === habit.id))
+              day.habits.push(habit.clone())
+          })
+        }
+        // day.habits = day.habits.filter(habit => !habit.stopped)
+      } else {
+        day.active = true
         const habitsToAdd = habits.filter(habit =>
           habit.weekdays.includes(dayIndex),
         )
         if (habitsToAdd.length > 0) {
           habitsToAdd.forEach(habit => {
-            newDay.habits.push(habit.clone())
+            if (!day.habits.some(h => h.id === habit.id)) {
+              day.habits.push(habit.clone())
+            }
           })
         }
-        weekDays.push(newDay)
-      }
-    }
-    weekDays.sort((a, b) => a.date.getTime() - b.date.getTime())
-    const today = new Date()
-    const todayIndex = adjustDayIndex(today)
-    for (const day of weekDays) {
-      const dayIndex = adjustDayIndex(day.date)
-      if (dayIndex > todayIndex) {
-        day.active = false
-      } else {
-        day.active = true
       }
     }
     return weekDays
@@ -64,23 +98,58 @@ export default class Day {
     })
     for (const date of datesToAdd) {
       const newDay = new Day(date)
-      const dayIndex = adjustDayIndex(newDay.date)
-      const habitsToAdd = habits.filter(habit =>
-        habit.weekdays.includes(dayIndex),
-      )
-      if (habitsToAdd.length > 0) {
-        habitsToAdd.forEach(habit => {
-          newDay.habits.push(habit.clone())
-        })
-      }
+      // const dayIndex = adjustDayIndex(newDay.date)
+      // const habitsToAdd = habits.filter(habit =>
+      //   habit.weekdays.includes(dayIndex),
+      // )
+      // if (habitsToAdd.length > 0) {
+      //   habitsToAdd.forEach(habit => {
+      //     newDay.habits.push(habit.clone())
+      //   })
+      // }
       currentMonthDays.push(newDay)
     }
     const today = new Date()
+    today.setHours(0, 0, 0, 0)
     currentMonthDays.forEach(day => {
-      if (day.date > today) {
+      const dayIndex = adjustDayIndex(day.date)
+      if (isSameDay(day.date, today)) {
+        day.active = true
+        const habitsToAdd = habits.filter(
+          habit => habit.weekdays.includes(dayIndex) && !habit.stopped,
+        )
+        if (habitsToAdd.length > 0) {
+          habitsToAdd.forEach(habit => {
+            if (!day.habits.some(h => h.id === habit.id)) {
+              day.habits.push(habit.clone())
+            }
+          })
+        }
+        day.active = true
+      } else if (day.date > today) {
         day.active = false
+        const habitsToAdd = habits.filter(
+          habit => habit.weekdays.includes(dayIndex) && !habit.stopped,
+        )
+        if (habitsToAdd.length > 0) {
+          habitsToAdd.forEach(habit => {
+            if (!day.habits.some(h => h.id === habit.id))
+              day.habits.push(habit.clone())
+          })
+        }
+        // day.habits = day.habits.filter(habit => !habit.stopped)
       } else {
         day.active = true
+        const habitsToAdd = habits.filter(habit =>
+          habit.weekdays.includes(dayIndex),
+        )
+        if (habitsToAdd.length > 0) {
+          habitsToAdd.forEach(habit => {
+            if (!day.habits.some(h => h.id === habit.id)) {
+              day.habits.push(habit.clone())
+            }
+          })
+        }
       }
     })
     return currentMonthDays.sort((a: any, b: any) => a.date - b.date)
@@ -129,7 +198,6 @@ export default class Day {
       return []
     }
   }
-
   static getCurrentWeekSavedDays(week: Date[]): Day[] {
     const loadedWeekdays = this.loadWeekdays()
     const currentWeek = []

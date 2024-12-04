@@ -74,16 +74,21 @@ test('Navigates between weekdays', async ({ page }) => {
   await expect(page.getByText(/^Sunday/)).toBeVisible()
 })
 
-test('Removes stopped habit from future days, but not the past days or current day', async ({
+test('Removes stopped habit from current day, when habit stop is toggled', async ({
   page,
 }) => {
   await setLocalStorageItem('habits', habits, page)
-  await page.goto('/habits')
+  await page.goto('/')
+  await expect(page.getByText('Budgeting')).toBeVisible()
+  await page.getByRole('link', { name: 'Habits' }).click()
   await page
     .getByTitle('Track daily expenses and')
     .locator('#stop-button')
     .click()
-  await page.goto('/day/2012-12-01')
-  await expect(page.getByText('Budgeting')).toBeVisible()
-  // await page.goto('/day/2030-12-01')
+  await expect(page.getByText('Habit stopped successfully!')).toBeVisible()
+  await expect(
+    page.getByText('Budgeting-stoppedMonTueWedThuFriSatSun'),
+  ).toBeVisible()
+  await page.getByRole('link', { name: 'Home' }).click()
+  await expect(page.getByText('Budgeting')).not.toBeVisible()
 })

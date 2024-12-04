@@ -1,16 +1,23 @@
 import { test, expect, Page, BrowserContext } from '@playwright/test'
+import { setLocalStorageItem, getLocalStorageItem } from './localStorage'
 import habits from './fixtures/habitsFix'
 
-test.skip('Calendar is displayed in calendar view', async ({ page }) => {
-  page.goto('/calendar')
+test('Calendar is displayed in calendar view', async ({ page }) => {
+  await page.goto('/calendar')
+  await expect(page.getByRole('heading', { name: 'Calendar' })).toBeVisible()
+  await expect(page.getByText('MonTueWedThuFriSatSun')).toBeVisible()
 })
 
-test.skip('Navigates between calendar and Day components', async ({ page }) => {
-  page.goto('/calendar')
-})
-
-test.skip('Changes made in calendar view persist in home view', async ({
+test('Navigates between CalendarBody and DayHabitList components', async ({
   page,
 }) => {
-  page.goto('/calendar')
+  await setLocalStorageItem('habits', habits, page)
+  await page.goto('/calendar')
+  await expect(page.getByRole('heading', { name: 'Calendar' })).toBeVisible()
+  await expect(page.getByText('MonTueWedThuFriSatSun')).toBeVisible()
+  await page.locator('div').filter({ hasText: /^1$/ }).nth(1).click()
+  await expect(page.getByText('Budgeting')).toBeVisible()
+  await page.getByRole('img', { name: 'Back arrow' }).click()
+  await expect(page.getByRole('heading', { name: 'Calendar' })).toBeVisible()
+  await expect(page.getByText('MonTueWedThuFriSatSun')).toBeVisible()
 })
