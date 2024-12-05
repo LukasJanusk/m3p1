@@ -50,7 +50,7 @@ const title = computed(() => (formVisible.value ? 'Add Habit' : 'My Habits'))
 const showForm = () => {
   formVisible.value = !formVisible.value
 }
-const habitCategory = ref<string>('All habits')
+const habitCategory = ref('All habits')
 const store = useCurrentWeek()
 </script>
 

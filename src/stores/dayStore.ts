@@ -38,8 +38,12 @@ export const useCurrentWeek = defineStore('weekStore', () => {
         }
       })
       return true
-    } catch (error: any) {
-      console.error(`Failed to add habit: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`Failed to add habit: ${error.message}`)
+      } else {
+        console.error('Unknown error occured while adding habit')
+      }
       return false
     }
   }
@@ -47,8 +51,12 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     try {
       const habitsJson = JSON.stringify(habits.value)
       localStorage.setItem('habits', habitsJson)
-    } catch (error: any) {
-      console.error(`Failed to save Habits: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`Failed to save Habits: ${error.message}`)
+      } else {
+        console.error('Unknown error occured while saving habits')
+      }
     }
   }
   const editHabit = (habit: Habit): boolean => {
@@ -67,8 +75,12 @@ export const useCurrentWeek = defineStore('weekStore', () => {
         Day.saveWeekdays(allDays)
       }
       return true
-    } catch (error: any) {
-      console.error(`Failed to edit Habit: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`Failed to edit Habit: ${error.message}`)
+      } else {
+        console.error('Unknown error occured while saving habits')
+      }
       return false
     }
   }

@@ -1,44 +1,33 @@
-import { test, expect, Page, BrowserContext } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 import habits from './fixtures/habitsFix'
 import { setLocalStorageItem, getLocalStorageItem } from './localStorage'
-import { toDisplayString } from 'vue'
-
-const fixedDate = '2024-12-02T00:00:00Z'
-
-async function setDate(page: Page, fixedDate: string) {
-  await page.context().addInitScript(fixedDate => {
-    const OriginalDate = Date
-    global.Date = class extends OriginalDate {
-      constructor() {
-        super(fixedDate)
-      }
-      static now() {
-        return new OriginalDate(fixedDate).getTime()
-      }
-    } as DateConstructor
-  }, fixedDate)
-}
+import Habit from '../../src/utils/habits'
 
 test('Toggles habit done/undone', async ({ page }) => {
+  interface DayData {
+    date: string
+    active?: boolean
+    habits?: Habit[]
+  }
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   await setLocalStorageItem('habits', habits, page)
   await page.goto('/')
   await page.getByLabel('Budgeting').click()
   let daysLocal = await getLocalStorageItem('days', page)
-  let toggledDay = daysLocal.find((day: any) => {
+  let toggledDay = daysLocal.find((day: DayData) => {
     return day.date === today.toISOString()
   })
-  let toggledHabits = toggledDay.habits.filter((habit: any) => {
+  let toggledHabits = toggledDay.habits.filter((habit: Habit) => {
     return habit.active === true && habit.id === 2
   })
   expect(toggledHabits.length).toBe(1)
   await page.getByLabel('Budgeting').click()
   daysLocal = await getLocalStorageItem('days', page)
-  toggledDay = daysLocal.find((day: any) => {
+  toggledDay = daysLocal.find((day: DayData) => {
     return day.date === today.toISOString()
   })
-  toggledHabits = toggledDay.habits.filter((habit: any) => {
+  toggledHabits = toggledDay.habits.filter((habit: Habit) => {
     return habit.active === true && habit.id === 2
   })
   expect(toggledHabits.length).toBe(0)

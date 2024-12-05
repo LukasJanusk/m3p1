@@ -14,10 +14,16 @@ export default class Category {
   static save(categories: Category[]) {
     try {
       localStorage.setItem('categories', JSON.stringify(categories))
-    } catch (error: any) {
-      console.error(
-        `Could not save categories to local storage: ${error.message}`,
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(
+          `Could not save categories to local storage: ${error.message}`,
+        )
+      } else {
+        console.error(
+          'An unknown error occurred while saving categories to local storage',
+        )
+      }
     }
   }
 
@@ -42,10 +48,16 @@ export default class Category {
       ]
       Category.save(defaultCategories)
       return defaultCategories
-    } catch (error: any) {
-      console.error(
-        `Could not load Categories from local storage: ${error.message}`,
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(
+          `Could not load Categories from local storage: ${error.message}`,
+        )
+      } else {
+        console.error(
+          'An unknown error occurred while saving categories to local storage',
+        )
+      }
       return []
     }
   }

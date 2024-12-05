@@ -1,5 +1,5 @@
-import { test, expect, Page, BrowserContext } from '@playwright/test'
-import { setLocalStorageItem, getLocalStorageItem } from './localStorage'
+import { test, expect } from '@playwright/test'
+import { setLocalStorageItem } from './localStorage'
 import habits from './fixtures/habitsFix'
 
 test('Calendar is displayed in calendar view', async ({ page }) => {

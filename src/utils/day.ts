@@ -132,7 +132,9 @@ export default class Day {
         }
       }
     })
-    return currentMonthDays.sort((a: any, b: any) => a.date - b.date)
+    return currentMonthDays.sort(
+      (a: Day, b: Day) => a.date.getTime() - b.date.getTime(),
+    )
   }
 
   static saveWeekdays(weekDays: Day[]): void {
@@ -150,8 +152,14 @@ export default class Day {
         }
       }
       localStorage.setItem('days', JSON.stringify(savedDays))
-    } catch (error: any) {
-      console.error(`Could not save Days to localStorage: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`Could not save Days to localStorage: ${error.message}`)
+      } else {
+        console.error(
+          'Unknown error occured while saving Days to local storage',
+        )
+      }
     }
   }
 
@@ -173,8 +181,12 @@ export default class Day {
           date: dateObject,
         })
       })
-    } catch (error: any) {
-      console.error(`Could not load Days from localStorage: ${error.message}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`Could not load Days from localStorage: ${error.message}`)
+      } else {
+        console.error('Unknown error occured while loading weekdays')
+      }
       return []
     }
   }

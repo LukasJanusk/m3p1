@@ -1,4 +1,6 @@
 import { Page } from '@playwright/test'
+import Habit from '../../src/utils/habits'
+import Day from '../../src/utils/day'
 
 export async function getLocalStorageItem(item: string, page: Page) {
   return await page.evaluate(key => {
@@ -7,12 +9,17 @@ export async function getLocalStorageItem(item: string, page: Page) {
   }, item)
 }
 
-export async function setLocalStorageItem(key: string, value: any, page: Page) {
+export async function setLocalStorageItem(
+  key: string,
+  value: Day[] | Habit[],
+  page: Page,
+) {
   const context = page.context()
+  const valueString = JSON.stringify(value)
   await context.addInitScript(
-    ([key, value]) => {
-      localStorage.setItem(key, JSON.stringify(value))
+    ([key, valueString]) => {
+      localStorage.setItem(key, valueString)
     },
-    [key, value],
+    [key, valueString],
   )
 }

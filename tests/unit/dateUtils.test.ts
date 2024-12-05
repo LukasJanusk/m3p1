@@ -50,6 +50,11 @@ describe('Tests utility functions which manipulate Date objects', () => {
     const isInvalid1 = validateDate('24-01-2000')
     const isInvalid2 = validateDate('2024-13-01')
     const isInvalid3 = validateDate('2022-02-30')
+    expect(isValid1).toBe(true)
+    expect(isValid2).toBe(true)
+    expect(isInvalid1).toBe(false)
+    expect(isInvalid2).toBe(false)
+    expect(isInvalid3).toBe(false)
   })
   it('Returns string in format yyyy-mm-dd of provided Date object', () => {
     const dateString1 = formatDate(testDate4)

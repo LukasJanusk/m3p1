@@ -28,11 +28,21 @@ export default class Habit {
   }
 
   static getHabits(): Habit[] {
+    interface HabitData {
+      id: number
+      name: string
+      userId: number
+      category: string
+      description: string
+      weekdays: number[]
+      active: boolean
+      stopped: boolean
+    }
     try {
       const storagedHabits = localStorage.getItem('habits')
       if (storagedHabits) {
         const habitsParsed = JSON.parse(storagedHabits)
-        const habits: Habit[] = habitsParsed.map((habitData: any) => {
+        const habits: Habit[] = habitsParsed.map((habitData: HabitData) => {
           return new Habit(
             habitData.id,
             habitData.name,
@@ -47,10 +57,16 @@ export default class Habit {
         return habits
       }
       return []
-    } catch (error: any) {
-      console.error(
-        `Unable to fetch habits from local storage: ${error.message}`,
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(
+          `Unable to fetch habits from local storage: ${error.message}`,
+        )
+      } else {
+        console.error(
+          'Unknown error occured fetching habits from local storage',
+        )
+      }
       return []
     }
   }

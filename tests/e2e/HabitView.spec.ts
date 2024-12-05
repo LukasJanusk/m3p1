@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test'
 import habits from './fixtures/habitsFix'
 import { getLocalStorageItem, setLocalStorageItem } from './localStorage'
+import Habit from '../../src/utils/habits'
 
 test('Adds habit', async ({ page }) => {
   await page.goto('/habits')
@@ -85,7 +86,7 @@ test('Edits habit', async ({ page }) => {
   await expect(page.getByText('Habit updated successfully!')).toBeVisible()
   const habitsEdited = await getLocalStorageItem('habits', page)
   const description = habitsEdited.find(
-    (habit: any) => habit.id === 1,
+    (habit: Habit) => habit.id === 1,
   ).description
   expect(description).toBe('Run 10km in the morning.')
 })
@@ -120,7 +121,7 @@ test('Deletes habit', async ({ page }) => {
     .click()
   await expect(page.getByText('Habit removed successfully!')).toBeVisible()
   const habitsLocal = await getLocalStorageItem('habits', page)
-  const deletedHabitFound = habitsLocal.some((habit: any) => habit.id === 1)
+  const deletedHabitFound = habitsLocal.some((habit: Habit) => habit.id === 1)
   expect(habitsLocal.length).toBe(9)
   expect(deletedHabitFound).toBe(false)
 })
@@ -131,7 +132,7 @@ test('Toggles habit stop', async ({ page }) => {
   await page.getByTitle('Run 5km every morning').locator('#stop-button').click()
   await expect(page.getByText('Habit stopped successfully!')).toBeVisible()
   let habitsLocal = await getLocalStorageItem('habits', page)
-  let stoppedHabit = habitsLocal.find((habit: any) => {
+  let stoppedHabit = habitsLocal.find((habit: Habit) => {
     return habit.id === 1
   })
   expect(stoppedHabit.stopped).toBe(true)
@@ -142,7 +143,7 @@ test('Toggles habit stop', async ({ page }) => {
   await expect(page.getByText('Habit activated successfully!')).toBeVisible()
   await expect(page.getByText('Morning RunMonTueWedThuFriSatSun')).toBeVisible()
   habitsLocal = await getLocalStorageItem('habits', page)
-  stoppedHabit = habitsLocal.find((habit: any) => {
+  stoppedHabit = habitsLocal.find((habit: Habit) => {
     return habit.id === 1
   })
   expect(stoppedHabit.stopped).toBe(false)
