@@ -106,8 +106,8 @@
 import { defineComponent, ref, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import EditHabitForm from './EditHabitForm.vue'
-import SuccessMessage from '../reusable/SuccessMessage.vue'
-import ErrorMessage from '../reusable/ErrorMessage.vue'
+import SuccessMessage from '@/components/SuccessMessage.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 import Habit from '@/utils/habits'
 
 export default defineComponent({

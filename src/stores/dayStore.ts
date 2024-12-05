@@ -164,11 +164,13 @@ export const useCurrentWeek = defineStore('weekStore', () => {
     Day.saveWeekdays(allDays)
     return true
   }
+
   // categories
   const categories = ref(Category.load())
   watch(categories, () => {
     Category.save(categories.value)
   })
+
   //week
   const week = ref(getCurrentWeek())
   const activeIndex = ref({ index: getCurrentDayIndex() })
@@ -194,6 +196,7 @@ export const useCurrentWeek = defineStore('weekStore', () => {
       match.active = day.active
     }
   }
+
   //month
   const selectedMonth = ref(new Date().getMonth())
   const monthDays = ref(

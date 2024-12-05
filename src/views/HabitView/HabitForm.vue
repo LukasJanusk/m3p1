@@ -80,12 +80,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import SuccessMessage from '../reusable/SuccessMessage.vue'
+import SuccessMessage from '@/components/SuccessMessage.vue'
 import Habit from '@/utils/habits'
 import { useCurrentWeek } from '@/stores/dayStore'
-import CategorySelect from '../reusable/CategorySelect.vue'
+import CategorySelect from '@/components/CategorySelect.vue'
 import AddCategoryForm from './AddCategoryForm.vue'
-import ErrorMessage from '../reusable/ErrorMessage.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 import Category from '@/utils/category'
 
 export default defineComponent({

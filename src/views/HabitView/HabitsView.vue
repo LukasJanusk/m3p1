@@ -36,12 +36,12 @@
   </div>
 </template>
 
-<script setup>
-import HabitForm from '@/components/habits/HabitForm.vue'
-import HabitList from '@/components/habits/HabitList.vue'
-import TopContainer from '@/components/reusable/TopContainer.vue'
-import MainContainer from '@/components/reusable/MainContainer.vue'
-import CategorySelect from '@/components/reusable/CategorySelect.vue'
+<script setup lang="ts">
+import HabitForm from './HabitForm.vue'
+import HabitList from './HabitList.vue'
+import TopContainer from '@/components/TopContainer.vue'
+import MainContainer from '@/components/MainContainer.vue'
+import CategorySelect from '@/components/CategorySelect.vue'
 import { ref, computed } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 
@@ -50,7 +50,7 @@ const title = computed(() => (formVisible.value ? 'Add Habit' : 'My Habits'))
 const showForm = () => {
   formVisible.value = !formVisible.value
 }
-const habitCategory = ref('All habits')
+const habitCategory = ref<string>('All habits')
 const store = useCurrentWeek()
 </script>
 

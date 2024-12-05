@@ -39,7 +39,7 @@
 import { defineComponent, ref } from 'vue'
 import { useCurrentWeek } from '@/stores/dayStore'
 import Category from '@/utils/category'
-import ErrorMessage from '../reusable/ErrorMessage.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 
 export default defineComponent({
   name: 'AddCategoryForm',

@@ -55,9 +55,9 @@
 <script lang="ts">
 import { defineComponent, ref, PropType } from 'vue'
 import Habit from '@/utils/habits'
-import CategorySelect from '../reusable/CategorySelect.vue'
+import CategorySelect from '@/components/CategorySelect.vue'
 import Category from '@/utils/category'
-import ErrorMessage from '../reusable/ErrorMessage.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 
 export default defineComponent({
   name: 'EditHabitForm',

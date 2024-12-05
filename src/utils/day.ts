@@ -20,15 +20,6 @@ export default class Day {
     for (const day of week) {
       if (!dayIndexes.includes(day.getDay())) {
         const newDay = new Day(day)
-        // const dayIndex = adjustDayIndex(newDay.date)
-        // const habitsToAdd = habits.filter(habit =>
-        //   habit.weekdays.includes(dayIndex),
-        // )
-        // if (habitsToAdd.length > 0) {
-        //   habitsToAdd.forEach(habit => {
-        //     newDay.habits.push(habit.clone())
-        //   })
-        // }
         weekDays.push(newDay)
       }
     }
@@ -60,11 +51,10 @@ export default class Day {
               day.habits.push(habit.clone())
           })
         }
-        // day.habits = day.habits.filter(habit => !habit.stopped)
       } else {
         day.active = true
-        const habitsToAdd = habits.filter(habit =>
-          habit.weekdays.includes(dayIndex),
+        const habitsToAdd = habits.filter(
+          habit => habit.weekdays.includes(dayIndex) && !habit.stopped,
         )
         if (habitsToAdd.length > 0) {
           habitsToAdd.forEach(habit => {
@@ -98,15 +88,6 @@ export default class Day {
     })
     for (const date of datesToAdd) {
       const newDay = new Day(date)
-      // const dayIndex = adjustDayIndex(newDay.date)
-      // const habitsToAdd = habits.filter(habit =>
-      //   habit.weekdays.includes(dayIndex),
-      // )
-      // if (habitsToAdd.length > 0) {
-      //   habitsToAdd.forEach(habit => {
-      //     newDay.habits.push(habit.clone())
-      //   })
-      // }
       currentMonthDays.push(newDay)
     }
     const today = new Date()
@@ -137,11 +118,10 @@ export default class Day {
               day.habits.push(habit.clone())
           })
         }
-        // day.habits = day.habits.filter(habit => !habit.stopped)
-      } else {
+      } else if (day.date < today) {
         day.active = true
-        const habitsToAdd = habits.filter(habit =>
-          habit.weekdays.includes(dayIndex),
+        const habitsToAdd = habits.filter(
+          habit => habit.weekdays.includes(dayIndex) && !habit.stopped,
         )
         if (habitsToAdd.length > 0) {
           habitsToAdd.forEach(habit => {

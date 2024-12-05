@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import CalendarView from '../views/CalendarView.vue'
+import HomeView from '@/views/HomeView/HomeView.vue'
+import CalendarView from '@/views/CalendarView/CalendarView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,7 +27,7 @@ const router = createRouter({
       name: 'calendar',
       component: CalendarView,
       props: route => {
-        const dateParam = route.query.date
+        const dateParam = route.query.date as string | undefined
         return { date: dateParam }
       },
       children: [
@@ -42,7 +42,7 @@ const router = createRouter({
     {
       path: '/habits',
       name: 'habits',
-      component: () => import('../views/HabitsView.vue'),
+      component: () => import('../views/HabitView/HabitsView.vue'),
     },
     {
       path: '/:pathMatch(.*)*',

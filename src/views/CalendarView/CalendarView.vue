@@ -20,7 +20,7 @@
       </div>
       <div v-if="!calendarView" class="navigation-container">
         <img
-          src="../assets/back2.svg"
+          src="../../assets/back2.svg"
           title="Back to calendar"
           alt="Back arrow"
           class="nav-button"
@@ -49,13 +49,13 @@
   </div>
 </template>
 
-<script>
-import CalendarBody from '@/components/calendar/CalendarBody.vue'
-import TopContainer from '@/components/reusable/TopContainer.vue'
-import MainContainer from '@/components/reusable/MainContainer.vue'
-import SelectedMonth from '@/components/calendar/SelectedMonth.vue'
-import MonthNavigation from '@/components/calendar/MonthNavigation.vue'
-import DayHabitList from '@/components/reusable/DayHabitList.vue'
+<script lang="ts">
+import CalendarBody from './CalendarBody.vue'
+import TopContainer from '@/components/TopContainer.vue'
+import MainContainer from '@/components/MainContainer.vue'
+import SelectedMonth from './SelectedMonth.vue'
+import MonthNavigation from './MonthNavigation.vue'
+import DayHabitList from '@/components/DayHabitList.vue'
 import { useRouter, useRoute } from 'vue-router'
 import {
   formatDate,
@@ -64,7 +64,7 @@ import {
   validateDate,
 } from '@/utils/dateUtils'
 import { useCurrentWeek } from '@/stores/dayStore'
-import { ref, watch, computed } from 'vue'
+import { Ref, ref, watch, computed } from 'vue'
 import Day from '@/utils/day'
 
 export default {
@@ -82,7 +82,7 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const calendarView = ref(true)
-    const selectedDay = ref(null)
+    const selectedDay: Ref<Day> = ref(new Day(new Date()))
     const dateToShow = computed(() => {
       const dateString = selectedDay.value
         ? getCurrentDayString(selectedDay.value.date)
@@ -104,6 +104,9 @@ export default {
     watch(
       () => route.params.date,
       newDate => {
+        if (Array.isArray(newDate)) {
+          newDate = newDate[0]
+        }
         if (validateDate(newDate)) {
           const date = new Date(newDate)
           date.setHours(0, 0, 0, 0)
@@ -118,9 +121,9 @@ export default {
               date.getMonth(),
               store.habits,
             )
-            selectedDay.value = store.monthDays.find(d => {
-              return isSameDay(d.date, date)
-            })
+            selectedDay.value =
+              store.monthDays.find(d => isSameDay(d.date, date)) ??
+              new Day(new Date())
           }
           calendarView.value = false
         } else {
@@ -131,7 +134,7 @@ export default {
       { immediate: true },
     )
 
-    const toggleDayView = day => {
+    const toggleDayView = (day: Day) => {
       calendarView.value = !calendarView.value
       selectedDay.value = day
       const dateString = formatDate(day.date)
