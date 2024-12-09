@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="fade" tag="div" mode="out-in">
-      <div v-if="dateToDisplay" :key="dateToDisplay" class="date-container">
+      <div v-if="dateToDisplay" class="date-container">
         {{ dateToDisplay }}
       </div>
     </transition>
