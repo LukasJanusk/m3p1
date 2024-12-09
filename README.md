@@ -58,3 +58,17 @@ The CalendarView top container contains a title, selected month and year, and na
 
 The project follows the standard Vue recommended structure and naming conventions for components.
 All components and views are placed in the /src folders. dateStore.js contains all state tracked by the Pinia module. /src/utils contains dateUtils.js for helper functions for manipulating Date objects, and category.js, day.js, habits.js for working with the corresponding objects.
+
+## Testing
+
+To test run unit tests:
+
+```sh
+npm run test
+```
+
+To run e2e tests:
+
+```sh
+npm run test:e2e
+```
